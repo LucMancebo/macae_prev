@@ -4,6 +4,25 @@
 
 Resumo rápido do estado atual, decisões e próximos passos relevantes para a Milestone 2 (Segurança & Autenticação).
 
+## Estado atual após a revisão de hoje
+
+- Backend ativo em Fastify + Prisma, agora preparado para usar Neon com o adapter oficial da Prisma.
+- Frontend em Next.js continua em `web/`, integrado ao mesmo deploy da raiz sem dependência de Prisma no runtime do app web.
+- A configuração de banco do servidor foi consolidada em `api/prisma/prisma.ts` e reaproveitada em `api/src/config/database.ts`.
+- O schema Prisma do backend passou a declarar `directUrl` e `driverAdapters`, o que é necessário para o fluxo de deploy com Neon.
+- O arquivo órfão `web/prisma.ts` foi removido porque só introduzia imports não resolvidos no projeto web.
+- A configuração de TypeScript do backend foi corrigida para voltar a ser um JSON válido e compatível com a versão atual do compilador.
+- O workspace foi validado no fim da revisão e não há erros pendentes reportados pelos checks atuais.
+
+## Configuração de Vercel + Neon
+
+- `DATABASE_URL` deve apontar para a string de conexão principal do Neon, preferencialmente a pooler URL.
+- `DIRECT_URL` deve apontar para a conexão direta do Neon para migrações e tarefas administrativas do Prisma.
+- `JWT_SECRET`, `CORS_ORIGIN`, `NODE_ENV` e `NEXT_PUBLIC_API_URL` continuam obrigatórios para o projeto em produção.
+- O deploy do monorepo usa `api/index.ts` para a API e `web/` para o frontend, com compatibilidade para `ALLOWED_ORIGINS` quando houver mais de uma origem.
+- O fluxo local e o de produção agora compartilham a mesma criação de Prisma Client, reduzindo divergência entre teste e deploy.
+- O `vercel.json` da raiz foi alinhado ao entrypoint real da API e ao build do frontend para evitar falha de build por caminho inexistente.
+
 O que foi feito
 
 - Arquitetura modular: backend em `Fastify` (TypeScript) e frontend base em `Next.js`.
@@ -41,26 +60,29 @@ Problema EADDRINUSE (listen EADDRINUSE: address already in use 0.0.0.0:3333)
 
 1. **Implementar bloqueio por tentativas de login** ✅ (Concluído: 5 tentativas → 30min bloqueio).
 2. **Centralizar tratamento de erros** ✅ (Concluído: `api/src/hooks/error-handler.ts`).
+
 ### 🛠 Entregas Realizadas (Hoje)
 
 1.  **Infraestrutura & DevOps**:
-    *   Implementação de **Docker Compose** com PostgreSQL 16 e pgAdmin.
-    *   Sincronização do banco de dados real e populado com **Prisma Seed**.
-    *   Consolidação de variáveis de ambiente no `.env` (CORS, JWT, Ports).
+    - Implementação de **Docker Compose** com PostgreSQL 16 e pgAdmin.
+    - Sincronização do banco de dados real e populado com **Prisma Seed**.
+    - Consolidação de variáveis de ambiente no `.env` (CORS, JWT, Ports).
 2.  **Módulo de Consignatárias (Instituições Financeiras)**:
-    *   Backend: CRUD completo com validação de CNPJ e Auditoria.
-    *   Frontend: Gestão completa com listagem e formulário modal.
+    - Backend: CRUD completo com validação de CNPJ e Auditoria.
+    - Frontend: Gestão completa com listagem e formulário modal.
 3.  **Reforço de Qualidade (Hardening)**:
-    *   **Auditoria 2.0**: Histórico visível no frontend para cada registro (POC 6).
-    *   **Normalização de Datas**: Tratamento UTC para evitar erro de dia anterior.
-    *   **Tipagem Forte**: Criação de `entidades.ts` no frontend e fim do uso de `any`.
-    *   **Otimização de Logs**: Redução de 90% no tamanho dos arquivos de log via limpeza de relações.
+    - **Auditoria 2.0**: Histórico visível no frontend para cada registro (POC 6).
+    - **Normalização de Datas**: Tratamento UTC para evitar erro de dia anterior.
+    - **Tipagem Forte**: Criação de `entidades.ts` no frontend e fim do uso de `any`.
+    - **Otimização de Logs**: Redução de 90% no tamanho dos arquivos de log via limpeza de relações.
 
 ### 📋 Contexto Atual
-*   **M3 Status**: 45% concluído.
-*   **Ambiente**: Banco de dados real em Docker ativo na porta 5432.
+
+- **M3 Status**: 45% concluído.
+- **Ambiente**: Banco de dados real em Docker ativo na porta 5432.
 
 ### 🚩 Próximos Passos (Imediato)
+
 1.  **Módulo de Produtos**: Implementar tabelas de taxas e prazos por banco.
 2.  **Motor de Cálculo**: Desenvolver o serviço que calcula a margem líquida do servidor (30%/5%).
 3.  **Exclusão com Confirmação**: Adicionar segurança visual ao excluir registros.

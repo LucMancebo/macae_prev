@@ -28,12 +28,17 @@ export const buildApp = (): FastifyInstance => {
     });
 
     // CORS seguro: whitelist apenas o frontend autorizado
-    const allowedOrigins = process.env.ALLOWED_ORIGINS 
-        ? process.env.ALLOWED_ORIGINS.split(',') 
-        : ['http://localhost:3000'];
+    const originSource =
+        process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGIN || 'http://localhost:3000';
+    const allowedOrigins = originSource
+        .split(',')
+        .map((origin) => origin.trim())
+        .filter(Boolean);
+
+    const corsOrigin = allowedOrigins.includes('*') ? true : allowedOrigins;
 
     app.register(cors, {
-        origin: allowedOrigins,
+        origin: corsOrigin,
         credentials: true
     });
 

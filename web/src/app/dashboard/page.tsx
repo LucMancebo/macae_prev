@@ -130,7 +130,11 @@ export default function DashboardOverview() {
       const anyErr = err as any;
       const details =
         anyErr?.error || anyErr?.message || anyErr?.status || anyErr;
-      console.error("Erro ao buscar estatísticas", details);
+      // Inclui mais contexto para evitar console.error("{}") sem causa
+      console.error("Erro ao buscar estatísticas", {
+        details,
+        err: anyErr,
+      });
     } finally {
       setLoading(false);
     }

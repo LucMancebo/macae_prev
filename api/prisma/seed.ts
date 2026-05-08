@@ -1,5 +1,4 @@
 import { prisma } from './prisma';
-
 import bcrypt from 'bcryptjs';
 
 async function main() {
@@ -15,7 +14,7 @@ async function main() {
             data: {
                 nome: 'ADMINISTRADOR',
                 descricao: 'Acesso total ao sistema MACAEPREV',
-                permissoes: ["*"] // Ajustado para formato compatível
+                permissoes: ["*"]
             }
         });
         console.log(`✅ Perfil ADMINISTRADOR criado com sucesso.`);
@@ -23,7 +22,7 @@ async function main() {
         console.log(`ℹ️ Perfil ADMINISTRADOR já existe.`);
     }
 
-    // 2. Transforma a senha plana em Hash para a LGPD
+    // 2. Transforma a senha plana em Hash
     const emailAdmin = 'admin@macaeprev.rj.gov.br';
     const senhaPlana = '123456';
     const salt = await bcrypt.genSalt(10);
@@ -31,7 +30,7 @@ async function main() {
 
     console.log(`Buscando ou criando o Usuário Master...`);
 
-    // 3. Upsert do Usuário (se já existir, atualiza a senha, se não cria um novo)
+    // 3. Upsert do Usuário
     const usuario = await prisma.usuario.upsert({
         where: { email: emailAdmin },
         update: {
@@ -48,7 +47,7 @@ async function main() {
         }
     });
 
-    // 4. Cria um Termo de Uso inicial para a LGPD
+    // 4. Cria um Termo de Uso inicial
     console.log(`Buscando ou criando Termos de Uso (LGPD)...`);
     await prisma.termoUso.upsert({
         where: { id: '00000000-0000-0000-0000-000000000001' },
@@ -56,17 +55,12 @@ async function main() {
         create: {
             id: '00000000-0000-0000-0000-000000000001',
             versao: '1.0',
-            conteudo: 'Este é o Termo de Uso e Política de Privacidade do MACAEPREV. Ao aceitar, você concorda com o processamento de seus dados para fins de gestão de consignações conforme a LGPD.',
+            conteudo: 'Este é o Termo de Uso e Política de Privacidade do MACAEPREV...',
             publicado: true
         }
     });
 
-    console.log(`✅ Usuário e Termos criados/atualizados com sucesso!`);
-    console.log(`-------------------------------------------`);
-    console.log(`E-mail Teste: ${usuario.email}`);
-    console.log(`Senha Plana.: ${senhaPlana}`);
-    console.log(`Id Usuário..: ${usuario.id}`);
-    console.log(`-------------------------------------------`);
+    console.log(`✅ Usuário e Termos criados com sucesso!`);
 }
 
 main()

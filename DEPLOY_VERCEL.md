@@ -1,6 +1,6 @@
 # 🚀 Guia de Deploy MacaePrev na Vercel
 
-Este documento descreve o passo a passo detalhado para realizar o deploy do sistema MACAEPREV na Vercel, utilizando a estrutura de monorepo (pastas `api` e `web`) e o banco de dados PostgreSQL no Neon.tech.
+Este documento descreve o passo a passo para publicar o monorepo MACAEPREV na Vercel, com frontend Next.js e API Fastify no mesmo projeto e banco PostgreSQL no Neon.tech.
 
 ---
 
@@ -8,7 +8,7 @@ Este documento descreve o passo a passo detalhado para realizar o deploy do sist
 
 - Um banco de dados PostgreSQL externo (Vercel Postgres, Neon.tech ou Supabase).
 - Conta na [Vercel](https://vercel.com).
-- Projeto hospedado no GitHub/GitLab (com o arquivo `vercel.json` na raiz).
+- Projeto hospedado no GitHub/GitLab com o arquivo `vercel.json` na raiz do repositório.
 
 ---
 
@@ -23,16 +23,16 @@ Este documento descreve o passo a passo detalhado para realizar o deploy do sist
 
 ## 3. Preparação do Projeto Local
 
-### 3.1. `vercel.json` (Arquivo de Configuração do Monorepo)
+### 3.1. `vercel.json` (Configuração do Monorepo)
 
-Certifique-se de que o arquivo `vercel.json` esteja na **raiz do seu projeto**. Este arquivo informa à Vercel como construir e rotear suas aplicações (Frontend e Backend) dentro do monorepo. O conteúdo deve ser similar ao seguinte:
+Certifique-se de que o arquivo `vercel.json` esteja na raiz do projeto. Ele deve instruir a Vercel a compilar o frontend em `web/` e a API em `api/`.
 
 ```json
 {
   "version": 2,
   "builds": [
     {
-      "src": "api/api/index.ts",
+      "src": "api/index.ts",
       "use": "@vercel/node"
     },
     {
@@ -43,7 +43,7 @@ Certifique-se de que o arquivo `vercel.json` esteja na **raiz do seu projeto**. 
   "routes": [
     {
       "src": "/v1/(.*)",
-      "dest": "api/src/server.ts",
+      "dest": "api/index.ts",
       "continue": true
     },
     {
@@ -70,16 +70,16 @@ Para que o Prisma Client seja gerado corretamente durante o build na Vercel, adi
 
 1.  Acesse o Vercel Dashboard e clique em **Add New > Project**.
 2.  Selecione seu repositório Git (GitHub/GitLab).
-3.  Quando solicitado, a Vercel deve detectar automaticamente a configuração de monorepo devido ao `vercel.json`.
-    - **Root Directory:** Deixe em branco ou confirme que está apontando para a raiz do seu repositório.
-    - **Framework Preset:** A Vercel deve identificar `Next.js` para o frontend e `@vercel/node` para o backend automaticamente.
-4.  Em **Environment Variables**, adicione as seguintes variáveis de ambiente (para o projeto Vercel como um todo):
-    - `DATABASE_URL`: Cole a Connection String do Neon.tech que você copiou no Passo 2.
-    - `JWT_SECRET`: Uma chave secreta forte e longa para a autenticação JWT da sua API.
-    - `CORS_ORIGIN`: A URL de produção do seu projeto na Vercel (ex: `https://seu-projeto.vercel.app`). Você pode deixar `*` temporariamente para testes, mas **NÃO** em produção.
-    - `NODE_ENV`: `production`
-    - `NEXT_PUBLIC_API_URL`: A URL da sua API na Vercel (ex: `https://seu-projeto.vercel.app/v1`). A Vercel irá gerar essa URL após o primeiro deploy. Você pode precisar atualizar essa variável após o deploy inicial.
-5.  Clique em **Deploy**. A Vercel fará o build e o deploy do seu frontend e backend.
+3.  Em **Environment Variables** do projeto, adicione:
+
+- `DATABASE_URL`: string de conexão principal do Neon, preferencialmente a pooler URL.
+- `DIRECT_URL`: string de conexão direta do Neon para migrações e comandos administrativos do Prisma.
+- `JWT_SECRET`: chave forte para JWT.
+- `CORS_ORIGIN`: URL autorizada do frontend em produção. Se precisar de múltiplas origens, separe por vírgula. O backend também aceita `ALLOWED_ORIGINS` por compatibilidade.
+- `NODE_ENV`: `production`
+- `NEXT_PUBLIC_API_URL`: URL pública do projeto na Vercel, apontando para a raiz da aplicação. Em produção, o frontend consumirá a API em `${NEXT_PUBLIC_API_URL}/v1`.
+
+4.  Clique em **Deploy**.
 
 ---
 
@@ -93,12 +93,12 @@ Sempre que houver alterações no esquema do banco de dados (via Prisma), você 
 
 ```bash
 # No diretório /api
-DATABASE_URL="sua_url_de_produção" npx prisma db push
+DATABASE_URL="sua_url_de_producao" npx prisma db push
 ```
 
 ---
 
-## 5. CI/CD (Automatização)
+## 6. CI/CD (Automatização)
 
 Uma vez configurado, cada `git push` para a branch `main` irá:
 

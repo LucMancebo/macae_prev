@@ -608,24 +608,6 @@
     grid-template-columns: 1fr;
   }
 }
-
-/* New global CSS variables for better theming */
-/* This would ideally be in a global stylesheet or theme file */
-:root {
-  --color-blue-light: #98b8f2;
-  --color-blue-medium: #74a7ff;
-  --color-blue-lighter: #c6d8ff;
-  --color-teal-light: #6ee7d8;
-  --color-gray-dark: #111111;
-  --color-gray-medium: #7a7a7a;
-  --color-gray-light: #cbd5e1;
-  --color-orange-light: #f59e0b;
-  --radius-xl: 1.5rem; /* New radius variable */
-  --radius-full: 999px; /* Alias for full radius */
-  --border-light: rgba(233, 237, 247, 0.95);
-  --border-lighter: rgba(233, 237, 247, 0.7);
-}
-
 @media (max-width: 760px) {
   .pageHeader {
     align-items: start;

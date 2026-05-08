@@ -351,20 +351,3 @@
     justify-self: stretch;
   }
 }
-
-/* New global CSS variables for better theming */
-/* This would ideally be in a global stylesheet or theme file */
-:root {
-  --bg-gradient-start: #f6f8fe;
-  --bg-gradient-end: #f4f7fe;
-  --bg-card: rgba(255, 255, 255, 0.78);
-  --bg-hover: rgba(67, 24, 255, 0.06);
-  --bg-input: rgba(255, 255, 255, 0.92);
-  --bg-transparent: transparent;
-  --border-default: rgba(233, 237, 247, 0.8);
-  --border-light: rgba(196, 196, 196, 0.9);
-  --radius-md: 0.5rem;
-  --radius-lg: 0.875rem;
-  --radius-xl: 1.5rem;
-  --radius-full: 999px;
-}
