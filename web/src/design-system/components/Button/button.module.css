@@ -1,0 +1,96 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  border: 0;
+  border-radius: var(--radius-component);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+  }
+
+  &:not(:disabled):hover {
+    transform: translateY(-1px);
+  }
+}
+
+.button--primary {
+  background: var(--brand-primary);
+  color: var(--text-light);
+  box-shadow: 0 10px 20px rgba(67, 24, 255, 0.15);
+
+  &:not(:disabled):hover {
+    background: var(--brand-primary-hover);
+  }
+}
+
+.button--secondary {
+  background: var(--bg-app);
+  color: var(--text-dark);
+
+  &:not(:disabled):hover {
+    background: var(--bg-muted);
+  }
+}
+
+.button--ghost {
+  background: transparent;
+  color: var(--text-main);
+  box-shadow: none;
+
+  &:not(:disabled):hover {
+    background: var(--bg-surface);
+    color: var(--text-dark);
+  }
+}
+
+.button--danger {
+  background: #ef4444;
+  color: var(--text-light);
+
+  &:not(:disabled):hover {
+    background: #dc2626;
+  }
+}
+
+.button--sm {
+  min-height: 2.25rem;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+}
+
+.button--md {
+  min-height: 2.875rem;
+  padding: 0.875rem 1.375rem;
+  font-size: 0.9375rem;
+}
+
+.button--lg {
+  min-height: 3.25rem;
+  padding: 1rem 1.75rem;
+  font-size: 1rem;
+}
+
+.button--fullWidth {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.button--iconOnly {
+  width: 2.5rem;
+  min-width: 2.5rem;
+  padding: 0;
+  gap: 0;
+}

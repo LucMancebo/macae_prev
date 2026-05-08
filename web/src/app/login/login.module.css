@@ -1,0 +1,145 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    180deg,
+    var(--bg-app) 0%,
+    #0c49d8 55%,
+    #ffffff 100%
+  );
+  padding: 20px;
+}
+
+.card {
+  width: 100%;
+  max-width: 440px;
+  padding: 1rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border-ui);
+  box-shadow: var(--shadow-premium);
+}
+
+.header {
+  text-align: center;
+}
+
+/* Espaçamento consistente dentro dos forms (LOGIN/MFA/LGPD) */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-dark);
+  letter-spacing: -0.05em;
+  margin-bottom: 8px;
+}
+
+.logo span {
+  color: var(--brand-primary);
+}
+
+.subtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.error {
+  padding: 12px 14px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #b91c1c;
+  border-radius: var(--radius-component);
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+/* MFA e Termos */
+.mfaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+.mfaIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--color-primary-light);
+  color: var(--brand-primary);
+  font-size: 26px;
+  box-shadow: var(--effect-glass-1);
+  margin-bottom: 2px;
+}
+
+.mfaTitle {
+  color: var(--text-dark);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-align: center;
+  margin: 0;
+}
+
+.mfaHint {
+  font-size: 14px;
+  color: var(--text-main);
+  text-align: center;
+  margin-bottom: 2px;
+  line-height: 1.5;
+}
+
+.mfaInput {
+  text-align: center;
+  font-size: 1.25rem;
+  letter-spacing: 0.1rem;
+}
+
+/* Terms */
+.termsScroll {
+  height: 220px;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-main);
+  margin-bottom: 16px;
+  border: 1px solid var(--border-ui);
+  box-shadow: var(--effect-glass-1);
+}
+
+.termsTitle {
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.termsCard {
+  background: transparent;
+}
+
+.backButton {
+  margin-top: 6px;
+}
+
+/* Small responsive tuning */
+@media (max-width: 420px) {
+  .card {
+    padding: 1.75rem;
+  }
+}

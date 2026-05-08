@@ -1,0 +1,91 @@
+{
+  "info": {
+    "name": "MACAEPREV API — Milestone 2 (Auth & Audit)",
+    "description": "Collection para testes de autenticação, auditoria e endpoints base da API MACAEPREV.",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@macaeprev.rj.gov.br\",\n  \"senha\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3333/v1/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3333",
+              "path": ["v1", "auth", "login"]
+            },
+            "description": "Realiza login e retorna JWT token."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "description": "Cole aqui o token retornado pelo endpoint de login."
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3333/v1/auth/me",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3333",
+              "path": ["v1", "auth", "me"]
+            },
+            "description": "Retorna informações do usuário autenticado."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health & System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3333/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3333",
+              "path": ["health"]
+            },
+            "description": "Verifica se o servidor está online."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string",
+      "description": "Token JWT obtido no login. Cole aqui o valor de 'token' retornado por /v1/auth/login"
+    }
+  ]
+}

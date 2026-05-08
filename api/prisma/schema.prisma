@@ -1,0 +1,294 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. servidores
+model Servidor {
+  id                 String   @id @default(uuid()) @db.Uuid
+  cpf                String   @unique @db.VarChar(11)
+  nome               String   @db.VarChar(200)
+  matricula          String   @unique @db.VarChar(20)
+  cargo              String   @db.VarChar(100)
+  situacao_funcional String // ATIVO, APOSENTADO, PENSIONISTA
+  data_admissao      DateTime @db.Date
+  remuneracao_bruta  Decimal  @db.Decimal(12, 2)
+  status             String // ATIVO, INATIVO, BLOQUEADO
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+
+  contratos        Contrato[]
+  margens_servidor MargemServidor[]
+
+  @@map("servidores")
+}
+
+// 2. consignatarias
+model Consignataria {
+  id               String   @id @default(uuid()) @db.Uuid
+  cnpj             String   @unique @db.VarChar(14)
+  razao_social     String   @db.VarChar(200)
+  nome_fantasia    String?  @db.VarChar(200)
+  tipo             String // BANCO, SEGURADORA, PLANO_SAUDE, ASSOCIACAO, OUTROS
+  cet_maximo       Decimal? @db.Decimal(5, 4)
+  status           String // ATIVA, SUSPENSA, INATIVA
+  contato_email    String?  @db.VarChar(200)
+  contato_telefone String?  @db.VarChar(20)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  produtos  Produto[]
+  contratos Contrato[]
+  usuarios  Usuario[]
+
+  @@map("consignatarias")
+}
+
+// 3. margens
+model Margem {
+  id                String   @id @default(uuid()) @db.Uuid
+  nome              String   @db.VarChar(100)
+  tipo              String // EXCLUSIVA, COMPARTILHADA
+  percentual_maximo Decimal  @db.Decimal(5, 2)
+  descricao         String?  @db.Text
+  status            String // ATIVA, INATIVA
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  produtos         Produto[]
+  margens_servidor MargemServidor[]
+
+  @@map("margens")
+}
+
+// 4. produtos
+model Produto {
+  id                   String   @id @default(uuid()) @db.Uuid
+  nome                 String   @db.VarChar(100)
+  tipo                 String // EMPRESTIMO, CARTAO, PLANO_SAUDE, SEGURO, MENSALIDADE, OUTROS
+  tipo_desconto        String // NOMINAL, PERCENTUAL
+  margem_id            String   @db.Uuid
+  consignataria_id     String   @db.Uuid
+  juros_minimo         Decimal? @db.Decimal(5, 4)
+  juros_maximo         Decimal? @db.Decimal(5, 4)
+  prazo_minimo         Int?
+  prazo_maximo         Int?
+  parcelas_maximo      Int?
+  tempo_servico_minimo Int?
+  cargos_elegiveis     Json?
+  status               String // ATIVO, INATIVO
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+
+  margem        Margem        @relation(fields: [margem_id], references: [id])
+  consignataria Consignataria @relation(fields: [consignataria_id], references: [id])
+  contratos     Contrato[]
+
+  @@map("produtos")
+}
+
+// 5. contratos
+model Contrato {
+  id                  String    @id @default(uuid()) @db.Uuid
+  numero_contrato     String    @unique @db.VarChar(30)
+  servidor_id         String    @db.Uuid
+  consignataria_id    String    @db.Uuid
+  produto_id          String    @db.Uuid
+  valor_total         Decimal   @db.Decimal(12, 2)
+  valor_parcela       Decimal   @db.Decimal(12, 2)
+  quantidade_parcelas Int
+  parcelas_pagas      Int
+  taxa_juros          Decimal   @db.Decimal(5, 4)
+  cet                 Decimal   @db.Decimal(5, 4)
+  data_inicio         DateTime  @db.Date
+  data_fim            DateTime  @db.Date
+  status              String // PENDENTE, ATIVO, SUSPENSO, LIQUIDADO, CANCELADO
+  tipo_operacao       String // NOVO, PORTABILIDADE, RENEGOCIACAO
+  contrato_origem_id  String?   @db.Uuid
+  fluxo_aprovacao_id  String?   @db.Uuid
+  aprovado_por        String?   @db.Uuid
+  data_aprovacao      DateTime?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+
+  servidor            Servidor        @relation(fields: [servidor_id], references: [id])
+  consignataria       Consignataria   @relation(fields: [consignataria_id], references: [id])
+  produto             Produto         @relation(fields: [produto_id], references: [id])
+  contrato_origem     Contrato?       @relation("Portabilidade", fields: [contrato_origem_id], references: [id])
+  contratos_derivados Contrato[]      @relation("Portabilidade")
+  fluxo_aprovacao     FluxoAprovacao? @relation(fields: [fluxo_aprovacao_id], references: [id])
+  usuario_aprovador   Usuario?        @relation("Aprovador", fields: [aprovado_por], references: [id])
+  parcelas            Parcela[]
+
+  @@map("contratos")
+}
+
+// 6. parcelas
+model Parcela {
+  id                    String    @id @default(uuid()) @db.Uuid
+  contrato_id           String    @db.Uuid
+  numero_parcela        Int
+  valor                 Decimal   @db.Decimal(12, 2)
+  competencia           String    @db.VarChar(7)
+  status                String // PREVISTA, DESCONTADA, NAO_DESCONTADA, CANCELADA
+  motivo_nao_desconto   String?   @db.VarChar(200)
+  data_processamento    DateTime?
+  arquivo_integracao_id String?   @db.Uuid
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
+
+  contrato           Contrato           @relation(fields: [contrato_id], references: [id])
+  arquivo_integracao ArquivoIntegracao? @relation(fields: [arquivo_integracao_id], references: [id])
+
+  @@map("parcelas")
+}
+
+// 7. usuarios
+model Usuario {
+  id               String    @id @default(uuid()) @db.Uuid
+  nome             String    @db.VarChar(200)
+  email            String    @unique @db.VarChar(200)
+  senha_hash       String    @db.VarChar(256)
+  perfil_id        String    @db.Uuid
+  consignataria_id String?   @db.Uuid
+  status           String // ATIVO, BLOQUEADO, INATIVO
+  ultimo_acesso    DateTime?
+  mfa_habilitado   Boolean   @default(false)
+  mfa_secret       String?   @db.VarChar(256)
+  tentativas_login Int       @default(0)
+  bloqueado_ate    DateTime? // Data até quando o usuário está bloqueado (rate-limiting)
+  aceitou_termos   Boolean   @default(false)
+  data_aceite      DateTime?
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+
+  perfil              PerfilAcesso        @relation(fields: [perfil_id], references: [id])
+  consignataria       Consignataria?      @relation(fields: [consignataria_id], references: [id])
+  contratos_aprovados Contrato[]          @relation("Aprovador")
+  logs_auditoria      LogAuditoria[]
+  arquivos_integracao ArquivoIntegracao[]
+  aceites_termos      AceiteTermo[]
+
+  @@map("usuarios")
+}
+
+// 13. termos_uso (LGPD)
+model TermoUso {
+  id         String   @id @default(uuid()) @db.Uuid
+  versao     String   @db.VarChar(20)
+  conteudo   String   @db.Text
+  publicado  Boolean  @default(true)
+  created_at DateTime @default(now())
+
+  aceites AceiteTermo[]
+
+  @@map("termos_uso")
+}
+
+model AceiteTermo {
+  id           String   @id @default(uuid()) @db.Uuid
+  usuario_id   String   @db.Uuid
+  termo_id     String   @db.Uuid
+  ip_origem    String   @db.VarChar(45)
+  user_agent   String?  @db.VarChar(500)
+  aceito_em    DateTime @default(now())
+
+  usuario Usuario  @relation(fields: [usuario_id], references: [id])
+  termo   TermoUso @relation(fields: [termo_id], references: [id])
+
+  @@map("aceites_termos")
+}
+
+// 8. perfis_acesso
+model PerfilAcesso {
+  id         String   @id @default(uuid()) @db.Uuid
+  nome       String   @unique @db.VarChar(100)
+  descricao  String?  @db.Text
+  permissoes Json
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  usuarios Usuario[]
+
+  @@map("perfis_acesso")
+}
+
+// 9. logs_auditoria
+model LogAuditoria {
+  id               String   @id @default(uuid()) @db.Uuid
+  usuario_id       String   @db.Uuid
+  entidade         String   @db.VarChar(100)
+  entidade_id      String   @db.Uuid
+  acao             String // INCLUSAO, ALTERACAO, EXCLUSAO, CONSULTA, LOGIN, LOGOUT
+  dados_anteriores Json?
+  dados_novos      Json?
+  ip_origem        String   @db.VarChar(45)
+  user_agent       String?  @db.VarChar(500)
+  data_hora        DateTime @default(now())
+
+  usuario Usuario @relation(fields: [usuario_id], references: [id])
+
+  @@map("logs_auditoria")
+}
+
+// 10. fluxos_aprovacao
+model FluxoAprovacao {
+  id             String   @id @default(uuid()) @db.Uuid
+  nome           String   @db.VarChar(100)
+  tipo_operacao  String // NOVO, PORTABILIDADE, RENEGOCIACAO, CANCELAMENTO
+  etapas         Json
+  acao_expiracao String // APROVAR, REJEITAR, ESCALONAR
+  status         String // ATIVO, INATIVO
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  contratos Contrato[]
+
+  @@map("fluxos_aprovacao")
+}
+
+// 11. arquivos_integracao
+model ArquivoIntegracao {
+  id                 String    @id @default(uuid()) @db.Uuid
+  tipo               String // ENVIO, RETORNO
+  competencia        String    @db.VarChar(7)
+  nome_arquivo       String    @db.VarChar(200)
+  caminho_arquivo    String    @db.VarChar(500)
+  data_geracao       DateTime
+  data_processamento DateTime?
+  total_registros    Int
+  registros_sucesso  Int?
+  registros_erro     Int?
+  status             String // GERADO, ENVIADO, PROCESSADO, ERRO
+  usuario_id         String    @db.Uuid
+  created_at         DateTime  @default(now())
+  updated_at         DateTime  @updatedAt
+
+  usuario  Usuario   @relation(fields: [usuario_id], references: [id])
+  parcelas Parcela[]
+
+  @@map("arquivos_integracao")
+}
+
+// 12. margem_servidor
+model MargemServidor {
+  id               String   @id @default(uuid()) @db.Uuid
+  servidor_id      String   @db.Uuid
+  margem_id        String   @db.Uuid
+  valor_total      Decimal  @db.Decimal(12, 2)
+  valor_utilizado  Decimal  @db.Decimal(12, 2)
+  valor_reservado  Decimal  @db.Decimal(12, 2)
+  valor_disponivel Decimal  @db.Decimal(12, 2)
+  competencia_base String   @db.VarChar(7)
+  updated_at       DateTime @updatedAt
+
+  servidor Servidor @relation(fields: [servidor_id], references: [id])
+  margem   Margem   @relation(fields: [margem_id], references: [id])
+
+  @@unique([servidor_id, margem_id])
+  @@map("margem_servidor")
+}

@@ -1,0 +1,134 @@
+:root {
+  /* SnowUI extracted tokens */
+  --bg-app: #f4f7fe;
+  --bg-card: #ffffff;
+  --bg-surface: #f9f9fa;
+  --bg-muted: #edeefc;
+  --bg-muted-2: #e6f1fd;
+
+  --brand-primary: #4318ff;
+  --brand-primary-hover: #3311db;
+  --brand-primary-light: rgba(67, 24, 255, 0.08);
+
+  --text-dark: #2b3674;
+  --text-muted: #a3aed0;
+  --text-main: #707eae;
+  --text-link: #95a4fc;
+
+  --border-ui: #e9edf7;
+  --border-ui-strong: rgba(0, 0, 0, 0.1);
+
+  --radius-card: 20px;
+  --radius-component: 16px;
+  --radius-pill: 40px;
+
+  --shadow-premium: 0 18px 40px rgba(112, 144, 176, 0.12);
+  --shadow-focus: 0 0 0 4px rgba(67, 24, 255, 0.15);
+  --effect-glass-1: 0 4px 16px rgba(0, 0, 0, 0.04);
+  --effect-glass-2: 0 8px 28px rgba(0, 0, 0, 0.1);
+  --effect-glow:
+    0 0 12px 8px rgba(255, 255, 255, 0.2), 0 0 12px 8px rgba(0, 0, 0, 0.2);
+  --effect-focus: 0 0 0 4px rgba(0, 0, 0, 0.04);
+  --effect-inner-shadow:
+    inset 1px 1.5px 4px rgba(0, 0, 0, 0.1),
+    inset 1px 1.5px 4px rgba(0, 0, 0, 0.08),
+    inset 0 -0.5px 1px rgba(255, 255, 255, 0.25),
+    inset 0 -0.5px 1px rgba(255, 255, 255, 0.3);
+  --effect-drop-shadow-1: 0 0.5px 0.5px rgba(0, 0, 0, 0.1);
+  --effect-drop-shadow-2: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --effect-image-hover:
+    inset 0 -20px 20px rgba(255, 255, 255, 0.2),
+    inset 0 20px 20px rgba(0, 0, 0, 1);
+  --effect-background-blur-40: 40px;
+  --effect-background-blur-100: 100px;
+
+  --font-family-base: "Inter", "DM Sans", sans-serif;
+  --font-family-heading: "Inter", "DM Sans", sans-serif;
+  --font-family-mono: "Fira Code", "Monaco", "Menlo", monospace;
+
+  --font-size-display: 64px;
+  --font-size-h1: 48px;
+  --font-size-h2: 32px;
+  --font-size-h3: 24px;
+  --font-size-h4: 18px;
+  --font-size-body: 14px;
+  --font-size-small: 12px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-display: 72px;
+  --line-height-h1: 56px;
+  --line-height-h2: 40px;
+  --line-height-h3: 32px;
+  --line-height-h4: 28px;
+  --line-height-body: 20px;
+  --line-height-small: 16px;
+
+  --spacing-0: 0px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-80: 80px;
+
+  --color-primary: var(--brand-primary);
+  --color-primary-hover: var(--brand-primary-hover);
+  --color-primary-light: var(--brand-primary-light);
+  --color-primary-subtle: rgba(67, 24, 255, 0.08);
+
+  --color-secondary: var(--text-link);
+  --color-secondary-subtle: #edeefc;
+
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #8b5cf6;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-black-100: #000000;
+  --color-black-80: rgba(0, 0, 0, 0.8);
+  --color-black-40: rgba(0, 0, 0, 0.4);
+  --color-black-20: rgba(0, 0, 0, 0.2);
+  --color-black-10: rgba(0, 0, 0, 0.1);
+  --color-black-4: rgba(0, 0, 0, 0.04);
+
+  /* Legacy aliases for app components */
+  --bg-base: var(--bg-app);
+  --bg-elevated: var(--bg-card);
+  --bg-input: #ffffff;
+  --text-primary: var(--text-dark);
+  --text-secondary: var(--text-main);
+  --text-tertiary: var(--text-muted);
+  --text-inverse: var(--color-white);
+  --border-default: var(--border-ui);
+  --border-hover: rgba(0, 0, 0, 0.1);
+  --border-focus: var(--brand-primary);
+  --shadow-sm: 0 1px 2px rgba(112, 144, 176, 0.08);
+  --shadow-md: 0 4px 6px rgba(112, 144, 176, 0.1);
+  --shadow-lg: 0 10px 15px rgba(112, 144, 176, 0.12);
+  --shadow-xl: var(--shadow-premium);
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 200ms ease-in-out;
+  --transition-slow: 300ms ease-in-out;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 40px;
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+}

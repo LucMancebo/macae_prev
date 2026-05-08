@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "description": "Code Connect mappings para Figma Design System → MACAEPREV Components",
+  "timestamp": "2026-05-08",
+  "mappings": [
+    {
+      "figmaNodeId": "TBD",
+      "componentName": "Button/Primary",
+      "source": "src/app/components/Button/Button.tsx",
+      "framework": "React",
+      "status": "pending"
+    },
+    {
+      "figmaNodeId": "TBD",
+      "componentName": "Card/Base",
+      "source": "src/app/components/Card/Card.tsx",
+      "framework": "React",
+      "status": "pending"
+    },
+    {
+      "figmaNodeId": "TBD",
+      "componentName": "Badge/Success",
+      "source": "src/app/components/Badge/Badge.tsx",
+      "framework": "React",
+      "status": "pending"
+    },
+    {
+      "figmaNodeId": "TBD",
+      "componentName": "Input/Base",
+      "source": "src/app/components/Input/Input.tsx",
+      "framework": "React",
+      "status": "pending"
+    }
+  ],
+  "notes": "Atualizar node IDs após mapear componentes no Figma"
+}

@@ -1,0 +1,9 @@
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-ui);
+  border-radius: var(--radius-card);
+}
+
+.card--elevated {
+  box-shadow: var(--shadow-premium);
+}

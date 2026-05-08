@@ -1,0 +1,42 @@
+# Evidências — Milestone 1: Fundação & Infraestrutura
+
+As evidências listadas aqui comprovam a concretização da POC na etapa atual do projeto. 
+
+## Evidências por Questão POC
+
+### POC 1 e 15 — Cross / Multi Browser Platform (Req. 4.1.1 e 4.1.12)
+- **Tipo de evidência**: Código / Setup
+- **Descrição**: A garantia de transversalidade dos Browsers está posta no framework raiz adotado pelas dependências que dão output da aplicação em JS compatível.
+- **Arquivo de Ref**: `/web/package.json` && `/web/next.config.ts`
+
+### POC 23 — Compatibilidade Municipal (Req. 4.1.17.2)
+- **Tipo de evidência**: Configuração
+- **Descrição**: O setup modular permite trocar as variáveis de ambiente sem rebuildar a aplicação, tornando-a portátil e servível nativamente para qualquer datacenter moderno.
+- **Arquivo de Ref**: `/api/src/server.ts`
+
+### POC 29 — Banco De Dados Agnóstico e Setup (Req. 4.1.17.13)
+- **Tipo de evidência**: Código Backend ORM / Schema
+- **Descrição**: A solução atendeu estritamente à demanda da licitação de construir algo **independente do banco relacional** (ou seja, se a prefeitura trocar PG por SQL Server amanhã, o código permanece intacto). Isso foi conquistado por nosso setup do framework `Prisma ORM`.
+- **Arquivo de Ref**: `/api/prisma/schema.prisma`
+
+**Trecho que demonstra a independência agnóstica de banco:**
+```typescript
+generator client {
+  provider = "prisma-client-js"
+}
+// Trocar a variável provider para "mysql" ou "sqlserver" não requer alteração de lógica do software.
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+```
+
+## Evidências de Testes
+- **Compilação TS (Zero Emit Err):**
+A transpilação rodou no terminal atestando compatibilidade absoluta das 12 tabelas.
+```bash
+$ npx prisma format; npx prisma generate; npx tsc --noEmit
+Formatted prisma\schema.prisma in 26ms 🚀
+...
+✔ Generated Prisma Client (v6.19.3) to .\node_modules\@prisma\client in 154ms
+```

@@ -1,0 +1,37 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  & > :global(input),
+  & > :global(select),
+  & > :global(textarea) {
+    margin-top: 0;
+  }
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.25rem;
+  color: var(--text-dark);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-semibold);
+}
+
+.required {
+  color: var(--brand-primary);
+}
+
+.feedbackHint {
+  color: var(--text-main);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.feedbackError {
+  color: #dc2626;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}

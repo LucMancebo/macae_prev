@@ -1,0 +1,37 @@
+.input {
+  width: 100%;
+  min-height: 2.875rem;
+  border: 1px solid var(--border-ui);
+  border-radius: var(--radius-component);
+  background: var(--bg-card);
+  color: var(--text-dark);
+  padding: 0.875rem 1rem;
+  font-family: var(--font-family-base);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: var(--shadow-focus);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+    background: var(--bg-surface);
+  }
+}
+
+.input--compact {
+  min-height: 2.5rem;
+  padding-block: 0.625rem;
+}
