@@ -12,6 +12,7 @@
     "start": "node dist/server.js",
     "postinstall": "prisma generate"
   },
+  "browserslist": {},
   "prisma": {
     "seed": "tsx prisma/prisma.config.ts"
   },

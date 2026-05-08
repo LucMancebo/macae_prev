@@ -14,7 +14,9 @@ export const errorHandler = (
         message,
         url: request.url,
         method: request.method,
-        error: error.stack
+        error: error.stack,
+        params: request.params,
+        query: request.query
     });
 
     // Resposta padronizada de erro
@@ -22,8 +24,8 @@ export const errorHandler = (
         error: {
             code: error.code || 'INTERNAL_ERROR',
             message,
-            statusCode,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            requestId: request.id
         }
     });
 };

@@ -1,18 +1,55 @@
+# ROADMAP DE EXECUÇÃO: MACAEPREV - STATUS ATUALIZADO
+
+## Milestone 1: Fundação & Infraestrutura [CONCLUÍDO]
+
+- **Issue 1.1:** Setup da Arquitetura (API Fastify + Frontend Next.js) - [OK]
+- **Issue 1.2:** Modelagem do Banco (Prisma ORM + 12 Entidades) - [OK]
+- **Issue 1.3:** Dockerização (PostgreSQL local) - [OK]
+
+## Milestone 2: Segurança, Autenticação e UX [EM ANDAMENTO - 90%]
+
+### Issue 2.1: Ajustes de Interface (UX Premium)
+
+- **Tarefa 2.1.1:** Refatoração visual (Glassmorphism). [CONCLUÍDO]
+- **Tarefa 2.1.2:** Hotfix de Navegação (Sidebar fixa). [CONCLUÍDO - Ajuste Manual]
+
+### Issue 2.2: Motor de Segurança & Auditoria
+
+- **Tarefa 2.2.1:** Middleware JWT e Auditoria de CRUD. [CONCLUÍDO]
+- **Tarefa 2.2.2:** Bloqueio de IP por Brute Force. [PENDENTE]
+
+### Issue 2.3: Homologação (Vercel) [NOVA]
+
+- **Tarefa 2.3.1:** Configurar `vercel.json` para Monorepo. [CONCLUÍDO]
+- **Tarefa 2.3.2:** Deploy e vinculação de variáveis de ambiente. [CONCLUÍDO]
+- **Tarefa 2.3.2:** Vincular banco Neon e realizar Deploy. [EM ANDAMENTO]
+
+## Milestone 3: Core - Gestão de Consignações [PRÓXIMO PASSO]
+
+### Issue 3.1: Motor de Cálculo de Margem
+
+- **Sub-tarefa 3.1.1:** Criar `MarginService` (Regra 30% empréstimo / 5% cartão).
+- **Sub-tarefa 3.1.2:** Criar API de consulta de margem real para o servidor.
+
+---
+
 1- Preciso que entenda e eslareça os requisitos do arquivo requisitos.md.
+
 - Relacione os requisitos com o necessario pra completar as questões da prova de conceito (POC).
 - Responda todas as questões da prova de conceito (POC) com base nos requisitos do arquivo requisitos.md.
 - Mostre como os requisitos do arquivo requisitos.md se aplicam a cada questão da prova de conceito (POC).
 - Faça um resumo dos requisitos do arquivo requisitos.md.
 
-1.1- Elabore as etapas do projeto em Milestones, issues e subissues.
+  1.1- Elabore as etapas do projeto em Milestones, issues e subissues.
+
 - Elabore um documento com as etapas do projeto em Milestones, issues e subissues.
 - Liste e descreva cada etapa, issue e subissue.
 - Liste e descreva as tarefas que precisam ser realizadas em cada issue e subissue.
 - Liste e descreva as dependências entre as issues e subissues.
 - Liste e descreva as dependências entre as issues e subissues.
 
-
 2- Preciso que elabore um documento com as especificações tecnicas do projeto, com as seguintes informações:
+
 - Descreva um cenário real de utilização do sistema
 - Defina as entidades do sistema
 - Defina os atributos das entidades
