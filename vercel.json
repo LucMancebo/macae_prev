@@ -1,24 +1,10 @@
 {
-  "version": 2,
-  "builds": [
+  "buildCommand": "npm run build",
+  "outputDirectory": "web/.next",
+  "rewrites": [
     {
-      "src": "api/index.ts",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "web/package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/v1/(.*)",
-      "dest": "api/index",
-      "continue": true
-    },
-    {
-      "src": "/(.*)",
-      "dest": "web/$1"
+      "source": "/v1/:path*",
+      "destination": "/api/index"
     }
   ]
 }
