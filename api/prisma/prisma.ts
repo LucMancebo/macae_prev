@@ -5,10 +5,17 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const connectionString = process.env.DATABASE_URL || process.env.DIRECT_URL;
+const connectionString =
+    process.env.DATABASE_URL ||
+    process.env.DIRECT_URL ||
+    process.env.POSTGRES_PRISMA_URL ||
+    process.env.POSTGRES_URL_NON_POOLING ||
+    process.env.POSTGRES_URL;
 
 if (!connectionString) {
-    throw new Error('DATABASE_URL ou DIRECT_URL não configurada no ambiente.');
+    throw new Error(
+        'Variável de banco não encontrada. Configure DATABASE_URL/DIRECT_URL ou POSTGRES_PRISMA_URL/POSTGRES_URL.'
+    );
 }
 
 const sql = neon(connectionString);
