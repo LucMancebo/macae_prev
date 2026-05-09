@@ -13,9 +13,6 @@
     "postinstall": "prisma generate"
   },
   "browserslist": {},
-  "prisma": {
-    "seed": "tsx prisma/prisma.config.ts"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
