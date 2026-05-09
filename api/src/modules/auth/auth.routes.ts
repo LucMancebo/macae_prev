@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyInstance, FastifyRequest, FastifyReply, HookHandlerDoneFunction } from 'fastify';
 import { AuthController } from './auth.controller';
 import { loginSchema, loginMfaSchema, acceptTermsSchema } from './auth.schema';
 
@@ -9,25 +9,33 @@ export async function authRoutes(app: FastifyInstance) {
     const authenticate = async (request: FastifyRequest, reply: FastifyReply) => {
         try {
             await request.jwtVerify();
-        } catch (err) {
+        } catch (err: any) {
+            request.server.log.warn({
+                msg: 'JWT Verification Failed',
+                error: err.message,
+                path: request.url
+            });
+
             return reply.status(401).send({
-                error: 'Não autorizado',
-                message: 'Token inválido ou expirado. Por favor, realize o login novamente.'
+                statusCode: 401,
+                error: 'Unauthorized',
+                message: 'Sessão inválida ou expirada. Por favor, saia e entre novamente.',
+                code: 'FALHA_AUTENTICACAO'
             });
         }
     };
 
-    // Rotas Públicas
+    // --- ROTAS PÚBLICAS ---
     app.post('/login', { schema: loginSchema }, authController.login);
     app.post('/login-mfa', { schema: loginMfaSchema }, authController.loginMfa);
     app.get('/terms', authController.getTerms);
 
-    // Rotas Protegidas
+    // --- ROTAS PROTEGIDAS ---
+    // Rota usada pelo AuthContext para validar se o usuário ainda está logado
+    app.get('/me', { preValidation: [authenticate] }, authController.me);
+
     app.post('/accept-terms', { preValidation: [authenticate], schema: acceptTermsSchema }, authController.acceptTerms);
     app.get('/perfis', { preValidation: [authenticate] }, authController.getPerfis);
-
-    // Informações do usuário logado
-    app.get('/me', { preValidation: [authenticate] }, authController.me);
 
     // Rotas protegidas de configuração de MFA
     app.get('/mfa/setup', { preValidation: [authenticate] }, authController.generateMfa);

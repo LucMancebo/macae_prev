@@ -39,13 +39,15 @@ export const buildApp = (): FastifyInstance => {
 
     app.register(cors, {
         origin: corsOrigin,
-        credentials: true
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
     });
 
     // Configuração do JWT (Segurança)
     app.register(jwt, {
         secret:
-            process.env.JWT_SECRET || 'macae_prev_super_secret_dev_key_change_me'
+            process.env.JWT_SECRET || 'sua-chave-secreta-jwt-super-segura-aqui-min-32-chars'
     });
 
     // Configuração do Swagger (Documentação)

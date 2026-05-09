@@ -46,15 +46,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       setUser(data.user);
     } catch (error: any) {
-      // 401 normalmente indica token inválido/expirado; isso não é “erro de login”, e sim estado.
+      // Captura o erro 401 ou o código específico do nosso backend
       if (
-        error?.error?.code === "FST_JWT_AUTHORIZATION_HEADER" ||
-        error?.statusCode === 401
+        error?.code === "FALHA_AUTENTICACAO" ||
+        error?.statusCode === 401 ||
+        error?.error === "Unauthorized"
       ) {
-        localStorage.removeItem("macae_prev_token");
-        setToken(null);
-        setUser(null);
-        router.push("/login");
+        console.warn("Sessão expirada, redirecionando para login...");
+        logout();
         return;
       }
 
