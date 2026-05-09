@@ -5,12 +5,24 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const fromParts = (() => {
+    const host = process.env.POSTGRES_HOST || process.env.PGHOST;
+    const user = process.env.POSTGRES_USER || process.env.PGUSER;
+    const password = process.env.POSTGRES_PASSWORD || process.env.PGPASSWORD;
+    const database = process.env.POSTGRES_DATABASE || process.env.PGDATABASE;
+
+    if (!host || !user || !password || !database) return undefined;
+
+    return `postgresql://${encodeURIComponent(user)}:${encodeURIComponent(password)}@${host}/${database}?sslmode=require`;
+})();
+
 const connectionString =
     process.env.DATABASE_URL ||
     process.env.DIRECT_URL ||
     process.env.POSTGRES_PRISMA_URL ||
     process.env.POSTGRES_URL_NON_POOLING ||
-    process.env.POSTGRES_URL;
+    process.env.POSTGRES_URL ||
+    fromParts;
 
 if (!connectionString) {
     throw new Error(
