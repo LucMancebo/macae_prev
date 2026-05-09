@@ -1,3 +1,18 @@
+# Documentação do Projeto
+
+Arquivos de referência principais:
+
+- **Técnico / Arquitetura**: `docs/tecnico/`
+- **Fluxo de Login**: `docs/tecnico/login.md`
+- **Variáveis para Vercel**: `VERCEL_ENV_VARS.md`
+- **Segurança / Segredos**: `docs/SECURITY.md`
+
+Como contribuir com a documentação
+
+1. Edite ou crie arquivos dentro de `docs/`.
+2. Nunca inclua credenciais reais em arquivos de documentação. Use placeholders.
+3. Para exemplos de `.env` use os arquivos `*.example` existentes.
+
 # 📋 Documentação — Sistema de Consignação MACAEPREV
 
 > Sistema de controle operacional e gerencial das operações de consignação com desconto em folha de pagamento para o Instituto de Previdência Social do Município de Macaé.
@@ -48,30 +63,30 @@ docs/
 
 ## ⚙️ Stack Tecnológico
 
-| Camada | Tecnologia |
-|--------|------------|
-| Backend | Node.js — API REST |
-| Frontend | React + TypeScript + Next.js |
-| Estilização | CSS externo (`.css` / `.module.css`) |
-| Banco de Dados | PostgreSQL |
-| ORM | Prisma |
-| Hospedagem | AWS (EC2/ECS, RDS, S3, CloudFront) |
-| CI/CD | GitHub Actions |
-| Integração Folha | CSV (formato fixo) |
+| Camada           | Tecnologia                           |
+| ---------------- | ------------------------------------ |
+| Backend          | Node.js — API REST                   |
+| Frontend         | React + TypeScript + Next.js         |
+| Estilização      | CSS externo (`.css` / `.module.css`) |
+| Banco de Dados   | PostgreSQL                           |
+| ORM              | Prisma                               |
+| Hospedagem       | AWS (EC2/ECS, RDS, S3, CloudFront)   |
+| CI/CD            | GitHub Actions                       |
+| Integração Folha | CSV (formato fixo)                   |
 
 ---
 
 ## 🗺️ Roadmap de Milestones
 
-| # | Milestone | Duração | POC Cobertas |
-|---|-----------|---------|-------------|
-| M1 | Fundação & Infraestrutura | 4 sem | 1, 15, 23, 29 |
-| M2 | Segurança & Autenticação | 3 sem | 6, 12, 24, 28 |
-| M3 | Core: Gestão de Consignações | 6 sem | 3, 4, 5, 7, 8, 9, 11, 16, 20, 21 |
-| M4 | Integração com Folha | 4 sem | 2, 17, 18, 19 |
-| M5 | Relatórios & BI | 3 sem | 10, 14, 22, 30 |
-| M6 | Frontend & UX | 4 sem | 1, 13, 15 |
-| M7 | Suporte & Operação | 2 sem | 25, 26, 27 |
+| #   | Milestone                    | Duração | POC Cobertas                     |
+| --- | ---------------------------- | ------- | -------------------------------- |
+| M1  | Fundação & Infraestrutura    | 4 sem   | 1, 15, 23, 29                    |
+| M2  | Segurança & Autenticação     | 3 sem   | 6, 12, 24, 28                    |
+| M3  | Core: Gestão de Consignações | 6 sem   | 3, 4, 5, 7, 8, 9, 11, 16, 20, 21 |
+| M4  | Integração com Folha         | 4 sem   | 2, 17, 18, 19                    |
+| M5  | Relatórios & BI              | 3 sem   | 10, 14, 22, 30                   |
+| M6  | Frontend & UX                | 4 sem   | 1, 13, 15                        |
+| M7  | Suporte & Operação           | 2 sem   | 25, 26, 27                       |
 
 ---
 

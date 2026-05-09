@@ -11,7 +11,7 @@ Adicione cada variável abaixo (copie nome e valor):
 ### **1. DATABASE_URL (Pooler - Para Aplicação)**
 
 ```
-postgresql://neondb_owner:npg_Kczd8Z0DbEkr@ep-spring-cake-ac9tv0lz-pooler.sa-east-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require
+postgresql://<DB_USER>:<DB_PASSWORD>@<HOST>/<DATABASE>?channel_binding=require&sslmode=require
 ```
 
 ---
@@ -19,7 +19,7 @@ postgresql://neondb_owner:npg_Kczd8Z0DbEkr@ep-spring-cake-ac9tv0lz-pooler.sa-eas
 ### **2. DIRECT_URL (Direct - Para Prisma Migrations)**
 
 ```
-postgresql://neondb_owner:npg_Kczd8Z0DbEkr@ep-spring-cake-ac9tv0lz.sa-east-1.aws.neon.tech/neondb?sslmode=require
+postgresql://<DB_USER>:<DB_PASSWORD>@<HOST>/<DATABASE>?sslmode=require
 ```
 
 ---
@@ -27,7 +27,7 @@ postgresql://neondb_owner:npg_Kczd8Z0DbEkr@ep-spring-cake-ac9tv0lz.sa-east-1.aws
 ### **3. JWT_SECRET (Gere uma string aleatória)**
 
 ```
-sua-chave-secreta-jwt-super-segura-aqui-min-32-chars
+<SUA_JWT_SECRET_AQUI_MIN_32_CHARS>
 ```
 
 _Sugestão: Use um gerador online: https://generate-random.org/ (min 32 caracteres)_
