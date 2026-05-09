@@ -38,3 +38,6 @@ pnpm-debug.log*
 # Sistema Operacional
 .DS_Store
 Thumbs.db
+
+# Pasta com documentos sensíveis (não commitar credenciais)
+/docs/sensitive/

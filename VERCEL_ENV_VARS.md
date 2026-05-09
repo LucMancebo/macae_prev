@@ -11,7 +11,7 @@ Adicione cada variável abaixo (copie nome e valor):
 ### **1. DATABASE_URL (Pooler - Para Aplicação)**
 
 ```
-postgresql://<DB_USER>:<DB_PASSWORD>@<HOST>/<DATABASE>?channel_binding=require&sslmode=require
+postgresql://neondb_owner:npg_Kczd8Z0DbEkr@ep-spring-cake-ac9tv0lz-pooler.sa-east-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require
 ```
 
 ---
@@ -19,7 +19,7 @@ postgresql://<DB_USER>:<DB_PASSWORD>@<HOST>/<DATABASE>?channel_binding=require&s
 ### **2. DIRECT_URL (Direct - Para Prisma Migrations)**
 
 ```
-postgresql://<DB_USER>:<DB_PASSWORD>@<HOST>/<DATABASE>?sslmode=require
+postgresql://neondb_owner:npg_Kczd8Z0DbEkr@ep-spring-cake-ac9tv0lz.sa-east-1.aws.neon.tech/neondb?sslmode=require
 ```
 
 ---
@@ -27,7 +27,7 @@ postgresql://<DB_USER>:<DB_PASSWORD>@<HOST>/<DATABASE>?sslmode=require
 ### **3. JWT_SECRET (Gere uma string aleatória)**
 
 ```
-<SUA_JWT_SECRET_AQUI_MIN_32_CHARS>
+sua-chave-secreta-jwt-super-segura-aqui-min-32-chars
 ```
 
 _Sugestão: Use um gerador online: https://generate-random.org/ (min 32 caracteres)_
@@ -169,3 +169,22 @@ npm run dev
 4. Se estiver usando o mesmo banco do Neon em produção, mantenha `DIRECT_URL`/`DATABASE_URL` iguais entre Vercel e local (atenção a permissões de rede).
 
 Se quiser, eu posso automaticamente gerar `api/.env` (com placeholders) usando os valores atuais do `VERCEL_ENV_VARS.md` — quer que eu faça isso agora?
+
+---
+
+## Onde guardar credenciais sensíveis (local)
+
+Por segurança, não adicione credenciais reais neste arquivo. Se você precisa manter uma cópia local das credenciais para facilitar deploys manuais, crie um arquivo local ignorado pelo Git em:
+
+- `docs/sensitive/VERCEL_ENV_VARS.secret.md`
+
+Esse diretório já está listado em `.gitignore` e não será commitado. Coloque suas strings reais lá apenas no seu ambiente local. Nunca compartilhe esse arquivo em repositórios remotos.
+
+Exemplo de uso local (não commitável):
+
+```
+DATABASE_URL="postgresql://neondb_owner:<SENHA_REAL>@host/neondb?channel_binding=require&sslmode=require"
+DIRECT_URL="postgresql://neondb_owner:<SENHA_REAL>@host/neondb?sslmode=require"
+JWT_SECRET="<SUA_JWT_SECRET_REAL_AQUI>"
+NEXT_PUBLIC_API_URL="https://macae-prev.vercel.app/v1"
+```
