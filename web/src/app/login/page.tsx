@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Button, Card, FormField, Input } from "../../design-system/components";
+import { apiFetch } from "../../services/api";
 import styles from "./login.module.css";
 
 type LoginStep = "LOGIN" | "MFA" | "LGPD";
@@ -34,10 +35,11 @@ export default function LoginPage() {
 
   async function fetchTermos() {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333"}/v1/auth/terms`,
-      );
-      const data = await response.json();
+      const data = await apiFetch<{
+        id: string;
+        conteudo: string;
+        versao: string;
+      }>("/v1/auth/terms");
       setTermoAtual(data);
     } catch (err) {
       setError("Erro ao carregar termos de uso.");

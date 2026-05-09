@@ -1,9 +1,14 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333';
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333';
+const trimmedApiUrl = rawApiUrl.replace(/\/+$/, '');
+const API_URL = trimmedApiUrl.endsWith('/v1')
+    ? trimmedApiUrl.slice(0, -3)
+    : trimmedApiUrl;
 
 export async function apiFetch<T>(
     endpoint: string,
     options: RequestInit = {}
 ): Promise<T> {
+    const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
     const token = typeof window !== 'undefined' ? localStorage.getItem('macae_prev_token') : null;
 
     const headers = {
@@ -12,12 +17,19 @@ export async function apiFetch<T>(
         ...options.headers,
     };
 
-    const response = await fetch(`${API_URL}${endpoint}`, {
+    const response = await fetch(`${API_URL}${normalizedEndpoint}`, {
         ...options,
         headers,
     });
 
-    const data = await response.json();
+    const rawBody = await response.text();
+    let data: unknown = null;
+
+    try {
+        data = rawBody ? JSON.parse(rawBody) : null;
+    } catch {
+        data = { message: rawBody || 'Erro inesperado na API.' };
+    }
 
     if (!response.ok) {
         throw data;
