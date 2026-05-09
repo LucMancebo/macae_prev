@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaNeon } from '@prisma/adapter-neon';
-import { neon } from '@neondatabase/serverless';
+import { Pool } from '@neondatabase/serverless';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -30,8 +30,8 @@ if (!connectionString) {
     );
 }
 
-const sql = neon(connectionString);
-const adapter = new PrismaNeon(sql as any);
+const pool = new Pool({ connectionString: connectionString as string } as any);
+const adapter = new PrismaNeon(pool);
 const globalForPrisma = global as unknown as { prisma?: PrismaClient };
 
 export const prisma =

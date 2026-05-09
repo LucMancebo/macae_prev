@@ -1,8 +1,4 @@
-const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333';
-const trimmedApiUrl = rawApiUrl.replace(/\/+$/, '');
-const API_URL = trimmedApiUrl.endsWith('/v1')
-    ? trimmedApiUrl.slice(0, -3)
-    : trimmedApiUrl;
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333/v1').replace(/\/+$/, '');
 
 export async function apiFetch<T>(
     endpoint: string,

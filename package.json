@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "clean:ts": "tsc --build --clean",
+    "clean:all": "rm -rf ./**/dist ./**/.next **/tsconfig.tsbuildinfo && npm run clean:ts"
+  },
   "devDependencies": {
     "@types/node": "^25.6.0",
     "ts-node": "^10.9.2",

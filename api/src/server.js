@@ -1,27 +1,24 @@
-import 'dotenv/config';
-import { buildApp } from './app';
-import { prisma } from './config/database';
-import type { FastifyInstance } from 'fastify';
-
-let app: FastifyInstance | null = null;
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const app_1 = require("./app");
+const database_1 = require("./config/database");
+let app = null;
 const startServer = async () => {
-    app = buildApp();
+    app = (0, app_1.buildApp)();
     const basePort = Number(process.env.PORT) || 3333;
     const maxRetries = 3;
-
     try {
         // Tenta conectar ao banco de dados via Prisma antes de aceitar requisições
-        await prisma.$connect();
+        await database_1.prisma.$connect();
         app.log.info('Banco de dados conectado com sucesso (Prisma).');
-
         let port = basePort;
         for (let attempt = 0; attempt <= maxRetries; attempt++) {
             try {
                 await app.listen({ port, host: '0.0.0.0' });
                 app.log.info(`Servidor MACAEPREV rodando na porta ${port}`);
                 return;
-            } catch (err: any) {
+            }
+            catch (err) {
                 // Tratamento específico para porta ocupada
                 if (err && err.code === 'EADDRINUSE') {
                     app.log.error(`Porta ${port} já em uso (EADDRINUSE).`);
@@ -33,37 +30,38 @@ const startServer = async () => {
                         continue;
                     }
                     app.log.error('Todas as tentativas de porta falharam. Encerrando processo.');
-                    await prisma.$disconnect();
+                    await database_1.prisma.$disconnect();
                     process.exit(1);
                 }
                 throw err;
             }
         }
-    } catch (error) {
+    }
+    catch (error) {
         app?.log.error(error instanceof Error ? error : new Error(String(error)), 'Erro ao iniciar o servidor');
-        await prisma.$disconnect();
+        await database_1.prisma.$disconnect();
         process.exit(1);
     }
 };
-
-const gracefulShutdown = async (reason?: string) => {
+const gracefulShutdown = async (reason) => {
     console.log('Finalizando processos...', reason ?? 'signal');
     try {
         if (app) {
             await app.close();
             app.log.info('Fastify encerrado com sucesso');
         }
-    } catch (e) {
+    }
+    catch (e) {
         console.error('Erro ao fechar Fastify:', e);
     }
     try {
-        await prisma.$disconnect();
-    } catch (e) {
+        await database_1.prisma.$disconnect();
+    }
+    catch (e) {
         console.error('Erro ao desconectar Prisma:', e);
     }
     process.exit(0);
 };
-
 process.on('SIGINT', () => void gracefulShutdown('SIGINT'));
 process.on('SIGTERM', () => void gracefulShutdown('SIGTERM'));
 process.on('unhandledRejection', (reason) => {
@@ -74,5 +72,4 @@ process.on('uncaughtException', (err) => {
     console.error('Uncaught Exception:', err);
     void gracefulShutdown('uncaughtException');
 });
-
 startServer();
