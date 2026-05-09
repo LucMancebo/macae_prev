@@ -3,13 +3,20 @@ const bcrypt = require('bcryptjs');
 const { randomUUID } = require('crypto');
 
 async function main() {
-  const databaseUrl = process.env.DATABASE_URL;
+  const databaseUrl =
+    process.env.DATABASE_URL ||
+    process.env.DIRECT_URL ||
+    process.env.POSTGRES_URL ||
+    process.env.POSTGRES_PRISMA_URL;
 
   if (!databaseUrl) {
-    throw new Error('DATABASE_URL ausente no ambiente');
+    throw new Error(
+      'DATABASE_URL/DIRECT_URL ausente no ambiente (necessário para provision do admin)'
+    );
   }
 
   const sql = neon(databaseUrl);
+
 
   let perfilRows = await sql`SELECT id FROM perfis_acesso WHERE nome = 'ADMINISTRADOR' LIMIT 1`;
   let perfilId = perfilRows[0]?.id;
