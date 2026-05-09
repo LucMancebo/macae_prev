@@ -53,7 +53,8 @@ class AuthService {
         }
         // Verificar LGPD: Aceite de termos
         if (!usuario.aceitou_termos) {
-            return { token: '', usuarioId: usuario.id, termos_requeridos: true };
+            const tokenTemporario = this.gerarToken(usuario, app);
+            return { token: tokenTemporario, usuarioId: usuario.id, termos_requeridos: true };
         }
         // Se não tiver MFA nem pendência de termos, reseta tentativas e gera token final
         await this.resetarTentativas(usuario.id);

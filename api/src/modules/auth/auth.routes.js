@@ -12,20 +12,28 @@ async function authRoutes(app) {
         }
         catch (err) {
             return reply.status(401).send({
-                error: 'Não autorizado',
-                message: 'Token inválido ou expirado. Por favor, realize o login novamente.'
+                statusCode: 401,
+                error: 'Unauthorized',
+                message: 'Sessão inválida ou expirada. Por favor, realize o login novamente.',
+                code: 'FALHA_AUTENTICACAO'
             });
         }
     };
-    // Rotas Públicas
-    app.post('/login', { schema: auth_schema_1.loginSchema }, authController.login);
+    // --- ROTAS PÚBLICAS ---
+    app.post('/login', {
+        schema: auth_schema_1.loginSchema,
+    }, authController.login);
+    app.post('/logout', authController.logout);
     app.post('/login-mfa', { schema: auth_schema_1.loginMfaSchema }, authController.loginMfa);
     app.get('/terms', authController.getTerms);
-    // Rotas Protegidas
-    app.post('/accept-terms', { preValidation: [authenticate], schema: auth_schema_1.acceptTermsSchema }, authController.acceptTerms);
-    app.get('/perfis', { preValidation: [authenticate] }, authController.getPerfis);
-    // Informações do usuário logado
+    // --- ROTAS PROTEGIDAS ---
+    // Rota usada pelo AuthContext para validar se o usuário ainda está logado
     app.get('/me', { preValidation: [authenticate] }, authController.me);
+    app.post('/accept-terms', {
+        schema: auth_schema_1.acceptTermsSchema,
+        preHandler: [authenticate]
+    }, authController.acceptTerms);
+    app.get('/perfis', { preValidation: [authenticate] }, authController.getPerfis);
     // Rotas protegidas de configuração de MFA
     app.get('/mfa/setup', { preValidation: [authenticate] }, authController.generateMfa);
     app.post('/mfa/confirm', { preValidation: [authenticate] }, authController.confirmMfa);

@@ -4,6 +4,12 @@ exports.AuthController = void 0;
 const database_1 = require("../../config/database");
 const auth_service_1 = require("./auth.service");
 const audit_service_1 = require("../audit/audit.service");
+const cookieOptions = {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+};
 class AuthController {
     authService;
     constructor() {
@@ -32,9 +38,11 @@ class AuthController {
                 });
             }
             if (result.termos_requeridos) {
+                reply.setCookie('macae_prev_token', result.token, cookieOptions);
                 return reply.send({
                     message: 'Aceite de termos LGPD requerido',
                     termos_requeridos: true,
+                    token_livre: false,
                     usuarioId: result.usuarioId
                 });
             }
@@ -45,12 +53,13 @@ class AuthController {
                 acao: 'LOGIN',
                 dados_novos: { email }
             });
-            return reply.send({ token: result.token });
+            reply.setCookie('macae_prev_token', result.token, cookieOptions);
+            return reply.send({ token: result.token, token_livre: false });
         }
         catch (error) {
             request.server.log.error(error);
             return reply
-                .status(401)
+                .status(error?.statusCode || 401)
                 .send({ error: error.message || 'Falha na autenticação' });
         }
     };
@@ -97,6 +106,7 @@ class AuthController {
                 acao: 'LOGIN_MFA',
                 dados_novos: { usuarioId }
             });
+            reply.setCookie('macae_prev_token', token, cookieOptions);
             return reply.send({ token });
         }
         catch (error) {
@@ -137,6 +147,10 @@ class AuthController {
     me = async (request, reply) => {
         const user = request.user;
         return reply.send({ user });
+    };
+    logout = async (request, reply) => {
+        reply.clearCookie('macae_prev_token', cookieOptions);
+        return reply.send({ message: 'Logout realizado com sucesso' });
     };
 }
 exports.AuthController = AuthController;

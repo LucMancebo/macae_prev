@@ -1,20 +1,30 @@
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333/v1').replace(/\/+$/, '');
+const DEFAULT_LOCAL = 'http://localhost:3333/v1';
 
 export async function apiFetch<T>(
     endpoint: string,
     options: RequestInit = {}
 ): Promise<T> {
     const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-    const token = typeof window !== 'undefined' ? localStorage.getItem('macae_prev_token') : null;
+
+    // Determina a base da API em tempo de execução:
+    // - Se `NEXT_PUBLIC_API_URL` estiver definido (útil em dev e CI), usa-o.
+    // - No navegador em produção (Vercel), usamos o caminho relativo `/api/v1`.
+    // - Em ambiente server (SSG/SSR) sem variável, usamos localhost para dev.
+    const envApi = process.env.NEXT_PUBLIC_API_URL;
+    const base = envApi
+        ? envApi.replace(/\/+$/, '')
+        : typeof window !== 'undefined'
+            ? `${window.location.origin}/api/v1`
+            : DEFAULT_LOCAL;
 
     const headers = {
         'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...options.headers,
     };
 
-    const response = await fetch(`${API_URL}${normalizedEndpoint}`, {
+    const response = await fetch(`${base}${normalizedEndpoint}`, {
         ...options,
+        credentials: 'include',
         headers,
     });
 
@@ -28,7 +38,17 @@ export async function apiFetch<T>(
     }
 
     if (!response.ok) {
-        throw data;
+        const message =
+            (data && typeof data === 'object' && (data as any).message) ||
+            (data && typeof data === 'object' && (data as any).error) ||
+            response.statusText ||
+            'Erro inesperado na API.';
+
+        const err: any = new Error(String(message));
+        err.status = response.status;
+        err.statusCode = response.status;
+        err.body = data;
+        throw err;
     }
 
     return data as T;

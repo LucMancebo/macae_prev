@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { apiFetch } from "../../../services/api";
 import { Consignataria, PaginatedResponse } from "../../../types/entidades";
 import { formatarCNPJ } from "../../../utils/formatters";
@@ -21,11 +21,7 @@ export default function ConsignatariasPage() {
   const [isAuditOpen, setIsAuditOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Consignataria | null>(null);
 
-  useEffect(() => {
-    fetchItems();
-  }, [search, meta.page]);
-
-  async function fetchItems() {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
       const data = await apiFetch<PaginatedResponse<Consignataria>>(
@@ -38,7 +34,11 @@ export default function ConsignatariasPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [search, meta.page]);
+
+  useEffect(() => {
+    void fetchItems();
+  }, [fetchItems]);
 
   async function handleSave(formData: Partial<Consignataria>) {
     setSaving(true);
@@ -56,7 +56,7 @@ export default function ConsignatariasPage() {
       }
       setIsModalOpen(false);
       setSelectedItem(null);
-      fetchItems();
+      await fetchItems();
     } catch (error: any) {
       alert(error.message || "Erro ao salvar instituição");
     } finally {

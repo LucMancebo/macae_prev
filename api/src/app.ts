@@ -1,5 +1,6 @@
 import Fastify, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
+import cookie from '@fastify/cookie';
 import jwt from '@fastify/jwt';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
@@ -12,7 +13,9 @@ import { errorHandler } from './hooks/error-handler';
 
 export const buildApp = (): FastifyInstance => {
     const app = Fastify({
-        ignoreTrailingSlash: true,
+        routerOptions: {
+            ignoreTrailingSlash: true
+        },
         logger:
             process.env.NODE_ENV === 'production'
                 ? true
@@ -27,27 +30,36 @@ export const buildApp = (): FastifyInstance => {
                 }
     });
 
-    // CORS seguro: whitelist apenas o frontend autorizado
-    const originSource =
-        process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGIN || 'http://localhost:3000';
-    const allowedOrigins = originSource
+    const allowedOrigins = (process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGIN || 'http://localhost:3000')
         .split(',')
         .map((origin) => origin.trim())
         .filter(Boolean);
 
-    const corsOrigin = allowedOrigins.includes('*') ? true : allowedOrigins;
+    app.register(cookie);
 
+    // CORS seguro: whitelist apenas o frontend autorizado
     app.register(cors, {
-        origin: corsOrigin,
+        origin: (origin, cb) => {
+            if (!origin) {
+                cb(null, true);
+                return;
+            }
+
+            cb(null, allowedOrigins.includes(origin));
+        },
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization'],
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        exposedHeaders: ['Authorization']
     });
 
     // Configuração do JWT (Segurança)
     app.register(jwt, {
-        secret:
-            process.env.JWT_SECRET || 'sua-chave-secreta-jwt-super-segura-aqui-min-32-chars'
+        secret: process.env.JWT_SECRET || 'sua-chave-secreta-jwt-super-segura-aqui-min-32-chars',
+        cookie: {
+            cookieName: 'macae_prev_token',
+            signed: false
+        }
     });
 
     // Configuração do Swagger (Documentação)

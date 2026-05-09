@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildApp = void 0;
 const fastify_1 = __importDefault(require("fastify"));
 const cors_1 = __importDefault(require("@fastify/cors"));
+const cookie_1 = __importDefault(require("@fastify/cookie"));
 const jwt_1 = __importDefault(require("@fastify/jwt"));
 const swagger_1 = __importDefault(require("@fastify/swagger"));
 const swagger_ui_1 = __importDefault(require("@fastify/swagger-ui"));
@@ -17,7 +18,9 @@ const audit_routes_1 = require("./modules/audit/audit.routes");
 const error_handler_1 = require("./hooks/error-handler");
 const buildApp = () => {
     const app = (0, fastify_1.default)({
-        ignoreTrailingSlash: true,
+        routerOptions: {
+            ignoreTrailingSlash: true
+        },
         logger: process.env.NODE_ENV === 'production'
             ? true
             : {
@@ -30,20 +33,32 @@ const buildApp = () => {
                 }
             }
     });
-    // CORS seguro: whitelist apenas o frontend autorizado
-    const originSource = process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGIN || 'http://localhost:3000';
-    const allowedOrigins = originSource
+    const allowedOrigins = (process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGIN || 'http://localhost:3000')
         .split(',')
         .map((origin) => origin.trim())
         .filter(Boolean);
-    const corsOrigin = allowedOrigins.includes('*') ? true : allowedOrigins;
+    app.register(cookie_1.default);
+    // CORS seguro: whitelist apenas o frontend autorizado
     app.register(cors_1.default, {
-        origin: corsOrigin,
-        credentials: true
+        origin: (origin, cb) => {
+            if (!origin) {
+                cb(null, true);
+                return;
+            }
+            cb(null, allowedOrigins.includes(origin));
+        },
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        exposedHeaders: ['Authorization']
     });
     // Configuração do JWT (Segurança)
     app.register(jwt_1.default, {
-        secret: process.env.JWT_SECRET || 'macae_prev_super_secret_dev_key_change_me'
+        secret: process.env.JWT_SECRET || 'sua-chave-secreta-jwt-super-segura-aqui-min-32-chars',
+        cookie: {
+            cookieName: 'macae_prev_token',
+            signed: false
+        }
     });
     // Configuração do Swagger (Documentação)
     app.register(swagger_1.default, {

@@ -10,4 +10,9 @@ declare module 'fastify' {
             consignataria_id?: string;
         };
     }
+
+    interface FastifyReply {
+        setCookie(name: string, value: string, options?: Record<string, unknown>): FastifyReply;
+        clearCookie(name: string, options?: Record<string, unknown>): FastifyReply;
+    }
 }

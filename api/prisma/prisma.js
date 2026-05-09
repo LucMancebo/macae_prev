@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.prisma = void 0;
 const client_1 = require("@prisma/client");
 const adapter_neon_1 = require("@prisma/adapter-neon");
-const serverless_1 = require("@neondatabase/serverless");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const fromParts = (() => {
@@ -27,8 +26,7 @@ const connectionString = process.env.DATABASE_URL ||
 if (!connectionString) {
     throw new Error('Variável de banco não encontrada. Configure DATABASE_URL/DIRECT_URL ou POSTGRES_PRISMA_URL/POSTGRES_URL.');
 }
-const pool = new serverless_1.Pool({ connectionString: connectionString });
-const adapter = new adapter_neon_1.PrismaNeon(pool);
+const adapter = new adapter_neon_1.PrismaNeon({ connectionString: connectionString });
 const globalForPrisma = global;
 exports.prisma = globalForPrisma.prisma ||
     new client_1.PrismaClient({

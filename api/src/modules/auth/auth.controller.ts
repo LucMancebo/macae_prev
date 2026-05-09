@@ -3,6 +3,13 @@ import { prisma } from '../../config/database';
 import { AuthService } from './auth.service';
 import { AuditService } from '../audit/audit.service';
 
+const cookieOptions = {
+    httpOnly: true,
+    sameSite: 'lax' as const,
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+};
+
 export class AuthController {
     private authService: AuthService;
 
@@ -42,9 +49,11 @@ export class AuthController {
             }
 
             if (result.termos_requeridos) {
+                reply.setCookie('macae_prev_token', result.token, cookieOptions);
                 return reply.send({
                     message: 'Aceite de termos LGPD requerido',
                     termos_requeridos: true,
+                    token_livre: false,
                     usuarioId: result.usuarioId
                 });
             }
@@ -57,11 +66,12 @@ export class AuthController {
                 dados_novos: { email }
             });
 
-            return reply.send({ token: result.token });
+            reply.setCookie('macae_prev_token', result.token, cookieOptions);
+            return reply.send({ token: result.token, token_livre: false });
         } catch (error: any) {
             request.server.log.error(error);
             return reply
-                .status(401)
+                .status(error?.statusCode || 401)
                 .send({ error: error.message || 'Falha na autenticação' });
         }
     };
@@ -84,7 +94,7 @@ export class AuthController {
 
         try {
             await this.authService.aceitarTermos(usuarioId, termoId, request);
-            
+
             await AuditService.registrar(request, {
                 usuario_id: usuarioId,
                 entidade: 'Usuario',
@@ -117,6 +127,7 @@ export class AuthController {
                 dados_novos: { usuarioId }
             });
 
+            reply.setCookie('macae_prev_token', token, cookieOptions);
             return reply.send({ token });
         } catch (error: any) {
             return reply.status(401).send({ error: error.message });
@@ -161,5 +172,10 @@ export class AuthController {
     public me = async (request: FastifyRequest, reply: FastifyReply) => {
         const user = request.user;
         return reply.send({ user });
+    };
+
+    public logout = async (request: FastifyRequest, reply: FastifyReply) => {
+        reply.clearCookie('macae_prev_token', cookieOptions);
+        return reply.send({ message: 'Logout realizado com sucesso' });
     };
 }

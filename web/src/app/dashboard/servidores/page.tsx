@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { apiFetch } from "../../../services/api";
 import { Servidor, PaginatedResponse } from "../../../types/entidades";
 import { formatarCPF } from "../../../utils/formatters";
@@ -24,11 +24,7 @@ export default function ServidoresPage() {
     null,
   );
 
-  useEffect(() => {
-    fetchServidores();
-  }, [search, meta.page]);
-
-  async function fetchServidores() {
+  const fetchServidores = useCallback(async () => {
     setLoading(true);
     try {
       const data = await apiFetch<PaginatedResponse<Servidor>>(
@@ -41,7 +37,11 @@ export default function ServidoresPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [search, meta.page]);
+
+  useEffect(() => {
+    void fetchServidores();
+  }, [fetchServidores]);
 
   async function handleSave(formData: Partial<Servidor>) {
     setSaving(true);
@@ -60,7 +60,7 @@ export default function ServidoresPage() {
 
       setIsModalOpen(false);
       setSelectedServidor(null);
-      fetchServidores();
+      await fetchServidores();
     } catch (error: any) {
       alert(error.message || "Erro ao salvar servidor");
     } finally {

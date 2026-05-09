@@ -5,6 +5,7 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useCallback,
   ReactNode,
 } from "react";
 import { User, AuthResponse, MeResponse } from "../types/auth";
@@ -29,40 +30,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("macae_prev_token");
-    if (storedToken) {
-      setToken(storedToken);
-      loadUser(storedToken);
-    } else {
-      setLoading(false);
-    }
-  }, []);
+  const logout = useCallback(
+    async (redirect = true) => {
+      try {
+        await apiFetch("/v1/auth/logout", { method: "POST" });
+      } catch {
+        // ignora falha de logout local
+      }
+      setToken(null);
+      setUser(null);
+      if (redirect) {
+        router.push("/login");
+      }
+    },
+    [router],
+  );
 
-  async function loadUser(storedToken: string) {
+  const loadUserFromSession = useCallback(async () => {
     try {
-      const data = await apiFetch<MeResponse>("/v1/auth/me", {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      });
+      const data = await apiFetch<MeResponse>("/v1/auth/me", {});
+      setToken("session-cookie");
       setUser(data.user);
     } catch (error: any) {
-      // Captura o erro 401 ou o código específico do nosso backend
-      if (
-        error?.code === "FALHA_AUTENTICACAO" ||
-        error?.statusCode === 401 ||
-        error?.error === "Unauthorized"
-      ) {
-        console.warn("Sessão expirada, redirecionando para login...");
-        logout();
+      if (error?.status === 401 || error?.statusCode === 401) {
+        logout(false);
         return;
       }
 
       console.error("Falha ao carregar usuário:", error);
-      logout();
+      logout(false);
     } finally {
       setLoading(false);
     }
-  }
+  }, [logout]);
+
+  useEffect(() => {
+    void loadUserFromSession();
+  }, [loadUserFromSession]);
 
   async function login(email: string, senha: string): Promise<AuthResponse> {
     setLoading(true);
@@ -77,9 +81,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       return data;
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Erro detalhado no login:", error);
+
+      // Tratamento específico para erro de conexão (o erro 500 que o Prisma deve gerar)
+      if (
+        error?.status === 500 ||
+        error?.statusCode === 500 ||
+        error?.message?.includes("database")
+      ) {
+        throw new Error(
+          "Erro de conexão com o servidor. Tente novamente em instantes.",
+        );
+      }
+
+      // Se for 401, as credenciais não batem no banco
+      const message = error?.message || "E-mail ou senha incorretos.";
       setLoading(false);
-      throw error;
+      throw new Error(message);
     } finally {
       setLoading(false);
     }
@@ -102,37 +121,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function acceptTerms(usuarioId: string, termoId: string) {
-    setLoading(true);
-    try {
-      await apiFetch("/v1/auth/accept-terms", {
-        method: "POST",
-        body: JSON.stringify({ usuarioId, termoId }),
-      });
-      // Após aceitar termos, o usuário precisa tentar o login novamente
-      // ou podemos tentar logar automaticamente se tivéssemos a senha salva.
-      // Para segurança, vamos apenas retornar e o LoginPage lidará com isso.
-    } catch (error) {
-      setLoading(false);
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }
+  const acceptTerms = useCallback(
+    async (usuarioId: string, termoId: string) => {
+      setLoading(true);
+      try {
+        await apiFetch("/v1/auth/accept-terms", {
+          method: "POST",
+          body: JSON.stringify({ usuarioId, termoId }),
+        });
+        await loadUserFromSession();
+        router.push("/dashboard");
+      } catch (error) {
+        setLoading(false);
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [loadUserFromSession, router],
+  );
 
-  async function finalizeLogin(newToken: string) {
-    localStorage.setItem("macae_prev_token", newToken);
-    setToken(newToken);
-    await loadUser(newToken);
-    router.push("/dashboard");
-  }
-
-  function logout() {
-    localStorage.removeItem("macae_prev_token");
-    setToken(null);
-    setUser(null);
-    router.push("/login");
-  }
+  const finalizeLogin = useCallback(
+    async (newToken: string) => {
+      setToken(newToken || "session-cookie");
+      await loadUserFromSession();
+      router.push("/dashboard");
+    },
+    [loadUserFromSession, router],
+  );
 
   return (
     <AuthContext.Provider

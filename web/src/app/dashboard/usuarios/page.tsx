@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { apiFetch } from "../../../services/api";
 import { Usuario, PaginatedResponse } from "../../../types/entidades";
 import UsuarioForm from "./UsuarioForm";
@@ -20,11 +20,7 @@ export default function UsuariosPage() {
   const [isAuditOpen, setIsAuditOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Usuario | null>(null);
 
-  useEffect(() => {
-    fetchItems();
-  }, [search, meta.page]);
-
-  async function fetchItems() {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
       const data = await apiFetch<PaginatedResponse<Usuario>>(
@@ -37,7 +33,11 @@ export default function UsuariosPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [search, meta.page]);
+
+  useEffect(() => {
+    void fetchItems();
+  }, [fetchItems]);
 
   async function handleSave(formData: any) {
     setSaving(true);
@@ -55,7 +55,7 @@ export default function UsuariosPage() {
       }
       setIsModalOpen(false);
       setSelectedItem(null);
-      fetchItems();
+      await fetchItems();
     } catch (error: any) {
       alert(error.message || "Erro ao salvar usuário");
     } finally {

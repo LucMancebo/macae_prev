@@ -80,11 +80,6 @@ export default function LoginPage() {
     if (!termoAtual) return;
     try {
       await acceptTerms(usuarioId, termoAtual.id);
-      // Após aceitar, volta para o login para finalizar
-      setStep("LOGIN");
-      alert(
-        "Termos aceitos com sucesso! Por favor, realize o login novamente.",
-      );
     } catch (err: any) {
       setError(err.message || "Erro ao processar aceite.");
     }

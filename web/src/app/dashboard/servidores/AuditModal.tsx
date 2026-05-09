@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { apiFetch } from "../../../services/api";
 import { AuditLog } from "../../../types/entidades";
 import { formatarData } from "../../../utils/formatters";
@@ -20,11 +20,7 @@ export default function AuditModal({
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchLogs();
-  }, [id]);
-
-  async function fetchLogs() {
+  const fetchLogs = useCallback(async () => {
     try {
       const data: any = await apiFetch(`/v1/audit/${entidade}/${id}`);
       setLogs(data);
@@ -33,7 +29,11 @@ export default function AuditModal({
     } finally {
       setLoading(false);
     }
-  }
+  }, [entidade, id]);
+
+  useEffect(() => {
+    void fetchLogs();
+  }, [fetchLogs]);
 
   return (
     <div className={styles.modalOverlay}>
