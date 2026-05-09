@@ -17,15 +17,16 @@ export async function authRoutes(app: FastifyInstance) {
         }
     };
 
+    // Rotas Públicas
     app.post('/login', { schema: loginSchema }, authController.login);
     app.post('/login-mfa', { schema: loginMfaSchema }, authController.loginMfa);
     app.get('/terms', authController.getTerms);
-    app.post('/accept-terms', { schema: acceptTermsSchema }, authController.acceptTerms);
 
-    // Rota de perfis geralmente deve ser protegida
+    // Rotas Protegidas
+    app.post('/accept-terms', { preValidation: [authenticate], schema: acceptTermsSchema }, authController.acceptTerms);
     app.get('/perfis', { preValidation: [authenticate] }, authController.getPerfis);
 
-    // Rota protegida: Informações do usuário
+    // Informações do usuário logado
     app.get('/me', { preValidation: [authenticate] }, authController.me);
 
     // Rotas protegidas de configuração de MFA
