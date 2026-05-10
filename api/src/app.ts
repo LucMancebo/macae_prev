@@ -10,6 +10,7 @@ import { consignatariasRoutes } from './modules/consignatarias/consignatarias.ro
 import { usuariosRoutes } from './modules/usuarios/usuarios.routes';
 import { produtosRoutes } from './modules/produtos/produtos.routes';
 import { margensRoutes } from './modules/margens/margens.routes';
+import { consignacoesRoutes } from './modules/consignacoes/consignacoes.routes';
 import { auditRoutes } from './modules/audit/audit.routes';
 import { errorHandler } from './hooks/error-handler';
 
@@ -106,6 +107,7 @@ export const buildApp = (): FastifyInstance => {
     app.register(consignatariasRoutes, { prefix: '/v1/consignatarias' });
     app.register(produtosRoutes, { prefix: '/v1/produtos' });
     app.register(margensRoutes, { prefix: '/v1/margens' });
+    app.register(consignacoesRoutes, { prefix: '/v1/consignacoes' });
     app.register(usuariosRoutes, { prefix: '/v1/usuarios' });
     app.register(auditRoutes, { prefix: '/v1/audit' });
 
