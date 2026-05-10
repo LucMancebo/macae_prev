@@ -7,6 +7,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:vercel-db": "node scripts/test_with_vercel_db.js",
+    "test:local-db": "node scripts/test_with_local_db.js",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
