@@ -25,7 +25,7 @@ async function main() {
   const apiDir = path.join(root, 'api');
   try {
     console.log('Starting docker-compose test DB...');
-    execSync('docker compose -f docker-compose.test.yml up -d --remove-orphans', { cwd: root, stdio: 'inherit' });
+    execSync('docker compose -f api/scripts/docker-compose.test.yml up -d --remove-orphans', { cwd: root, stdio: 'inherit' });
 
     console.log('Waiting for Postgres on 127.0.0.1:15432...');
     await waitForPort('127.0.0.1', 15432);
@@ -42,11 +42,11 @@ async function main() {
 
     console.log('Tests finished with code', code);
     console.log('Tearing down docker-compose test stack...');
-    execSync('docker compose -f docker-compose.test.yml down -v', { cwd: root, stdio: 'inherit' });
+    execSync('docker compose -f api/scripts/docker-compose.test.yml down -v', { cwd: root, stdio: 'inherit' });
     process.exit(code);
   } catch (err) {
     console.error('Error during test run:', err);
-    try { execSync('docker compose -f docker-compose.test.yml down -v', { cwd: root, stdio: 'inherit' }); } catch (e) {}
+    try { execSync('docker compose -f api/scripts/docker-compose.test.yml down -v', { cwd: root, stdio: 'inherit' }); } catch (e) {}
     process.exit(1);
   }
 }

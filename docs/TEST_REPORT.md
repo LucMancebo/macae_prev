@@ -2,36 +2,28 @@
 
 Data: 2026-05-10
 
-Resumo:
+Resumo atual:
 
-- Suites executadas: 5
-- Suites com falha: 5
-- Testes: 16 (5 passaram, 11 falharam)
+- Suites executadas localmente: 5
+- Suites com falha: 0
+- Testes totais: 16 (16 passaram) — ambiente local com Docker Postgres (`api/scripts/docker-compose.test.yml`).
 
-Principais erros observados:
+Observações importantes:
 
-1. `AuthController` unit test
+- Problemas iniciais observados (antes das correções): falhas E2E devido a `DATABASE_URL` inválido/ausente e falta de plugins registrados nos testes unitários.
+- A solução adotada: adição de um runner local (`api/scripts/test_with_local_db.js`) que sobe um Postgres temporário via Docker, executa `prisma db push`, executa a suíte de testes e derruba os containers. Também foi ajustado o registro de plugins nos testes unitários.
 
-- Esperado: 200 com token
-- Recebido: 401
-- Observações: Apesar do `AuthService` ter sido mockado, a rota retornou 401 — suspeita de problema com plugins do Fastify (ex.: `reply.setCookie` ausente) ou validação de payload.
+Recomendações e próximos passos:
 
-2. E2E tests (Auth LGPD, MFA, Servidores)
+- Para CI/PR: configurar um banco de teste dedicado (Neon sandbox ou uma instância gerenciada) e evitar apontar testes para o DB de produção.
+- Garantir que `docs/sensitive/VERCEL_ENV_VARS.secret.md` contenha apenas placeholders (não commitar segredos).
+- Automatizar a execução de `npm run --prefix api test:local-db` no fluxo local de desenvolvedor (README / CONTRIBUTING).
 
-- Erro recorrente: `prisma:error undefined` seguido de `TypeError` em pontos onde o Prisma é utilizado.
-- Observações: Os testes E2E estão tentando acessar o Prisma real sem uma `DATABASE_URL` de teste adequada ou sem mocks.
+Alterações realizadas:
 
-3. Validações Fastify
+- Adicionados: `api/scripts/test_with_local_db.js`, `api/scripts/docker-compose.test.yml`, `api/scripts/test_with_vercel_db.js` (helper), e `npm run test:local-db` em `api/package.json`.
+- Branch criada e mergeada: `feature/add-local-test-db` → `main`.
 
-- Mensagens de validação: `body must have required property 'email'` / `'senha'` em alguns requests — indica payloads enviados incorretamente ou ausência de content-type na injeção das requests.
+Status atual: suíte de testes verde em `main` quando executada localmente com Docker Postgres.
 
-Recomendações imediatas:
-
-- Registrar `@fastify/cookie` nos testes unitários que usam `reply.setCookie` ou mockar `reply.setCookie` — isso corrige falhas unitárias rápidas.
-- Para E2E: escolher entre fornecer um banco de teste (ex.: SQLite ou Neon sandbox) ou mockar o `prisma` nas suítes E2E para desacoplar da infra.
-- Revisar fixtures de testes para garantir `Content-Type: application/json` ao usar `app.inject`.
-
-Próximas ações realizadas neste commit:
-
-- Adicionar `docs/TEST_REPORT.md` (este arquivo).
-- Aplicar correção rápida nos testes unitários (registro de plugin cookie) e re-executar testes.
+Nota de segurança: sempre use arquivos ignorados (`/docs/sensitive/`) para credenciais locais; não promova essas credenciais para o repositório remoto.

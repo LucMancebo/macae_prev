@@ -6,6 +6,13 @@ Resumo rápido do estado atual, decisões e próximos passos relevantes para a M
 
 ## Estado atual após a revisão de hoje
 
+**Atualizado:** 2026-05-10 — testes locais automatizados adicionados e merge de suporte de testes para `main`.
+
+### Atualizações recentes
+
+- Adicionada infra de testes locais: `api/scripts/test_with_local_db.js` e `api/scripts/docker-compose.test.yml` (runner que sobe Postgres temporário, executa `prisma db push` e roda a suíte de testes).
+- Branch `feature/add-local-test-db` criada e mergeada em `main`; `main` atualizado e suíte de testes local finalizou verde.
+
 - Backend ativo em Fastify + Prisma, agora preparado para usar Neon com o adapter oficial da Prisma.
 - Frontend em Next.js continua em `web/`, integrado ao mesmo deploy da raiz sem dependência de Prisma no runtime do app web.
 - A configuração de banco do servidor foi consolidada em `api/prisma/prisma.ts` e reaproveitada em `api/src/config/database.ts`.
