@@ -8,6 +8,8 @@ import { authRoutes } from './modules/auth/auth.routes';
 import { servidoresRoutes } from './modules/servidores/servidores.routes';
 import { consignatariasRoutes } from './modules/consignatarias/consignatarias.routes';
 import { usuariosRoutes } from './modules/usuarios/usuarios.routes';
+import { produtosRoutes } from './modules/produtos/produtos.routes';
+import { margensRoutes } from './modules/margens/margens.routes';
 import { auditRoutes } from './modules/audit/audit.routes';
 import { errorHandler } from './hooks/error-handler';
 
@@ -102,6 +104,8 @@ export const buildApp = (): FastifyInstance => {
     app.register(authRoutes, { prefix: '/v1/auth' });
     app.register(servidoresRoutes, { prefix: '/v1/servidores' });
     app.register(consignatariasRoutes, { prefix: '/v1/consignatarias' });
+    app.register(produtosRoutes, { prefix: '/v1/produtos' });
+    app.register(margensRoutes, { prefix: '/v1/margens' });
     app.register(usuariosRoutes, { prefix: '/v1/usuarios' });
     app.register(auditRoutes, { prefix: '/v1/audit' });
 
