@@ -11,6 +11,7 @@
     "test:local-db": "node scripts/test_with_local_db.js",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
+    "generate:openapi": "npm run build && node scripts/generate_openapi.js",
     "start": "node dist/server.js",
     "provision:admin": "node scripts/provision-admin-neon.js",
     "postinstall": "prisma generate && node scripts/provision-admin-neon.js || echo 'provision:admin skipped/failed'"
