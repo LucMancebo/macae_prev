@@ -1,6 +1,6 @@
 # POC — Prova de Conceito — Respostas (Status Real do Projeto)
 
-> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** (ou em andamento) na base de código atual, correspondendo à **Milestone 1 — Fundação & Infraestrutura**.
+> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1 & 2 Concluídas** (Fundação & Segurança). Última atualização: 10/05/2026.
 
 ## O sistema deverá atender os padrões abaixo descritos:
 
@@ -43,8 +43,8 @@
 
 ### 6 - Logs de CRUD nas telas + auditoria completa (4.1.6.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 2**. Tabela `logs_auditoria` mapeada com JSON snapshots, porém os middlewares e triggers de inserção via backend/API estão pendentes desta etapa.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 2**. Tabela `LogAuditoria` implementada com campos: IP, User-Agent, ação, timestamp, usuario_id. Middleware de auditoria registra todas as ações de login/LGPD. Documentado em `docs/milestones/M2_seguranca/documentacao.md`.
 
 ---
 
@@ -85,8 +85,8 @@
 
 ### 12 - Registro de acessos + controle por perfil individual (4.1.9.)
 
-**(X) Não atende** (Infra modelada)
-**Status Real:** Planejado para **Milestone 2**. Modelos `usuarios` e `perfis_acesso` populados, JWT e Auth faltantes.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 2**. Autenticação JWT implementada via `@fastify/jwt`. Perfis ADMINISTRADOR/USUARIO seeding concluído. Rotas protegidas verificam `user.perfilId`. Testes E2E validam fluxo completo (16/16 casos passando).
 
 ---
 
@@ -169,8 +169,8 @@
 
 ### 24 - Segurança: criptografia + controle de acesso (4.1.17.4.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 2**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 2**. Criptografia BCrypt (salt 10) implementada para senhas. JWT tokens com expiração 8h. Rate-limiting: 5 tentativas → 30min bloqueio. HttpOnly cookies em prod. Documentado completo em `docs/openapi.json` e Swagger `/docs`.
 
 ---
 
@@ -197,15 +197,15 @@
 
 ### 28 - Conformidade LGPD (4.1.17.10.)
 
-**(X) Não atende**
-**Status Real:** Ocultação de dados, criptografia e termos planejados para o módulo de segurança da **Milestone 2**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 2**. Tabelas `TermoUso` (versionamento) e `AceiteTermo` (auditoria com IP/User-Agent) implementadas. Bloqueio de acesso para usuários que não aceitaram termos. Fluxo de aceite obrigatório no login. Testes validados (CT15 + CT16).
 
 ---
 
 ### 29 - Infraestrutura completa de segurança (4.1.17.13.)
 
-**(X) Atende parcial**
-**Status Real:** Atendido primariamente do lado da aplicação no **Milestone 1**. A modelagem foi concretizada por um ORM **completamente agnóstico de banco de dados** (Prisma). Porém certificados digitais SSL, VPNs, e backup AWS RDS serão efetuados fisicamente nos painéis da AWS em momento propício do release final.
+**(✓) Atende parcial**
+**Status Real:** ✅ **Concluído (lado aplicação) em Milestone 2**. JWT + MFA (TOTP) + Auditoria + Rate-limiting implementados. Arquitetura Fastify com middlewares de segurança. Certificados SSL/TLS, VPNs e AWS RDS backup serão configurados em **Milestone 7** (Deploy & Suporte).
 
 ---
 
