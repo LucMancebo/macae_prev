@@ -1,4 +1,5 @@
 import Fastify, { FastifyInstance } from 'fastify';
+import cookie from '@fastify/cookie';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
 import { AuditService } from '../../audit/audit.service';
@@ -13,6 +14,7 @@ describe('AuthController', () => {
 
     beforeAll(() => {
         app = Fastify();
+        app.register(cookie);
         authController = new AuthController();
         app.post('/login', authController.login);
     });
@@ -72,6 +74,7 @@ describe('AuthController', () => {
         expect(response.statusCode).toBe(200);
         expect(JSON.parse(response.payload)).toEqual({
             token: 'fake-jwt-token',
+            token_livre: false,
         });
 
         expect(AuditService.registrar).toHaveBeenCalledWith(
