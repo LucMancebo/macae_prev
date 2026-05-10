@@ -2,6 +2,16 @@
 
 > _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1 & 2 Concluídas** (Fundação & Segurança). Última atualização: 10/05/2026.
 
+## 📊 Progresso Geral
+
+**Status: 9/30 POCs Respondidas (30%) | ⏳ 21 Pendentes para Milestones 3-7**
+
+| Respondidas | Pendentes | Taxa   |
+| ----------- | --------- | ------ |
+| 9           | 21        | 30% ✅ |
+
+---
+
 ## O sistema deverá atender os padrões abaixo descritos:
 
 ---
