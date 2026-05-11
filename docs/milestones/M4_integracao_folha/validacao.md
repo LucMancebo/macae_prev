@@ -5,10 +5,8 @@
 
 ## Concluído
 
-- Parser CSV de folha implementado e testado.
-- Validações de arquivo e checksum implementadas.
-- `ArquivoService`, controller e rotas `/v1/arquivos` implementados.
 - Tela `/dashboard/arquivos` e service frontend `web/src/services/arquivos.ts` implementados.
+- Engine de reconciliação MVP implementada em `api/src/utils/reconciliacao.ts` e integrada ao fluxo de importação.
 - Migration Prisma com `Arquivo`, `Repasse` e novos campos de `Parcela` criada.
 - Testes unitários da service e parser passando.
 - Suite oficial do backend aprovada com `npm run test:local-db`.

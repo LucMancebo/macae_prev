@@ -10,6 +10,7 @@
 - Migration criada para os novos modelos Prisma.
 - Frontend de arquivos disponível em `/dashboard/arquivos`.
 - Service frontend criado em `web/src/services/arquivos.ts`.
+- Engine de reconciliação MVP implementada em `api/src/utils/reconciliacao.ts` e integrada ao fluxo de importação.
 
 ## Arquivos-chave
 

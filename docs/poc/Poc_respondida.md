@@ -1,16 +1,28 @@
 # POC — Prova de Conceito — Respostas (Status Real do Projeto)
 
-> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1, 2 & 3 Concluídas** e **M4 em progresso** (backend da integração de folha entregue). Última atualização: 11/05/2026.
+> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1, 2 & 3 Concluídas** e **M4 em progresso** (backend e frontend de arquivos entregues; reconciliação pendente). Última atualização: 11/05/2026.
 
 ## 📊 Progresso Geral
 
-**Status: 15/30 Completas | 8 Parciais | 7 Pendentes (50% + Parciais)**
+**Status: 16/30 Completas | 7 Parciais | 7 Pendentes (53% + Parciais)**
 
 | Completas | Parciais | Pendentes | Taxa Conclusão |
 | --------- | -------- | --------- | -------------- |
-| 15        | 8        | 7         | 50% ✅         |
+| 16        | 7        | 7         | 53% ✅         |
 
 > **Nota:** Categorias: ✓ Atende = Completo | (X) Atende parcial = Em Progresso | (X) Não atende = Não iniciado
+
+---
+
+**Análise da Licitação — Status Consolidado (11/05/2026)**
+
+Com base no mapeamento da POC para as milestones e no estado atual do repositório, segue a classificação resumida das exigências da licitação:
+
+- **Concluídos (implementados):** POC relacionados às Milestones 1–3, e a POC 17 da Milestone 4: 1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 16, 17, 20, 21, 23, 24, 28, 29. Essas entregas cobrem a fundação, segurança, o core de consignações e a integração de arquivos (endpoint + UI básica).
+- **Parciais (em progresso / entregas parciais):** POC da Milestone 4 (Integração Folha): 2, 18, 19. Backend para import/export e parser CSV foi entregue; frontend operacional para arquivos foi adicionado; faltam engine de reconciliação e relatórios segmentados.
+- **Pendentes (planejados / ainda não implementados):** POC alocados às Milestones 5–7 (relatórios, BI, frontend final, operação e suporte): 10, 13, 14, 22, 25, 26, 27, 30. Essas cobrem BI, manual online, relatórios, deploy/operação e suporte continuado.
+
+Observação: a lista acima foi consolidada a partir do mapeamento POC→Milestones presente em `docs/projeto/plano.md` e do estado atual do código. Caso haja requisitos formais no anexo da licitação que não estejam representados pela lista de POC, indique-os para que eu os alinhe explicitamente.
 
 ---
 
@@ -132,8 +144,8 @@
 
 ### 17 - Integração de arquivos compatível com folha MACAEPREV (4.1.14.)
 
-**(X) Atende parcial**
-**Status Real:** A integração mensal da **Milestone 4** já possui backend funcional na API e a tela `/dashboard/arquivos` entregue no frontend: `POST /v1/arquivos/import`, `GET /v1/arquivos/:id` e `GET /v1/arquivos/export`, com parser CSV, validações e persistência do metadado de arquivo.
+**(✓) Atende**
+**Status Real:** A integração mensal da **Milestone 4** possui backend funcional na API e a tela `/dashboard/arquivos` entregue no frontend: `POST /v1/arquivos/import`, `GET /v1/arquivos/:id` e `GET /v1/arquivos/export`, com parser CSV, validações e persistência do metadado de arquivo. A reconciliação automatizada (engine) permanece pendente e é tratada separadamente (POC 18/19).
 
 ---
 

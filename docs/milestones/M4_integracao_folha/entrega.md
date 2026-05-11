@@ -8,6 +8,7 @@
 - Service, controller e rotas de arquivos em `api/src/modules/arquivos/`.
 - Service frontend `web/src/services/arquivos.ts`.
 - Tela `/dashboard/arquivos`.
+- Engine de reconciliação MVP: `api/src/utils/reconciliacao.ts` (integrada ao fluxo de importação)
 - Schema Prisma e migration para `Arquivo` e `Repasse`.
 - Testes unitários de parser e service.
 - Validação completa do backend via runner local.
