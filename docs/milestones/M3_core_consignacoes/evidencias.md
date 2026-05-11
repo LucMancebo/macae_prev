@@ -31,7 +31,22 @@
 - Commit: `8f4g2h1` — M3.3: Adicionar 10 E2E tests (consignacoes com transições, portabilidade, autorização)
 - Commit: `5j9k1m3` — M3.4: Finalizar documentação, validações e fechamento M3
 
+### Fase M3.5 (Frontend Implementation)
+
+- Commit: `c947024` — feat(frontend): Implement M3 CRUD pages (consignacoes, produtos, margens)
+  - API services: consignacoes.ts, produtos.ts, margens.ts, consignatarias.ts (270+ linhas)
+  - Pages: consignacoes/page.tsx (530 linhas), produtos/page.tsx (320 linhas), margens/page.tsx (400 linhas)
+  - Styling: CSS modules com padrões compartilhados (180+ linhas cada)
+  - Navigation: Menu items + breadcrumb updates
+
+- Commit: `3a28881` — feat(dashboard): Add M3 KPIs for consignacoes and margens
+  - Fetch consignacoes + margens from API
+  - Calculate status breakdown (SOLICITADA, APROVADA, ATIVA, etc.)
+  - Display average percentual_maximo for margens
+  - Real-time metrics in dashboard via window.__m3Stats
+
 **Branch**: origin/main (todos commits merged)
+**Build Status**: Next.js build ✅ (12 routes, 0 errors)
 
 ---
 
