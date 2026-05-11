@@ -23,15 +23,15 @@ Como contribuir com a documentação
 
 ## 🎯 Status Geral do Projeto
 
-| Milestone | Escopo                    | Backend     | Frontend    | Testes  | POCs |
-| --------- | ------------------------- | ----------- | ----------- | ------- | ---- |
-| **M1**    | Fundação & Infraestrutura | ✅ Completo | ✅ Completo | —       | 4/4  |
-| **M2**    | Segurança & Autenticação  | ✅ Completo | ✅ Completo | 16/16   | 4/4  |
-| **M3**    | Núcleo de Consignações    | ✅ Completo | ✅ Completo | 118/118 | 8/8  |
-| **M4**    | Relatórios & Integrações  | ⏳ Planejado| ⏳ Planejado| —       | 8/12 |
-| **M5**    | BI & Dashboards           | ⏳ Planejado| ⏳ Planejado| —       | —    |
-| **M6**    | Frontend & UX             | ⏳ Planejado| ⏳ Planejado| —       | —    |
-| **M7**    | Suporte & Operação        | ⏳ Planejado| ⏳ Planejado| —       | —    |
+| Milestone | Escopo                    | Backend      | Frontend     | Testes  | POCs |
+| --------- | ------------------------- | ------------ | ------------ | ------- | ---- |
+| **M1**    | Fundação & Infraestrutura | ✅ Completo  | ✅ Completo  | —       | 4/4  |
+| **M2**    | Segurança & Autenticação  | ✅ Completo  | ✅ Completo  | 16/16   | 4/4  |
+| **M3**    | Núcleo de Consignações    | ✅ Completo  | ✅ Completo  | 118/118 | 8/8  |
+| **M4**    | Relatórios & Integrações  | ⏳ Planejado | ⏳ Planejado | —       | 8/12 |
+| **M5**    | BI & Dashboards           | ⏳ Planejado | ⏳ Planejado | —       | —    |
+| **M6**    | Frontend & UX             | ⏳ Planejado | ⏳ Planejado | —       | —    |
+| **M7**    | Suporte & Operação        | ⏳ Planejado | ⏳ Planejado | —       | —    |
 
 **Total M3**: ✅ Backend (118 tests) + ✅ Frontend (3 CRUD pages + dashboard KPIs) + ✅ Build (Next.js green)
 

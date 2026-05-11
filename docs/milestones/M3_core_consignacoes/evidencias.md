@@ -43,7 +43,7 @@
   - Fetch consignacoes + margens from API
   - Calculate status breakdown (SOLICITADA, APROVADA, ATIVA, etc.)
   - Display average percentual_maximo for margens
-  - Real-time metrics in dashboard via window.__m3Stats
+  - Real-time metrics in dashboard via window.\_\_m3Stats
 
 **Branch**: origin/main (todos commits merged)
 **Build Status**: Next.js build ✅ (12 routes, 0 errors)
