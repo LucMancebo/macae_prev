@@ -16,6 +16,7 @@ import {
     validarNomeArquivo,
     ValidacaoArquivoResult
 } from '../../utils/validators-arquivo';
+import { reconciliarParcelas } from '../../utils/reconciliacao';
 
 export interface ArquivoProcessadoResult {
     nome_arquivo: string;
@@ -229,6 +230,31 @@ export class ArquivoService {
                 usuario_id: input.usuarioId
             }
         });
+
+        // executar reconciliação simples (MVP) usando as linhas parseadas
+        try {
+            const reconciliacao = await reconciliarParcelas(processamento.parse.linhas as LinhaFolhaEntrada[], arquivo.id);
+
+            // atualiza contadores no registro do arquivo
+            await prisma.arquivoIntegracao.update({
+                where: { id: arquivo.id },
+                data: {
+                    registros_sucesso: reconciliacao.conciliadas,
+                    registros_erro: reconciliacao.erros,
+                    status: reconciliacao.conciliadas > 0 ? 'PROCESSADO' : arquivo.status
+                }
+            });
+
+            // anexa o resumo da reconciliação ao processamento retornado
+            processamento.resumo.resultado_reconciliacao = {
+                ...processamento.resumo.resultado_reconciliacao,
+                ...reconciliacao
+            } as any;
+        } catch (err) {
+            // não falhar a importação principal por erro de reconciliação; apenas logar
+            // eslint-disable-next-line no-console
+            console.error('Erro na reconciliação MVP:', err);
+        }
 
         return {
             arquivo,

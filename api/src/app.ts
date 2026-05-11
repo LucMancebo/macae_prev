@@ -12,6 +12,7 @@ import { produtosRoutes } from './modules/produtos/produtos.routes';
 import { margensRoutes } from './modules/margens/margens.routes';
 import { consignacoesRoutes } from './modules/consignacoes/consignacoes.routes';
 import { arquivosRoutes } from './modules/arquivos/arquivo.routes';
+import { reconciliacaoRoutes } from './modules/reconciliacao/reconciliacao.routes';
 import { auditRoutes } from './modules/audit/audit.routes';
 import { errorHandler } from './hooks/error-handler';
 
@@ -110,6 +111,7 @@ export const buildApp = (): FastifyInstance => {
     app.register(margensRoutes, { prefix: '/v1/margens' });
     app.register(consignacoesRoutes, { prefix: '/v1/consignacoes' });
     app.register(arquivosRoutes, { prefix: '/v1/arquivos' });
+    app.register(reconciliacaoRoutes, { prefix: '/v1/reconciliacao' });
     app.register(usuariosRoutes, { prefix: '/v1/usuarios' });
     app.register(auditRoutes, { prefix: '/v1/audit' });
 
