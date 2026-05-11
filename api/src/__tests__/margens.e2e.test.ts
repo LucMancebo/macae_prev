@@ -173,7 +173,8 @@ describe('Margens Module — E2E Tests', () => {
                 tipo: 'EMPRESTIMO',
                 tipo_desconto: 'PERCENTUAL',
                 consignataria_id: consig.id,
-                margem_id
+                margem_id,
+                status: 'ATIVO'
             }
         });
 
