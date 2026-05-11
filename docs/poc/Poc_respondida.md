@@ -4,11 +4,13 @@
 
 ## 📊 Progresso Geral
 
-**Status: 19/30 POCs Respondidas (63%) | ⏳ 11 Pendentes para Milestones 4-7**
+**Status: 15/30 Completas | 4 Parciais | 11 Pendentes (50% + Parciais)**
 
-| Respondidas | Pendentes | Taxa   |
-| ----------- | --------- | ------ |
-| 19          | 11        | 63% ✅ |
+| Completas | Parciais | Pendentes | Taxa Conclusão |
+| --------- | -------- | --------- | -------------- |
+| 15        | 4        | 11        | 50% ✅         |
+
+> **Nota:** Categorias: ✓ Atende = Completo | (X) Atende parcial = Em Progresso | (X) Não atende = Não iniciado
 
 ---
 
