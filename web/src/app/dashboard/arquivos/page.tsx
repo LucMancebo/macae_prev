@@ -8,7 +8,13 @@ import {
   exportarArquivos,
   importarArquivo,
 } from "../../../services/arquivos";
-import { Badge, Button, Card, FormField, Input } from "../../../design-system/components";
+import {
+  Badge,
+  Button,
+  Card,
+  FormField,
+  Input,
+} from "../../../design-system/components";
 import styles from "./arquivos.module.css";
 
 const CSV_EXEMPLO = `consignante_id,consignataria_id,servidor_matricula,servidor_nome,produto_id,valor_liquido,desconto_consignante,taxa_efetiva,cet,parcela_numero,valor_parcela,data_vencimento,desconto_retencao,acrescimo_juros,observacoes
@@ -37,12 +43,16 @@ export default function ArquivosPage() {
     "FOLHA_CONSIGNACOES_MACAEPREV_202605_140230.csv",
   );
   const [conteudoCsv, setConteudoCsv] = useState(CSV_EXEMPLO);
-  const [arquivoSelecionado, setArquivoSelecionado] = useState<File | null>(null);
+  const [arquivoSelecionado, setArquivoSelecionado] = useState<File | null>(
+    null,
+  );
   const [arquivoId, setArquivoId] = useState("");
   const [dataInicio, setDataInicio] = useState("");
   const [dataFim, setDataFim] = useState("");
-  const [importacao, setImportacao] = useState<ArquivoImportacaoResposta | null>(null);
-  const [arquivoDetalhe, setArquivoDetalhe] = useState<ArquivoDetalheResposta | null>(null);
+  const [importacao, setImportacao] =
+    useState<ArquivoImportacaoResposta | null>(null);
+  const [arquivoDetalhe, setArquivoDetalhe] =
+    useState<ArquivoDetalheResposta | null>(null);
   const [mensagem, setMensagem] = useState("");
   const [loadingImportacao, setLoadingImportacao] = useState(false);
   const [loadingConsulta, setLoadingConsulta] = useState(false);
@@ -135,7 +145,9 @@ export default function ArquivosPage() {
         dataFim: dataFim || undefined,
       });
 
-      const blob = new Blob([resultado.csv], { type: "text/csv;charset=utf-8;" });
+      const blob = new Blob([resultado.csv], {
+        type: "text/csv;charset=utf-8;",
+      });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -156,7 +168,9 @@ export default function ArquivosPage() {
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <div className={styles.heroKicker}>M4 · Integração Folha</div>
-          <h1 className={styles.heroTitle}>Arquivos de folha com importação, consulta e exportação CSV.</h1>
+          <h1 className={styles.heroTitle}>
+            Arquivos de folha com importação, consulta e exportação CSV.
+          </h1>
           <p className={styles.heroSubtitle}>
             A operação já conversa com o backend M4. Esta tela concentra o fluxo
             de envio de folha, inspeção do arquivo processado e geração do
@@ -173,11 +187,15 @@ export default function ArquivosPage() {
         <Card className={styles.heroPanel}>
           <span className={styles.heroPanelLabel}>Atalhos operacionais</span>
           <div className={styles.heroPanelMetric}>
-            <strong>{importacao ? importacao.processamento.parse.linhas_validas : "0"}</strong>
+            <strong>
+              {importacao ? importacao.processamento.parse.linhas_validas : "0"}
+            </strong>
             <span>linhas válidas na última importação</span>
           </div>
           <div className={styles.heroPanelMetric}>
-            <strong>{importacao ? importacao.processamento.parse.linhas_erro : "0"}</strong>
+            <strong>
+              {importacao ? importacao.processamento.parse.linhas_erro : "0"}
+            </strong>
             <span>linhas com erro processadas</span>
           </div>
           <div className={styles.heroPanelMetric}>
@@ -205,8 +223,12 @@ export default function ArquivosPage() {
                   processamento do backend.
                 </p>
               </div>
-              <Badge tone={resolveTone(importacao?.processamento.resumo.status)}>
-                {importacao ? importacao.processamento.resumo.status : "Pendente"}
+              <Badge
+                tone={resolveTone(importacao?.processamento.resumo.status)}
+              >
+                {importacao
+                  ? importacao.processamento.resumo.status
+                  : "Pendente"}
               </Badge>
             </div>
 
@@ -233,7 +255,11 @@ export default function ArquivosPage() {
                 </span>
               </FormField>
 
-              <FormField className={styles.fullWidth} label="Conteúdo CSV" required>
+              <FormField
+                className={styles.fullWidth}
+                label="Conteúdo CSV"
+                required
+              >
                 <textarea
                   className={styles.textarea}
                   value={conteudoCsv}
@@ -258,7 +284,11 @@ export default function ArquivosPage() {
             {resumoImportacao ? (
               <div className={styles.metricGrid}>
                 {resumoImportacao.map((item) => (
-                  <Card key={item.label} className={styles.metricCard} elevated={false}>
+                  <Card
+                    key={item.label}
+                    className={styles.metricCard}
+                    elevated={false}
+                  >
                     <span>{item.label}</span>
                     <strong>{item.value}</strong>
                   </Card>
@@ -297,7 +327,9 @@ export default function ArquivosPage() {
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
                   <span>Arquivo</span>
-                  <strong>{arquivoDetalhe.nome_arquivo || arquivoDetalhe.id}</strong>
+                  <strong>
+                    {arquivoDetalhe.nome_arquivo || arquivoDetalhe.id}
+                  </strong>
                 </div>
                 <div className={styles.detailItem}>
                   <span>Status</span>
@@ -385,9 +417,7 @@ export default function ArquivosPage() {
             <div className={styles.sectionHeader}>
               <div>
                 <h2>Checklist M4</h2>
-                <p>
-                  Estado atual do módulo de folha dentro da milestone.
-                </p>
+                <p>Estado atual do módulo de folha dentro da milestone.</p>
               </div>
               <Badge tone="warning">Parcial</Badge>
             </div>
@@ -405,11 +435,11 @@ export default function ArquivosPage() {
               <div className={styles.sectionHeader}>
                 <div>
                   <h2>Última importação</h2>
-                  <p>
-                    Resumo rápido do processamento retornado pela API.
-                  </p>
+                  <p>Resumo rápido do processamento retornado pela API.</p>
                 </div>
-                <Badge tone={resolveTone(importacao.processamento.resumo.status)}>
+                <Badge
+                  tone={resolveTone(importacao.processamento.resumo.status)}
+                >
                   {importacao.processamento.resumo.status}
                 </Badge>
               </div>
@@ -425,18 +455,28 @@ export default function ArquivosPage() {
                 </div>
                 <div>
                   <span>Registros</span>
-                  <strong>{formatCount(importacao.arquivo.total_registros)}</strong>
+                  <strong>
+                    {formatCount(importacao.arquivo.total_registros)}
+                  </strong>
                 </div>
                 <div>
                   <span>Sucesso</span>
-                  <strong>{formatCount(importacao.arquivo.registros_sucesso)}</strong>
+                  <strong>
+                    {formatCount(importacao.arquivo.registros_sucesso)}
+                  </strong>
                 </div>
               </div>
 
               <div className={styles.previewBox}>
-                <span className={styles.previewLabel}>Erros da última importação</span>
+                <span className={styles.previewLabel}>
+                  Erros da última importação
+                </span>
                 <pre>
-                  {JSON.stringify(importacao.processamento.parse.erros, null, 2)}
+                  {JSON.stringify(
+                    importacao.processamento.parse.erros,
+                    null,
+                    2,
+                  )}
                 </pre>
               </div>
             </Card>

@@ -12,7 +12,11 @@
   gap: 1rem;
   padding: 1.5rem;
   border-radius: 1.75rem;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(31, 41, 55, 0.94));
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.98),
+    rgba(31, 41, 55, 0.94)
+  );
   color: #f8fafc;
   box-shadow: 0 32px 80px rgba(15, 23, 42, 0.18);
 }
@@ -24,7 +28,11 @@
   width: 22rem;
   height: 22rem;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(86, 180, 255, 0.18), transparent 72%);
+  background: radial-gradient(
+    circle,
+    rgba(86, 180, 255, 0.18),
+    transparent 72%
+  );
   pointer-events: none;
 }
 
