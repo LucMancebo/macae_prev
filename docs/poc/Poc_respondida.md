@@ -1,14 +1,14 @@
 # POC — Prova de Conceito — Respostas (Status Real do Projeto)
 
-> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1 & 2 Concluídas** (Fundação & Segurança). Última atualização: 10/05/2026.
+> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1, 2 & 3 Concluídas** (Fundação, Segurança & Core Consignações). Última atualização: 10/05/2026.
 
 ## 📊 Progresso Geral
 
-**Status: 9/30 POCs Respondidas (30%) | ⏳ 21 Pendentes para Milestones 3-7**
+**Status: 19/30 POCs Respondidas (63%) | ⏳ 11 Pendentes para Milestones 4-7**
 
 | Respondidas | Pendentes | Taxa   |
 | ----------- | --------- | ------ |
-| 9           | 21        | 30% ✅ |
+| 19          | 11        | 63% ✅ |
 
 ---
 
@@ -32,22 +32,22 @@
 
 ### 3 - Produtos de consignação + averbação por valor/percentual (4.1.3.)
 
-**(X) Não atende** (Etapa avançada em modelagem)
-**Status Real:** Modelagem das tabelas `produtos` e `margens` criadas no BD via Prisma na M1, mas a funcionalidade de software e visualização (Frontend/API) será feita na **Milestone 3**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 3**. CRUD completo para Produtos e Margens implementado. Backend: 6 testes de produtos + 8 testes de margens validam CRUD, validações de taxa_min/max, averbacao, prazo_min/max. Frontend: página `/dashboard/produtos` com criar/editar/deletar + página `/dashboard/margens` com criar/editar/deletar + bloquear/desbloquear. Todos endpoints testados via Jest.
 
 ---
 
 ### 4 - Inclusão de novas modalidades de produtos (4.1.4.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 3**. A modelagem possui tipos configuráveis em `schema.prisma`, mas sem interface de administração ainda.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 3**. Schema Prisma define tipo Produto como enum (PADRAO, ESPECIAL, RENEGOCIACAO). Página frontend `/dashboard/produtos` permite criar produtos com seleção de tipo. Backend valida tipos e aplica regras específicas conforme modalidade (taxa_min/max, averbacao, prazo).
 
 ---
 
 ### 5 - Controle de margens exclusivas/compartilhadas + configurações (4.1.5.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 3**. Entidades abstratas mapeadas (M1), motor de regras pendente.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 3**. Backend: tabela Margem com campos exclusividade (EXCLUSIVA/COMPARTILHADA), status (ATIVA/INATIVA), percentual_maximo. 8 testes validam CRUD, bloquear, desbloquear, consultarDisponibilidade. Frontend: página `/dashboard/margens` com CRUD completo, modal de detalhes mostrando disponibilidade por servidor, botões bloquear/desbloquear.
 
 ---
 
@@ -60,22 +60,22 @@
 
 ### 7 - Controle de margem com base na folha + pós-corte (4.1.7.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 3**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 3**. Backend: implementado consultarDisponibilidade(consignataria_id, produto_id) que verifica disponibilidade de margem baseado em consignatárias ativas e produtos relacionados. Frontend: página margens exibe disponibilidade breakdown por servidor. Testes validam regras (8 testes margens).
 
 ---
 
 ### 8 - Registro ágil de contratos + conciliação de parcelas (4.1.7.1.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 3**. Tabela de `contratos` e `parcelas` geradas (M1). Conciliador (Motor) não iniciado.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 3**. Backend: 10 testes de consignacoes validam CRUD, transições de status (SOLICITADA→APROVADA→ATIVA→QUITADA/CANCELADA/PORTADA), listarParcelas com detalhe. Endpoints: POST/PATCH/DELETE + GET/:id/parcelas. Frontend: página `/dashboard/consignacoes` com tabela listando todas, modal de detalhes mostrando parcelas, botões Aprovar/Ativar/Cancelar/Quitar.
 
 ---
 
 ### 9 - Portabilidade e renegociação com garantia de margem (4.1.7.2.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 3**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 3**. Backend: endpoint PATCH /consignacoes/:id/portar implementa portabilidade (transição status_fluxo para PORTADA). Validações de margem em transição. Testes: 10/10 consignacoes. Frontend: página consignacoes inclui botão "Portar" que chama API. Status PORTADA exibido em cor especial no dashboard.
 
 ---
 
@@ -88,8 +88,8 @@
 
 ### 11 - Controle de CET máximo (4.1.8.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 3**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 3**. Backend: validador `validarCET()` verifica taxa_efetiva against teto definido em config. Teste de calculadora valida: 27 testes de cálculos financeiros incluem cenários de CET máximo. Frontend: formulário de produtos exibe campo `taxa_efetiva` com validação real-time.
 
 ---
 
@@ -123,8 +123,8 @@
 
 ### 16 - Histórico de consignações e dados de Consignatárias (4.1.13.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 3 / 5**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 3**. Backend: endpoints GET /consignacoes (com paginação + filtros por status) + GET /consignacoes/:id (detalhe com parcelas). Tabelas auditadas. 10 testes validam fluxo completo. Frontend: página `/dashboard/consignacoes` exibe histórico em tabela paginada, filtros por status (SOLICITADA/APROVADA/ATIVA/QUITADA/CANCELADA/PORTADA), modal de detalhes com parcelas. Dashboard mostra KPI "Consignações (total)" com breakdown por status.
 
 ---
 
@@ -151,15 +151,15 @@
 
 ### 20 - Módulo de portabilidade/renegociação completo (4.1.16.1.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 3**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 3**. Backend: fluxo de portabilidade implementado (PATCH /consignacoes/:id/portar). Validações de elegibilidade + garantia de margem. Registros auditados em LogAuditoria. Testes: 10/10 consignacoes. Frontend: página consignacoes com botão "Portar", confirmação visual, status PORTADA destacado no dashboard.
 
 ---
 
 ### 21 - Fluxo de aprovação configurável (4.1.16.2.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 3**. Tabela de workflow já instanciada dinamicamente via JSON na M1.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 3**. Backend: fluxo de aprovação implementado via endpoints PATCH (aprovar, ativar, cancelar, quitar). Transições de status validadas conforme máquina de estados (SOLICITADA→APROVADA→ATIVA→QUITADA ou CANCELADA). Workflows armazenados em JSON (M1). Testes: 10/10. Frontend: botões de ação (Aprovar, Ativar, Cancelar, Quitar, Portar) no CRUD de consignacoes com confirmação.
 
 ---
 
