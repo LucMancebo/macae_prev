@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_1 = __importDefault(require("fastify"));
+const cookie_1 = __importDefault(require("@fastify/cookie"));
 const auth_controller_1 = require("../auth.controller");
 const auth_service_1 = require("../auth.service");
 const audit_service_1 = require("../../audit/audit.service");
@@ -15,6 +16,7 @@ describe('AuthController', () => {
     let authController;
     beforeAll(() => {
         app = (0, fastify_1.default)();
+        app.register(cookie_1.default);
         authController = new auth_controller_1.AuthController();
         app.post('/login', authController.login);
     });
@@ -61,6 +63,7 @@ describe('AuthController', () => {
         expect(response.statusCode).toBe(200);
         expect(JSON.parse(response.payload)).toEqual({
             token: 'fake-jwt-token',
+            token_livre: false,
         });
         expect(audit_service_1.AuditService.registrar).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({
             usuario_id: 'user-id-123',

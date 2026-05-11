@@ -52,12 +52,13 @@ Usuario (1) ──────────── (N) Consignacao (usuario_criaca
 ## 3. Implementação de Validadores
 
 ### 3.1 CPF Validator
+
 ```typescript
 // utils/validators.ts
 export function validarCPF(cpf: string): boolean {
-  const clean = cpf.replace(/\D/g, '');
+  const clean = cpf.replace(/\D/g, "");
   if (clean.length !== 11) return false;
-  
+
   // Algoritmo módulo 11 (RFC padrão)
   const calcDigit = (str: string, factor: number): string => {
     let sum = 0;
@@ -66,53 +67,59 @@ export function validarCPF(cpf: string): boolean {
       sum += parseInt(digit) * multiplier;
       multiplier--;
     }
-    const remainder = (sum % 11);
-    return (remainder < 2) ? '0' : String(11 - remainder);
+    const remainder = sum % 11;
+    return remainder < 2 ? "0" : String(11 - remainder);
   };
-  
+
   const digit1 = calcDigit(clean.substring(0, 9), 10);
   const digit2 = calcDigit(clean.substring(0, 9) + digit1, 11);
-  
+
   return clean === clean.substring(0, 9) + digit1 + digit2;
 }
 ```
 
 ### 3.2 CNPJ Validator
+
 ```typescript
 export function validarCNPJ(cnpj: string): boolean {
-  const clean = cnpj.replace(/\D/g, '');
+  const clean = cnpj.replace(/\D/g, "");
   if (clean.length !== 14) return false;
-  
+
   if (/^(\d)\1{13}$/.test(clean)) return false; // Todos dígitos iguais
-  
+
   const calcDigit = (str: string, weights: number[]): string => {
     let sum = 0;
     for (let i = 0; i < str.length; i++) {
       sum += parseInt(str[i]) * weights[i];
     }
     const remainder = sum % 11;
-    return (remainder < 2) ? '0' : String(11 - remainder);
+    return remainder < 2 ? "0" : String(11 - remainder);
   };
-  
+
   const weights1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
   const digit1 = calcDigit(clean.substring(0, 12), weights1);
-  
+
   const weights2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
   const digit2 = calcDigit(clean.substring(0, 12) + digit1, weights2);
-  
+
   return clean === clean.substring(0, 12) + digit1 + digit2;
 }
 ```
 
 ### 3.3 Taxa Validator
+
 ```typescript
-export function validarTaxas(taxa_minima: number, taxa_maxima: number): boolean {
+export function validarTaxas(
+  taxa_minima: number,
+  taxa_maxima: number,
+): boolean {
   // Taxa: 0.5% a 30% ao mês
   return taxa_minima >= 0.5 && taxa_maxima <= 30 && taxa_minima <= taxa_maxima;
 }
 ```
 
 ### 3.4 Prazo Validator
+
 ```typescript
 export function validarPrazo(prazo: number, min: number, max: number): boolean {
   return prazo >= min && prazo <= max && prazo > 0;
@@ -135,14 +142,14 @@ export class CalculosService {
    */
   static calcularCET(
     taxa_mensal_percentual: number,
-    custos_adicionais_percentual: number = 0
+    custos_adicionais_percentual: number = 0,
   ): number {
     const taxa_mensal = taxa_mensal_percentual / 100;
     const custos = custos_adicionais_percentual / 100;
-    
+
     const taxa_efetiva = taxa_mensal + custos;
     const cet = (Math.pow(1 + taxa_efetiva, 12) - 1) * 100;
-    
+
     return parseFloat(cet.toFixed(2));
   }
 
@@ -152,22 +159,22 @@ export class CalculosService {
   static calcularParcelas(
     valor_principal: number,
     taxa_mensal_percentual: number,
-    quantidade_parcelas: number
+    quantidade_parcelas: number,
   ): { valor_parcela: number; valor_total: number; juros_total: number } {
     const taxa = taxa_mensal_percentual / 100;
-    
+
     // Fórmula Price: P = V * (i * (1+i)^n) / ((1+i)^n - 1)
     const numerador = taxa * Math.pow(1 + taxa, quantidade_parcelas);
     const denominador = Math.pow(1 + taxa, quantidade_parcelas) - 1;
     const valor_parcela = valor_principal * (numerador / denominador);
-    
+
     const valor_total = valor_parcela * quantidade_parcelas;
     const juros_total = valor_total - valor_principal;
-    
+
     return {
       valor_parcela: parseFloat(valor_parcela.toFixed(2)),
       valor_total: parseFloat(valor_total.toFixed(2)),
-      juros_total: parseFloat(juros_total.toFixed(2))
+      juros_total: parseFloat(juros_total.toFixed(2)),
     };
   }
 
@@ -176,7 +183,7 @@ export class CalculosService {
    */
   static calcularDisponibilidadeMaragem(
     valor_limite: number,
-    valor_utilizado: number
+    valor_utilizado: number,
   ): number {
     const disponivel = valor_limite - valor_utilizado;
     return disponivel < 0 ? 0 : parseFloat(disponivel.toFixed(2));
@@ -192,18 +199,18 @@ export class CalculosService {
 // consignacoes/consignacoes.workflow.ts
 
 export enum ConsignacaoStatus {
-  SOLICITADA = 'SOLICITADA',
-  APROVADA = 'APROVADA',
-  ATIVA = 'ATIVA',
-  QUITADA = 'QUITADA',
-  CANCELADA = 'CANCELADA',
-  PORTADA = 'PORTADA'
+  SOLICITADA = "SOLICITADA",
+  APROVADA = "APROVADA",
+  ATIVA = "ATIVA",
+  QUITADA = "QUITADA",
+  CANCELADA = "CANCELADA",
+  PORTADA = "PORTADA",
 }
 
 export class ConsignacaoWorkflow {
   static canTransition(
     current: ConsignacaoStatus,
-    next: ConsignacaoStatus
+    next: ConsignacaoStatus,
   ): boolean {
     const transitions: Record<ConsignacaoStatus, ConsignacaoStatus[]> = {
       SOLICITADA: [APROVADA, CANCELADA],
@@ -211,9 +218,9 @@ export class ConsignacaoWorkflow {
       ATIVA: [QUITADA, CANCELADA, PORTADA],
       QUITADA: [],
       CANCELADA: [],
-      PORTADA: [ATIVA, QUITADA]
+      PORTADA: [ATIVA, QUITADA],
     };
-    
+
     return transitions[current]?.includes(next) ?? false;
   }
 
@@ -224,9 +231,9 @@ export class ConsignacaoWorkflow {
       ATIVA: [QUITADA, CANCELADA, PORTADA],
       QUITADA: [],
       CANCELADA: [],
-      PORTADA: [ATIVA, QUITADA]
+      PORTADA: [ATIVA, QUITADA],
     };
-    
+
     return transitions[current] ?? [];
   }
 }
@@ -238,17 +245,20 @@ export class ConsignacaoWorkflow {
 
 ```typescript
 // servidores/servidores.validation.ts
-import { z } from 'zod';
+import { z } from "zod";
 
 export const createServidorSchema = z.object({
   nome: z.string().min(3).max(100),
-  cpf: z.string().regex(/^\d{11}$/).refine(validarCPF, 'CPF inválido'),
+  cpf: z
+    .string()
+    .regex(/^\d{11}$/)
+    .refine(validarCPF, "CPF inválido"),
   matricula: z.string().min(3).max(20),
-  cargo: z.enum(['ANALISTA', 'TÉCNICO', 'ASSISTENTE', 'GESTOR']),
-  situacao_funcional: z.enum(['ATIVO', 'LICENCA', 'INATIVO']),
+  cargo: z.enum(["ANALISTA", "TÉCNICO", "ASSISTENTE", "GESTOR"]),
+  situacao_funcional: z.enum(["ATIVO", "LICENCA", "INATIVO"]),
   data_admissao: z.string().datetime(),
   remuneracao_bruta: z.number().positive(),
-  status: z.enum(['ATIVO', 'INATIVO']).default('ATIVO')
+  status: z.enum(["ATIVO", "INATIVO"]).default("ATIVO"),
 });
 
 export const updateServidorSchema = createServidorSchema.partial();

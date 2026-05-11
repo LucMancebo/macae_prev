@@ -52,7 +52,7 @@ describe('Margens Module — E2E Tests', () => {
 
         // Delete any test margens
         if (margemId) {
-            await prisma.margem.delete({ where: { id: margemId } }).catch(() => {});
+            await prisma.margem.delete({ where: { id: margemId } }).catch(() => { });
         }
 
         await app.close();

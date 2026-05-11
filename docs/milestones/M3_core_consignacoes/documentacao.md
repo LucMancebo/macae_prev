@@ -2,19 +2,20 @@
 
 ## 1. Identificação
 
-| Campo | Valor |
-|-------|-------|
-| **Milestone** | M3 — Core Consignações |
-| **Data Início Planejado** | Maio 2026 |
-| **Status** | 🔵 Em Planejamento |
-| **Responsável** | GitHub Copilot + Lucas Mancebo |
-| **Dependências** | ✅ M1 + M2 Concluídas |
+| Campo                     | Valor                          |
+| ------------------------- | ------------------------------ |
+| **Milestone**             | M3 — Core Consignações         |
+| **Data Início Planejado** | Maio 2026                      |
+| **Status**                | 🔵 Em Planejamento             |
+| **Responsável**           | GitHub Copilot + Lucas Mancebo |
+| **Dependências**          | ✅ M1 + M2 Concluídas          |
 
 ---
 
 ## 2. Escopo Geral
 
 Esta milestone consolida o **núcleo de negócio** do sistema MACAEPREV, implementando a gestão completa de:
+
 - **Servidores**: Cadastro e gestão de servidores públicos (estrutura já scaffolded)
 - **Consignatárias**: Instituições credoras de consignação
 - **Produtos**: Tipos de empréstimo/consignação
@@ -25,16 +26,16 @@ Esta milestone consolida o **núcleo de negócio** do sistema MACAEPREV, impleme
 
 ## 3. POCs Cobertas Nesta Milestone
 
-| POC | Descrição | Componentes |
-|-----|-----------|-------------|
-| **POC 3** | Produtos + averbação (valor/percentual) | Produto + Margem |
-| **POC 4** | Inclusão de novas modalidades | Producto (tipos) |
-| **POC 5** | Controle de margens exclusivas/compartilhadas | Margens (regras) |
-| **POC 7** | Controle de margem com base na folha | Cálculo + Validação |
-| **POC 8** | Registro ágil de contratos + conciliação | Consignação + Parcelas |
-| **POC 9** | Portabilidade e renegociação | Consignação (fluxos) |
-| **POC 11** | Controle de CET máximo | Validação (taxa) |
-| **POC 20** | Módulo de portabilidade/renegociação | Workflow (novo) |
+| POC        | Descrição                                     | Componentes            |
+| ---------- | --------------------------------------------- | ---------------------- |
+| **POC 3**  | Produtos + averbação (valor/percentual)       | Produto + Margem       |
+| **POC 4**  | Inclusão de novas modalidades                 | Producto (tipos)       |
+| **POC 5**  | Controle de margens exclusivas/compartilhadas | Margens (regras)       |
+| **POC 7**  | Controle de margem com base na folha          | Cálculo + Validação    |
+| **POC 8**  | Registro ágil de contratos + conciliação      | Consignação + Parcelas |
+| **POC 9**  | Portabilidade e renegociação                  | Consignação (fluxos)   |
+| **POC 11** | Controle de CET máximo                        | Validação (taxa)       |
+| **POC 20** | Módulo de portabilidade/renegociação          | Workflow (novo)        |
 
 **Total POCs a Responder: 8 (de 30 globais)** → Completará 17/30 (57%)
 
@@ -43,6 +44,7 @@ Esta milestone consolida o **núcleo de negócio** do sistema MACAEPREV, impleme
 ## 4. Arquitetura de Dados — Entidades Principais
 
 ### 4.1 Servidor (✅ Já Scaffolded)
+
 ```typescript
 model Servidor {
   id: String (PK)
@@ -54,7 +56,7 @@ model Servidor {
   data_admissao: DateTime
   remuneracao_bruta: Decimal
   status: String ("ATIVO" | "INATIVO" | "LICENCA")
-  
+
   // Relações
   consignacoes: Consignacao[]
   margens_servidor: MargemServidor[]
@@ -64,6 +66,7 @@ model Servidor {
 ```
 
 ### 4.2 Consignataria (✅ Já Scaffolded)
+
 ```typescript
 model Consignataria {
   id: String (PK)
@@ -73,7 +76,7 @@ model Consignataria {
   telefone: String
   email: String (unique)
   status: String ("ATIVA" | "INATIVA" | "SUSPENSA")
-  
+
   // Relações
   produtos: Produto[]
   consignacoes: Consignacao[]
@@ -84,6 +87,7 @@ model Consignataria {
 ```
 
 ### 4.3 Produto (⚠️ Parcialmente Scaffolded)
+
 ```typescript
 model Produto {
   id: String (PK)
@@ -96,7 +100,7 @@ model Produto {
   prazo_minimo: Int (meses)
   prazo_maximo: Int (meses)
   status: String ("ATIVO" | "INATIVO")
-  
+
   // Relações
   consignataria_id: String (FK)
   margens: Margem[]
@@ -107,6 +111,7 @@ model Produto {
 ```
 
 ### 4.4 Margem (📝 Requer Ajustes)
+
 ```typescript
 model Margem {
   id: String (PK)
@@ -118,7 +123,7 @@ model Margem {
   valor_disponivel: Decimal
   prazo_desconto: Int (meses)
   status: String ("ATIVA" | "SUSPENSA" | "BLOQUEADA")
-  
+
   // Relações
   consignacoes: Consignacao[]
   createdAt: DateTime
@@ -127,6 +132,7 @@ model Margem {
 ```
 
 ### 4.5 Consignação (🆕 Novo Módulo)
+
 ```typescript
 model Consignacao {
   id: String (PK)
@@ -134,29 +140,29 @@ model Consignacao {
   produto_id: String (FK)
   consignataria_id: String (FK)
   margem_id: String (FK)
-  
+
   // Dados Financeiros
   valor_solicitado: Decimal
   valor_aprovado: Decimal
   taxa_aplicada: Decimal (%)
   cet_percentual: Decimal (%)
-  
+
   // Prazos
   quantidade_parcelas: Int
   data_solicitacao: DateTime
   data_aprovacao: DateTime
   data_inicio_desconto: DateTime
   data_termino_previsto: DateTime
-  
+
   // Status & Fluxo
   status: String ("SOLICITADA" | "APROVADA" | "ATIVA" | "QUITADA" | "CANCELADA" | "PORTADA")
   motivo_rejeicao: String
-  
+
   // Auditoria
   usuario_criacao_id: String (FK)
   createdAt: DateTime
   updatedAt: DateTime
-  
+
   // Relações
   parcelas: Parcela[]
   portabilidades: Portabilidade[]
@@ -164,6 +170,7 @@ model Consignacao {
 ```
 
 ### 4.6 Parcela (📝 Novo)
+
 ```typescript
 model Parcela {
   id: String (PK)
@@ -181,6 +188,7 @@ model Parcela {
 ```
 
 ### 4.7 Portabilidade (📝 Novo)
+
 ```typescript
 model Portabilidade {
   id: String (PK)
@@ -188,14 +196,14 @@ model Portabilidade {
   consignacao_nova_id: String (FK)
   consignataria_origem_id: String (FK)
   consignataria_destino_id: String (FK)
-  
+
   data_solicitacao: DateTime
   data_aprovacao: DateTime
   data_efetivacao: DateTime
-  
+
   motivo: String
   status: String ("SOLICITADA" | "APROVADA" | "EFETIVADA" | "CANCELADA")
-  
+
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -260,7 +268,9 @@ api/src/modules/
 ## 6. Funcionalidades Principais por Módulo
 
 ### 6.1 Servidores (M3.1 — Ajustes)
+
 **Status**: Scaffolded, precisa validações
+
 - [x] Listar servidores (com filtros: status, cargo)
 - [x] Buscar por ID
 - [x] Criar servidor
@@ -272,7 +282,9 @@ api/src/modules/
 - [ ] **Testes E2E** (ajustar autenticação)
 
 ### 6.2 Consignatárias (M3.1 — Ajustes)
+
 **Status**: Scaffolded, precisa validações
+
 - [x] Listar consignatárias
 - [x] Buscar por ID
 - [x] Criar consignatária
@@ -284,7 +296,9 @@ api/src/modules/
 - [ ] **Testes E2E** (ajustar autenticação)
 
 ### 6.3 Produtos (M3.2 — Novo)
+
 **Status**: Schemas prontos, código não
+
 - [ ] CRUD completo
 - [ ] Validação de tipos (ENUM)
 - [ ] Validação de taxas (min ≤ max)
@@ -292,7 +306,9 @@ api/src/modules/
 - [ ] Testes E2E (6+ casos)
 
 ### 6.4 Margens (M3.2 — Novo)
+
 **Status**: Schemas prontos, código não
+
 - [ ] CRUD para margens por produto/consignatária
 - [ ] Validação de tipo (EXCLUSIVA vs COMPARTILHADA)
 - [ ] Cálculo de disponibilidade (utilizado vs limite)
@@ -300,7 +316,9 @@ api/src/modules/
 - [ ] Testes E2E (8+ casos)
 
 ### 6.5 Consignações (M3.3 — Novo Módulo Completo)
+
 **Status**: Schemas prontos, lógica não
+
 - [ ] Fluxo de solicitação → aprovação → ativa
 - [ ] Validação de elegibilidade do servidor
 - [ ] Cálculo de CET (Custo Efetivo Total)
@@ -315,6 +333,7 @@ api/src/modules/
 ## 7. Regras de Negócio Críticas
 
 ### 7.1 Validações de Entrada
+
 - **CPF**: Algoritmo módulo 11 (RFC 3962 ou similar)
 - **CNPJ**: Algoritmo de validação oficial
 - **Taxa de Juros**: Mínimo 1%, máximo legal (taxa de mercado)
@@ -322,17 +341,20 @@ api/src/modules/
 - **Prazo**: Mínimo 6 meses, máximo 240 meses
 
 ### 7.2 Regras de Consignação
+
 - Servidor deve estar **ATIVO** para nova consignação
 - Margem deve ter saldo disponível ≥ valor solicitado
 - Número de parcelas deve estar entre prazo_minimo e prazo_maximo do produto
 - Data de término não pode exceder data de aposentadoria (se aplicável)
 
 ### 7.3 Portabilidade
+
 - Só é permitida para consignações **ATIVAS** ou **QUITADAS**
 - Consignatária destino deve ter margem disponível
 - Taxa da consignatária destino não pode ser > 10% da origem (proteção)
 
 ### 7.4 Auditoria
+
 - Todas as mudanças de status registradas em `LogAuditoria`
 - IP, User-Agent, usuário, timestamp em cada alteração
 - Snapshots de valores antes/depois
@@ -342,6 +364,7 @@ api/src/modules/
 ## 8. Endpoints Planejados
 
 ### Servidores
+
 ```
 GET    /v1/servidores
 GET    /v1/servidores/:id
@@ -351,6 +374,7 @@ DELETE /v1/servidores/:id
 ```
 
 ### Consignatárias
+
 ```
 GET    /v1/consignatarias
 GET    /v1/consignatarias/:id
@@ -360,6 +384,7 @@ DELETE /v1/consignatarias/:id
 ```
 
 ### Produtos
+
 ```
 GET    /v1/produtos
 GET    /v1/produtos/:id
@@ -370,6 +395,7 @@ GET    /v1/consignatarias/:id/produtos
 ```
 
 ### Margens
+
 ```
 GET    /v1/margens
 GET    /v1/margens/:id
@@ -381,6 +407,7 @@ GET    /v1/margens/disponibilidade/:margemId
 ```
 
 ### Consignações
+
 ```
 GET    /v1/consignacoes
 GET    /v1/consignacoes/:id
@@ -397,11 +424,13 @@ POST   /v1/consignacoes/:id/portabilidade
 ## 9. Matriz de Testes (Escopo)
 
 ### Testes Unitários
+
 - Validações (CPF, CNPJ, taxa, prazo)
 - Cálculos (CET, disponibilidade, parcelas)
 - Regras de negócio (elegibilidade)
 
 ### Testes E2E
+
 - Fluxos completos de CRUD
 - Fluxos de consignação (solicit → aprova → ativa → quitação)
 - Portabilidades
@@ -413,13 +442,13 @@ POST   /v1/consignacoes/:id/portabilidade
 
 ## 10. Estimativas de Esforço
 
-| Componente | Estimado | Complexidade |
-|-----------|----------|--------------|
-| **M3.1 — Servidores/Consignatárias (validações)** | 1-2 dias | 🟡 Média |
-| **M3.2 — Produtos/Margens (CRUD novo)** | 1-2 dias | 🟡 Média |
-| **M3.3 — Consignações (lógica complexa)** | 2-3 dias | 🔴 Alta |
-| **M3.4 — Testes + Documentação** | 1-2 dias | 🟡 Média |
-| **TOTAL M3** | **5-9 dias** | |
+| Componente                                        | Estimado     | Complexidade |
+| ------------------------------------------------- | ------------ | ------------ |
+| **M3.1 — Servidores/Consignatárias (validações)** | 1-2 dias     | 🟡 Média     |
+| **M3.2 — Produtos/Margens (CRUD novo)**           | 1-2 dias     | 🟡 Média     |
+| **M3.3 — Consignações (lógica complexa)**         | 2-3 dias     | 🔴 Alta      |
+| **M3.4 — Testes + Documentação**                  | 1-2 dias     | 🟡 Média     |
+| **TOTAL M3**                                      | **5-9 dias** |              |
 
 ---
 
