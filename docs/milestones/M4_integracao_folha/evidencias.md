@@ -8,6 +8,8 @@
 - `npm run test:local-db` passou com exit code 0.
 - API registrada com prefixo `/v1/arquivos` no bootstrap principal.
 - Migration criada para os novos modelos Prisma.
+- Frontend de arquivos disponível em `/dashboard/arquivos`.
+- Service frontend criado em `web/src/services/arquivos.ts`.
 
 ## Arquivos-chave
 
@@ -16,7 +18,9 @@
 - [api/src/modules/arquivos/arquivo.routes.ts](../../../api/src/modules/arquivos/arquivo.routes.ts)
 - [api/src/utils/csv-parser.ts](../../../api/src/utils/csv-parser.ts)
 - [api/src/types/arquivo.ts](../../../api/src/types/arquivo.ts)
+- [web/src/services/arquivos.ts](../../../web/src/services/arquivos.ts)
+- [web/src/app/dashboard/arquivos/page.tsx](../../../web/src/app/dashboard/arquivos/page.tsx)
 
 ## Observação
 
-Não há screenshots ainda porque a interface M4 não foi iniciada. Essas evidências cobrem a camada backend e ficam como base para a próxima entrega de frontend e reconciliação.
+Não há screenshots ainda porque a interface não foi capturada nesta rodada. As evidências cobrem backend e frontend e ficam como base para a reconciliação.

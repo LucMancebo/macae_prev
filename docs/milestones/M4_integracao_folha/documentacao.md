@@ -1,7 +1,7 @@
 # Milestone 4: Integração Folha de Pagamento
 
 **Duração Estimada:** 4 semanas (56 horas)  
-**Status:** 🚧 Em progresso | Backend entregue, frontend e reconciliação pendentes  
+**Status:** 🚧 Em progresso | Backend e frontend de arquivos entregues, reconciliação pendente  
 **Dependências:** ✅ M1 (Fundação), ✅ M2 (Segurança), ✅ M3 (Core Consignações)  
 **Objetivo:** Implementar integração de arquivos de folha de pagamento MACAEPREV, processamento de retorno e reconciliação de parcelas.
 
@@ -25,7 +25,7 @@ O backend de M4 já está operacional na API e validado com a suíte oficial `np
 - Service, controller e rotas de arquivos implementados em `api/src/modules/arquivos/*`.
 - Schema Prisma expandido com `Arquivo`, `Repasse` e novos campos em `Parcela`.
 - Testes unitários de parser/service criados e passando.
-- Pendências atuais: frontend `/dashboard/arquivos`, engine de reconciliação, relatórios e documentação OpenAPI.
+- Pendências atuais: engine de reconciliação, relatórios segmentados e documentação OpenAPI.
 
 ---
 

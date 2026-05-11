@@ -133,21 +133,21 @@
 ### 17 - Integração de arquivos compatível com folha MACAEPREV (4.1.14.)
 
 **(X) Atende parcial**
-**Status Real:** A integração mensal da **Milestone 4** já possui backend funcional na API: `POST /v1/arquivos/import`, `GET /v1/arquivos/:id` e `GET /v1/arquivos/export`, com parser CSV, validações e persistência do metadado de arquivo.
+**Status Real:** A integração mensal da **Milestone 4** já possui backend funcional na API e a tela `/dashboard/arquivos` entregue no frontend: `POST /v1/arquivos/import`, `GET /v1/arquivos/:id` e `GET /v1/arquivos/export`, com parser CSV, validações e persistência do metadado de arquivo.
 
 ---
 
 ### 18 - Arquivos mensais + processamento de retorno da folha (4.1.15.)
 
 **(X) Atende parcial**
-**Status Real:** O processamento mensal de arquivos já está coberto na **Milestone 4** com importação, leitura por ID e exportação CSV de retorno na API. Falta o fluxo completo de reconciliação e a camada de interface.
+**Status Real:** O processamento mensal de arquivos já está coberto na **Milestone 4** com importação, leitura por ID, exportação CSV de retorno e a interface operacional em `/dashboard/arquivos`. Falta o fluxo completo de reconciliação.
 
 ---
 
 ### 19 - Dados segmentados por Consignante e Consignatária (4.1.16.)
 
 **(X) Atende parcial**
-**Status Real:** A base para segmentação por Consignante e Consignatária já está entregue na **Milestone 4** via metadados e schema do arquivo. O relatório completo de conciliação por perfil ainda depende da engine de reconciliação e do dashboard.
+**Status Real:** A base para segmentação por Consignante e Consignatária já está entregue na **Milestone 4** via metadados, schema do arquivo e interface operacional. O relatório completo de conciliação por perfil ainda depende da engine de reconciliação.
 
 ---
 

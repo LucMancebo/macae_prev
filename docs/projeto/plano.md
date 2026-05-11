@@ -206,7 +206,7 @@ Cada questão da POC referencia diretamente um requisito. Abaixo o mapeamento co
 > **Objetivo**: Garantir a comunicação bidirecional com o sistema de folha.
 > **Duração estimada**: 4 semanas
 
-> **Estado atual:** backend da integração de folha já foi implementado na API com parser CSV, validações, service, rotas, schema Prisma, migration e testes automatizados. Frontend, engine de reconciliação e documentação de API final seguem como próximas entregas.
+> **Estado atual:** backend da integração de folha e a tela `/dashboard/arquivos` já foram implementados. A engine de reconciliação, relatórios segmentados e documentação de API final seguem como próximas entregas.
 
 #### Issue 4.1 — Migração de Dados
 

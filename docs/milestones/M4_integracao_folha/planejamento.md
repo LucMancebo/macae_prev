@@ -10,7 +10,7 @@
 
 **Objetivo:** Implementar parseador de CSV legado e scripts de migração
 
-**Status Atual:** o backend M4 já está implementado na API. Parser CSV, validações, service de arquivos, rotas e schema/migration Prisma foram entregues e validados com `npm run test:local-db`. Permanecem pendentes a camada de frontend, a engine de reconciliação e a documentação de API final.
+**Status Atual:** o backend M4 e o frontend de arquivos já estão implementados. Parser CSV, validações, service de arquivos, rotas, schema/migration Prisma, service frontend e página `/dashboard/arquivos` foram entregues e validados com `npm run test:local-db` + checagem de tipagem no web. Permanecem pendentes a engine de reconciliação, relatórios segmentados e a documentação de API final.
 
 #### Terça (7h)
 
@@ -131,7 +131,7 @@
 
 #### Quarta (5h)
 
-- [ ] **Task 3.3** (4h): Frontend page `/dashboard/arquivos`
+- [x] **Task 3.3** (4h): Frontend page `/dashboard/arquivos`
   - Tabela: arquivo_id, data_upload, consignante, linhas, status_processamento
   - Botões: Upload, Export, Ver Detalhes, Deletar
   - Modal detalhes: list de linhas processadas (com status por linha)
@@ -139,7 +139,7 @@
   - Arquivo: `web/src/app/dashboard/arquivos/page.tsx` (350+ linhas)
   - CSS: `web/src/app/dashboard/arquivos/arquivos.module.css`
 
-- [ ] **Task 3.4** (1h): Frontend service
+- [x] **Task 3.4** (1h): Frontend service
   - `web/src/services/arquivos.ts` (uploadArquivo, listarArquivos, exportarRetorno)
 
 #### Quinta (4h)
@@ -157,12 +157,12 @@
 
 **Entregáveis da Semana 3:**
 
-- ✅ reconciliacao.ts (engine)
-- ✅ GET /api/reconciliacao/relatorio
-- ✅ Página `/dashboard/arquivos` (CRUD)
-- ✅ Página `/dashboard/reconciliacao` (relatório)
-- ✅ Dashboard KPIs atualizados
-- ✅ 10+ testes E2E
+- ⏳ reconciliacao.ts (engine)
+- ⏳ GET /api/reconciliacao/relatorio
+- ✅ Página `/dashboard/arquivos`
+- ⏳ Página `/dashboard/reconciliacao` (relatório)
+- ⏳ Dashboard KPIs atualizados
+- ⏳ 10+ testes E2E
 
 ---
 
