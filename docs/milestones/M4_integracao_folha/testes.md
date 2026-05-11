@@ -1,6 +1,8 @@
 # M4: Especificação de Testes
 
-**Cobertura Total:** 40+ testes | **Arquivos:** 3 (Parser, Service, E2E)
+**Cobertura Planejada:** 40+ testes | **Estado Atual:** backend validado; resultados executados registrados em [validacao.md](./validacao.md)
+
+> Este documento descreve a estratégia e os casos previstos para M4. A execução real e os resultados consolidados estão em `validacao.md`.
 
 ---
 

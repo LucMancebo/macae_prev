@@ -1,7 +1,7 @@
 # Milestone 4: Integração Folha de Pagamento
 
 **Duração Estimada:** 4 semanas (56 horas)  
-**Status:** 📋 Planejamento | Não iniciado  
+**Status:** 🚧 Em progresso | Backend entregue, frontend e reconciliação pendentes  
 **Dependências:** ✅ M1 (Fundação), ✅ M2 (Segurança), ✅ M3 (Core Consignações)  
 **Objetivo:** Implementar integração de arquivos de folha de pagamento MACAEPREV, processamento de retorno e reconciliação de parcelas.
 
@@ -14,6 +14,18 @@ Milestone 4 (Integração Folha) adiciona capacidades de importação/exportaç�
 1. **Migração de Dados (POC 2)**: Parsing de banco de dados legado MACAEPREV em formato CSV/SQL
 2. **Integração de Arquivos (POC 17-18)**: Upload/processamento de folha com byline tracking e validação
 3. **Segmentação e Reconciliação (POC 19)**: Reconciliação de parcelas por consignante/consignatária com auditoria
+
+---
+
+## Estado Atual da Implementação
+
+O backend de M4 já está operacional na API e validado com a suíte oficial `npm run test:local-db`.
+
+- Parser CSV e utilitários de validação implementados em `api/src/utils/csv-parser.ts` e `api/src/utils/validators-arquivo.ts`.
+- Service, controller e rotas de arquivos implementados em `api/src/modules/arquivos/*`.
+- Schema Prisma expandido com `Arquivo`, `Repasse` e novos campos em `Parcela`.
+- Testes unitários de parser/service criados e passando.
+- Pendências atuais: frontend `/dashboard/arquivos`, engine de reconciliação, relatórios e documentação OpenAPI.
 
 ---
 
@@ -102,13 +114,24 @@ Milestone 4 (Integração Folha) adiciona capacidades de importação/exportaç�
 
 **Novas Tabelas:**
 
-- `Arquivo`: { id, nome, tipo(FOLHA/RETORNO), data_processamento, consignante_id, checksum, status }
-- `Repasse`: { id, parcela_id, tipo(DESCONTO/ACRESCIMO/JUROS), valor, percentual, data_movimento }
+- `Arquivo`: { id, nome, tipo(FOLHA/RETORNO/LEGADO), data_upload, data_processamento, consignante_id, checksum, status }
+- `Repasse`: { id, parcela_id, arquivo_id, tipo(DESCONTO/ACRESCIMO/JUROS/RETENCAO), valor, percentual, data_movimento }
 
 **Tabelas Modificadas:**
 
 - `Parcela`: add campo `data_processamento_folha`, `status_reconciliacao`
 - `LogAuditoria`: expandir para registrar movimentações de arquivo
+
+---
+
+## Documentos de Apoio
+
+- [README do milestone](./README.md)
+- [Plano de execução](./planejamento.md)
+- [Especificação de testes](./testes.md)
+- [Validação atual](./validacao.md)
+- [Entrega parcial](./entrega.md)
+- [Evidências](./evidencias.md)
 
 ---
 

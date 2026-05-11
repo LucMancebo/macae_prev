@@ -1,14 +1,14 @@
 # POC — Prova de Conceito — Respostas (Status Real do Projeto)
 
-> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1, 2 & 3 Concluídas** (Fundação, Segurança & Core Consignações). Última atualização: 10/05/2026.
+> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1, 2 & 3 Concluídas** e **M4 em progresso** (backend da integração de folha entregue). Última atualização: 11/05/2026.
 
 ## 📊 Progresso Geral
 
-**Status: 15/30 Completas | 4 Parciais | 11 Pendentes (50% + Parciais)**
+**Status: 15/30 Completas | 8 Parciais | 7 Pendentes (50% + Parciais)**
 
 | Completas | Parciais | Pendentes | Taxa Conclusão |
 | --------- | -------- | --------- | -------------- |
-| 15        | 4        | 11        | 50% ✅         |
+| 15        | 8        | 7         | 50% ✅         |
 
 > **Nota:** Categorias: ✓ Atende = Completo | (X) Atende parcial = Em Progresso | (X) Não atende = Não iniciado
 
@@ -27,8 +27,8 @@
 
 ### 2 – Migração da base de dados existente (4.1.2.)
 
-**(X) Não atende**
-**Status Real:** Planejado construtivamente para a **Milestone 4**. Os schemas de importação de banco já estão desenhados, mas os scripts de parsing/migração ainda não foram codificados.
+**(X) Atende parcial**
+**Status Real:** Backend da migração já foi iniciado na **Milestone 4**: parser CSV, validações, service, rotas e migration Prisma estão implementados. Ainda faltam o script formal de migração legado, a automação de importação histórica e o fluxo de UI.
 
 ---
 
@@ -132,22 +132,22 @@
 
 ### 17 - Integração de arquivos compatível com folha MACAEPREV (4.1.14.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 4**. Tabela auxiliar `arquivos_integracao` finalizada na M1.
+**(X) Atende parcial**
+**Status Real:** A integração mensal da **Milestone 4** já possui backend funcional na API: `POST /v1/arquivos/import`, `GET /v1/arquivos/:id` e `GET /v1/arquivos/export`, com parser CSV, validações e persistência do metadado de arquivo.
 
 ---
 
 ### 18 - Arquivos mensais + processamento de retorno da folha (4.1.15.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 4**.
+**(X) Atende parcial**
+**Status Real:** O processamento mensal de arquivos já está coberto na **Milestone 4** com importação, leitura por ID e exportação CSV de retorno na API. Falta o fluxo completo de reconciliação e a camada de interface.
 
 ---
 
 ### 19 - Dados segmentados por Consignante e Consignatária (4.1.16.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 4** e alocados os controles de view (Milestone 2).
+**(X) Atende parcial**
+**Status Real:** A base para segmentação por Consignante e Consignatária já está entregue na **Milestone 4** via metadados e schema do arquivo. O relatório completo de conciliação por perfil ainda depende da engine de reconciliação e do dashboard.
 
 ---
 

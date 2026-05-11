@@ -1,6 +1,6 @@
 # M4: Plano de Execução & Cronograma
 
-**Duração Total:** 4 semanas | **56 horas** | **Não iniciado**
+**Duração Total:** 4 semanas | **56 horas** | **Em progresso**
 
 ---
 
@@ -9,6 +9,8 @@
 ### Semana 1: Migration & CSV Parser (14 horas)
 
 **Objetivo:** Implementar parseador de CSV legado e scripts de migração
+
+**Status Atual:** o backend M4 já está implementado na API. Parser CSV, validações, service de arquivos, rotas e schema/migration Prisma foram entregues e validados com `npm run test:local-db`. Permanecem pendentes a camada de frontend, a engine de reconciliação e a documentação de API final.
 
 #### Terça (7h)
 
@@ -50,7 +52,7 @@
 **Entregáveis da Semana 1:**
 
 - ✅ csv-parser.ts (parseCSV + validators)
-- ✅ arquivo.d.ts (tipos)
+- ✅ arquivo.d.ts / arquivo.ts (tipos e schema)
 - ✅ 5+ testes de parser
 - ✅ csv_spec.md documentado
 
@@ -103,9 +105,9 @@
 
 - ✅ Tabelas Arquivo + Repasse criadas
 - ✅ ArquivoService completo
-- ✅ POST /api/arquivos/import (com testes E2E)
-- ✅ GET /api/arquivos/export (com filtros)
-- ✅ 8+ testes de integração
+- ✅ POST /api/arquivos/import (implementado e validado)
+- ✅ GET /api/arquivos/:id e GET /api/arquivos/export implementados
+- ✅ 8+ testes de integração/validação no backend
 
 ---
 
@@ -215,12 +217,11 @@
 
 **Entregáveis da Semana 4:**
 
-- ✅ 40+ testes passando (jest)
-- ✅ Build verde (TS + ESLint)
-- ✅ API docs atualizadas
-- ✅ README M4
-- ✅ evidencias.md + validacao.md
-- ✅ Merge para main
+- ✅ 40+ testes passando no backend (Jest via runner local)
+- ✅ Build TypeScript do backend sem erros
+- ⏳ Build do frontend e ESLint/Prettier ainda pendentes
+- ✅ README M4, evidências e validação atual já documentados
+- ⏳ API docs finais e merge para main após frontend/M4 final
 
 ---
 
