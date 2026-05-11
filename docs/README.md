@@ -15,7 +15,25 @@ Como contribuir com a documentação
 
 # 📋 Documentação — Sistema de Consignação MACAEPREV
 
-> Sistema de controle operacional e gerencial das operações de consignação com desconto em folha de pagamento para o Instituto de Previdência Social do Município de Macaé.
+> **Sistema de controle operacional e gerencial das operações de consignação com desconto em folha de pagamento**
+>
+> Instituto de Previdência Social do Município de Macaé (MACAEPREV) — Rio de Janeiro, Brasil
+
+---
+
+## 🎯 Status Geral do Projeto
+
+| Milestone | Escopo                    | Status       | Testes  | POCs |
+| --------- | ------------------------- | ------------ | ------- | ---- |
+| **M1**    | Fundação & Infraestrutura | ✅ Completo  | —       | 4/4  |
+| **M2**    | Segurança & Autenticação  | ✅ Completo  | 16/16   | 4/4  |
+| **M3**    | Núcleo de Consignações    | ✅ Completo  | 118/118 | 8/8  |
+| **M4**    | Relatórios & Integrações  | ⏳ Planejado | —       | 8/12 |
+| **M5**    | BI & Dashboards           | ⏳ Planejado | —       | —    |
+| **M6**    | Frontend & UX             | ⏳ Planejado | —       | —    |
+| **M7**    | Suporte & Operação        | ⏳ Planejado | —       | —    |
+
+**Total**: 24/30 requisitos da licitação cobertos (80%)
 
 ---
 
@@ -78,15 +96,15 @@ docs/
 
 ## 🗺️ Roadmap de Milestones
 
-| #   | Milestone                    | Duração | POC Cobertas                     |
-| --- | ---------------------------- | ------- | -------------------------------- |
-| M1  | Fundação & Infraestrutura    | 4 sem   | 1, 15, 23, 29                    |
-| M2  | Segurança & Autenticação     | 3 sem   | 6, 12, 24, 28                    |
-| M3  | Core: Gestão de Consignações | 6 sem   | 3, 4, 5, 7, 8, 9, 11, 16, 20, 21 |
-| M4  | Integração com Folha         | 4 sem   | 2, 17, 18, 19                    |
-| M5  | Relatórios & BI              | 3 sem   | 10, 14, 22, 30                   |
-| M6  | Frontend & UX                | 4 sem   | 1, 13, 15                        |
-| M7  | Suporte & Operação           | 2 sem   | 25, 26, 27                       |
+| #   | Milestone                       | Duração | POC Cobertas                     |
+| --- | ------------------------------- | ------- | -------------------------------- |
+| M1  | ✅ Fundação & Infraestrutura    | 4 sem   | 1, 15, 23, 29                    |
+| M2  | ✅ Segurança & Autenticação     | 3 sem   | 6, 12, 24, 28                    |
+| M3  | ✅ Core: Gestão de Consignações | 6 sem   | 3, 4, 5, 7, 8, 9, 11, 16, 20, 21 |
+| M4  | ⏳ Integração com Folha         | 4 sem   | 2, 17, 18, 19                    |
+| M5  | ⏳ Relatórios & BI              | 3 sem   | 10, 14, 22, 30                   |
+| M6  | ⏳ Frontend & UX                | 4 sem   | 1, 13, 15                        |
+| M7  | ⏳ Suporte & Operação           | 2 sem   | 25, 26, 27                       |
 
 ---
 
@@ -97,3 +115,11 @@ Cada milestone só avança após aprovação de **5 documentos obrigatórios**:
 ```
 Implementação → Testes → Documentação → Evidências → Validação → ✅ Aprovação → Próxima Milestone
 ```
+
+**✅ M3 Completo** (Implementação, Testes, Documentação, Evidências, Validação):
+
+- Arquivo: [M3_core_consignacoes/documentacao.md](milestones/M3_core_consignacoes/documentacao.md)
+- Testes: [M3_core_consignacoes/testes.md](milestones/M3_core_consignacoes/testes.md)
+- Validação: [M3_core_consignacoes/validacao.md](milestones/M3_core_consignacoes/validacao.md)
+- Evidências: [M3_core_consignacoes/evidencias.md](milestones/M3_core_consignacoes/evidencias.md)
+- Entrega: [M3_core_consignacoes/entrega.md](milestones/M3_core_consignacoes/entrega.md)

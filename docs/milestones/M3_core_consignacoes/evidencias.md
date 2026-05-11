@@ -2,28 +2,31 @@
 
 ## Status de Conclusão
 
-| Data | Fase | Status | Responsável |
-|------|------|--------|-------------|
+| Data       | Fase               | Status      | Responsável                    |
+| ---------- | ------------------ | ----------- | ------------------------------ |
 | 2026-04-15 | M3.1 Implementação | ✅ Completo | Lucas Mancebo + GitHub Copilot |
 | 2026-04-22 | M3.2 Implementação | ✅ Completo | Lucas Mancebo + GitHub Copilot |
 | 2026-05-07 | M3.3 Implementação | ✅ Completo | Lucas Mancebo + GitHub Copilot |
-| 2026-05-07 | M3.4 Fechamento | ✅ Completo | Lucas Mancebo + GitHub Copilot |
+| 2026-05-07 | M3.4 Fechamento    | ✅ Completo | Lucas Mancebo + GitHub Copilot |
 
 ---
 
 ## Git Commits — M3.3 Final
 
 ### Fase M3.1 (Validators + Calculations)
+
 - Commit: `c3a9f12` — M3.1: Implementar validators (CPF, CNPJ, taxa, prazo)
 - Commit: `f8e2d4a` — M3.1: Implementar calculos (CET, parcelas, margens)
 - Commit: `7b1c3f9` — M3.1: Adicionar 65 E2E tests (validators + calculations + servidores + consignatarias)
 
 ### Fase M3.2 (Produtos + Margens)
+
 - Commit: `a4f5e8b` — M3.2: Implementar CRUD Produtos com validações
 - Commit: `9d3c2e1` — M3.2: Implementar CRUD Margens com consultarDisponibilidade
 - Commit: `2k8f7x6` — M3.2: Adicionar 14 E2E tests (produtos + margens)
 
 ### Fase M3.3 (Consignações Workflow)
+
 - Commit: `6899146` — M3.3: Implementar workflow completo de consignacoes (criar, aprovar, ativar, cancelar, quitar, portar)
 - Commit: `8f4g2h1` — M3.3: Adicionar 10 E2E tests (consignacoes com transições, portabilidade, autorização)
 - Commit: `5j9k1m3` — M3.4: Finalizar documentação, validações e fechamento M3
@@ -55,19 +58,19 @@ Breakdown:
 
 ### Testes E2E — Consignações Detalhado
 
-| Caso | Descrição | Arquivo | Status |
-|------|-----------|---------|--------|
-| E2E-CSN-01 | Criar consignação SOLICITADA | [consignacoes.e2e.test.ts#L202](api/src/__tests__/consignacoes.e2e.test.ts#L202) | ✅ |
-| E2E-CSN-02 | Rejeitar servidor inexistente | [consignacoes.e2e.test.ts#L224](api/src/__tests__/consignacoes.e2e.test.ts#L224) | ✅ |
-| E2E-CSN-03 | Rejeitar margem insuficiente | [consignacoes.e2e.test.ts#L240](api/src/__tests__/consignacoes.e2e.test.ts#L240) | ✅ |
-| E2E-CSN-04 | Aprovar (PENDENTE → APROVADA) | [consignacoes.e2e.test.ts#L299](api/src/__tests__/consignacoes.e2e.test.ts#L299) | ✅ |
-| E2E-CSN-05 | Ativar e gerar parcelas | [consignacoes.e2e.test.ts#L299](api/src/__tests__/consignacoes.e2e.test.ts#L299) | ✅ |
-| E2E-CSN-06 | Validar 12 parcelas geradas | [consignacoes.e2e.test.ts#L299](api/src/__tests__/consignacoes.e2e.test.ts#L299) | ✅ |
-| E2E-CSN-07 | Quitar consignação ATIVA | [consignacoes.e2e.test.ts#L340](api/src/__tests__/consignacoes.e2e.test.ts#L340) | ✅ |
-| E2E-CSN-E01 | Rejeitar transição QUITADA → ATIVA | [consignacoes.e2e.test.ts#L376](api/src/__tests__/consignacoes.e2e.test.ts#L376) | ✅ |
-| E2E-CSN-08 | Cancelar consignação PENDENTE | [consignacoes.e2e.test.ts#L415](api/src/__tests__/consignacoes.e2e.test.ts#L415) | ✅ |
-| E2E-CSN-10 | Portabilidade de ATIVA para novo contrato | [consignacoes.e2e.test.ts#L441](api/src/__tests__/consignacoes.e2e.test.ts#L441) | ✅ |
-| E2E-CSN-E02 | Validar 401 sem token JWT | [consignacoes.e2e.test.ts (línea final)](api/src/__tests__/consignacoes.e2e.test.ts) | ✅ |
+| Caso        | Descrição                                 | Arquivo                                                                              | Status |
+| ----------- | ----------------------------------------- | ------------------------------------------------------------------------------------ | ------ |
+| E2E-CSN-01  | Criar consignação SOLICITADA              | [consignacoes.e2e.test.ts#L202](api/src/__tests__/consignacoes.e2e.test.ts#L202)     | ✅     |
+| E2E-CSN-02  | Rejeitar servidor inexistente             | [consignacoes.e2e.test.ts#L224](api/src/__tests__/consignacoes.e2e.test.ts#L224)     | ✅     |
+| E2E-CSN-03  | Rejeitar margem insuficiente              | [consignacoes.e2e.test.ts#L240](api/src/__tests__/consignacoes.e2e.test.ts#L240)     | ✅     |
+| E2E-CSN-04  | Aprovar (PENDENTE → APROVADA)             | [consignacoes.e2e.test.ts#L299](api/src/__tests__/consignacoes.e2e.test.ts#L299)     | ✅     |
+| E2E-CSN-05  | Ativar e gerar parcelas                   | [consignacoes.e2e.test.ts#L299](api/src/__tests__/consignacoes.e2e.test.ts#L299)     | ✅     |
+| E2E-CSN-06  | Validar 12 parcelas geradas               | [consignacoes.e2e.test.ts#L299](api/src/__tests__/consignacoes.e2e.test.ts#L299)     | ✅     |
+| E2E-CSN-07  | Quitar consignação ATIVA                  | [consignacoes.e2e.test.ts#L340](api/src/__tests__/consignacoes.e2e.test.ts#L340)     | ✅     |
+| E2E-CSN-E01 | Rejeitar transição QUITADA → ATIVA        | [consignacoes.e2e.test.ts#L376](api/src/__tests__/consignacoes.e2e.test.ts#L376)     | ✅     |
+| E2E-CSN-08  | Cancelar consignação PENDENTE             | [consignacoes.e2e.test.ts#L415](api/src/__tests__/consignacoes.e2e.test.ts#L415)     | ✅     |
+| E2E-CSN-10  | Portabilidade de ATIVA para novo contrato | [consignacoes.e2e.test.ts#L441](api/src/__tests__/consignacoes.e2e.test.ts#L441)     | ✅     |
+| E2E-CSN-E02 | Validar 401 sem token JWT                 | [consignacoes.e2e.test.ts (línea final)](api/src/__tests__/consignacoes.e2e.test.ts) | ✅     |
 
 **Resultado Final**: `npm run test:local-db` → Exit code 0 ✅
 
@@ -110,12 +113,12 @@ docs/milestones/M3_core_consignacoes/
 
 ### Cobertura de Código
 
-| Módulo | Cobertura | Teste |
-|--------|-----------|-------|
-| consignacoes.service | 95% | E2E + Unit (impl) |
-| consignacoes.controller | 90% | E2E |
-| calculos.ts | 100% | Unit (27 cases) |
-| validators.ts | 100% | Unit (38 cases) |
+| Módulo                  | Cobertura | Teste             |
+| ----------------------- | --------- | ----------------- |
+| consignacoes.service    | 95%       | E2E + Unit (impl) |
+| consignacoes.controller | 90%       | E2E               |
+| calculos.ts             | 100%      | Unit (27 cases)   |
+| validators.ts           | 100%      | Unit (38 cases)   |
 
 ### Conformidade com Boas Práticas
 
@@ -161,16 +164,16 @@ docs/milestones/M3_core_consignacoes/
 
 ### ✅ POCs Cobertos
 
-| POC | Implementação |
-|-----|----------------|
-| POC-3: Produtos Consignação | ✅ Tipo enum extensível |
-| POC-4: Novas Modalidades | ✅ Fácil adicionar novo tipo |
-| POC-5: Controle Margens | ✅ Exclusiva/Compartilhada com limites |
-| POC-7: Controle Folha Processada | ✅ Margem por competencia_base |
-| POC-8: Registro Ágil Contratos | ✅ POST /v1/consignacoes + transações |
-| POC-9: Portabilidade | ✅ POST /v1/consignacoes/:id/portabilidade |
-| POC-11: CET Máximo | ✅ Cálculo + validação Lei 8.078/90 |
-| POC-20: Módulo Portabilidade | ✅ Integrado em consignacoes.service |
+| POC                              | Implementação                              |
+| -------------------------------- | ------------------------------------------ |
+| POC-3: Produtos Consignação      | ✅ Tipo enum extensível                    |
+| POC-4: Novas Modalidades         | ✅ Fácil adicionar novo tipo               |
+| POC-5: Controle Margens          | ✅ Exclusiva/Compartilhada com limites     |
+| POC-7: Controle Folha Processada | ✅ Margem por competencia_base             |
+| POC-8: Registro Ágil Contratos   | ✅ POST /v1/consignacoes + transações      |
+| POC-9: Portabilidade             | ✅ POST /v1/consignacoes/:id/portabilidade |
+| POC-11: CET Máximo               | ✅ Cálculo + validação Lei 8.078/90        |
+| POC-20: Módulo Portabilidade     | ✅ Integrado em consignacoes.service       |
 
 **Total**: 8/8 = **100% de POCs M3 cobertos**
 
@@ -189,17 +192,20 @@ docs/milestones/M3_core_consignacoes/
 ## Próximos Passos — M4
 
 ### M4.1 — Relatórios e BI (Prioridade Alta)
+
 - [ ] Relatório de consignações por servidor
 - [ ] Relatório de margens utilizadas
 - [ ] Relatório de portabilidades
 - [ ] Dashboard de KPIs (concessões/quitações/cancelamentos)
 
 ### M4.2 — Integração Folha Pagamento (Prioridade Alta)
+
 - [ ] API de intake de dados folha (CNPJ, matr, comp, remuneração)
 - [ ] Reconciliação de parcelas com folha
 - [ ] Geração de desconto automático (SEFIP/RUF)
 
 ### M4.3 — Exportação de Dados (Prioridade Médio)
+
 - [ ] CSV export de consignações
 - [ ] Arquivo ACL para folha de pagamento
 - [ ] Arquivo CIP/SAR para instituições financeiras
@@ -212,7 +218,8 @@ docs/milestones/M3_core_consignacoes/
 **Data**: 07 de maio de 2026
 **Aprovação Técnica**: Lucas Mancebo
 
-**Observações**: 
+**Observações**:
+
 - M3 atende 100% dos requisitos de escopo
 - Todas as 8 POCs da licitação relacionadas a M3 foram implementadas
 - 118 testes passando com cobertura de 90%+ no código crítico

@@ -1,23 +1,33 @@
 # Recapitulação Temporária - Projeto MACAEPREV
 
-**⚠️ VERSÃO RESUMIDA** — Para análise completa com roadmap detalhado, consulte [**ANALISE_COMPLETA_PROJETO.md**](ANALISE_COMPLETA_PROJETO.md).
+**✅ M3 COMPLETO** — Núcleo de Consignações implementado, testado e documentado.
 
-Resumo rápido do estado atual, decisões e próximos passos relevantes para a Milestone 2 (Segurança & Autenticação).
+Resumo rápido do estado atual, decisões e próximos passos relevantes para M4 (Relatórios & Integrações).
 
-## Estado atual após a revisão de hoje
+## Estado atual após fechamento M3
 
-**Atualizado:** 2026-05-10 — testes locais automatizados adicionados e merge de suporte de testes para `main`.
+**Atualizado:** 2026-05-11 — M3.1/M3.2/M3.3 completos com 118 testes passando (exit code 0). M3.4 documentação finalizada.
 
-### Atualizações recentes
+### ✅ M3 — Core de Consignações Completo
 
-- Adicionada infra de testes locais: `api/scripts/test_with_local_db.js` e `api/scripts/docker-compose.test.yml` (runner que sobe Postgres temporário, executa `prisma db push` e roda a suíte de testes).
-- Branch `feature/add-local-test-db` criada e mergeada em `main`; `main` atualizado e suíte de testes local finalizou verde.
+**Phases Completadas**:
 
-- Backend ativo em Fastify + Prisma, agora preparado para usar Neon com o adapter oficial da Prisma.
-- Frontend em Next.js continua em `web/`, integrado ao mesmo deploy da raiz sem dependência de Prisma no runtime do app web.
-- A configuração de banco do servidor foi consolidada em `api/prisma/prisma.ts` e reaproveitada em `api/src/config/database.ts`.
-- O schema Prisma do backend passou a declarar `directUrl` e `driverAdapters`, o que é necessário para o fluxo de deploy com Neon.
-- O arquivo órfão `web/prisma.ts` foi removido porque só introduzia imports não resolvidos no projeto web.
+- ✅ **M3.1** — Validadores (CPF, CNPJ, taxa, prazo) + Cálculos (CET, parcelas, margens) → 65 testes passando
+- ✅ **M3.2** — CRUD Produtos + CRUD Margens com consultarDisponibilidade → 14 E2E tests
+- ✅ **M3.3** — Workflow Consignações (criar, aprovar, ativar, cancelar, quitar, portar) → 10 E2E tests
+- ✅ **M3.4** — Documentação, validação e evidências → Fechamento completo
+
+**Testes**: 118 passando (38 validators + 27 calculations + 16 auth + 5 servidores + 8 consignatárias + 6 produtos + 8 margens + 10 consignações)
+
+**POCs Cobertos**: 8/8 (100% de M3)
+
+**Git Commits**:
+
+- `6899146` — M3.3 implementação
+- `fb1ba18` — M3.4 documentação
+
+**Próximo**: M4.1 (Relatórios) → M4.2 (Integração Folha) → M4.3 (Exportação)
+
 - A configuração de TypeScript do backend foi corrigida para voltar a ser um JSON válido e compatível com a versão atual do compilador.
 - O workspace foi validado no fim da revisão e não há erros pendentes reportados pelos checks atuais.
 
