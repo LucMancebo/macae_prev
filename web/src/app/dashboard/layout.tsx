@@ -22,6 +22,7 @@ export default function DashboardLayout({
     "/dashboard/consignacoes": "Consignações",
     "/dashboard/produtos": "Produtos",
     "/dashboard/margens": "Margens",
+    "/dashboard/arquivos": "Arquivos",
     "/dashboard/usuarios": "Usuários",
   };
 
@@ -63,6 +64,10 @@ export default function DashboardLayout({
           icon: "📊",
         },
       ],
+    },
+    {
+      label: "Folha",
+      items: [{ name: "Arquivos", path: "/dashboard/arquivos", icon: "🗂" }],
     },
   ];
 
