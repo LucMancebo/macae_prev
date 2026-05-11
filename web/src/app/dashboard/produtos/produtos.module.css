@@ -1,0 +1,192 @@
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  background: var(--bg-page, #f5f5f5);
+  min-height: 100vh;
+}
+
+.titleArea {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary, #000);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary, #666);
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.tableContainer {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid var(--border-default, #ddd);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.skeleton {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary, #666);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.table thead {
+  background: var(--bg-secondary, #f9f9f9);
+  border-bottom: 1px solid var(--border-default, #ddd);
+}
+
+.table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary, #000);
+}
+
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-default, #eee);
+  color: var(--text-primary, #000);
+}
+
+.table tbody tr:hover {
+  background: var(--bg-hover, #fafafa);
+}
+
+.fontBold {
+  font-weight: 600;
+}
+
+.metaText {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #666);
+  margin-top: 0.25rem;
+}
+
+.monospace {
+  font-family: "Monaco", "Menlo", monospace;
+  font-size: 0.9rem;
+}
+
+.centered {
+  text-align: center;
+}
+
+.centerCell {
+  text-align: center;
+}
+
+.actionsCell {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.emptyState {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary, #666);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-top: 1px solid var(--border-default, #ddd);
+}
+
+.pageInfo {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #666);
+  min-width: 200px;
+  text-align: center;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 90%;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-default, #ddd);
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-secondary, #666);
+  padding: 0;
+}
+
+.modalBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-default, #ddd);
+  background: var(--bg-secondary, #f9f9f9);
+}

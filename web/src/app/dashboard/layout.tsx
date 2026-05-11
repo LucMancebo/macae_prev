@@ -19,6 +19,9 @@ export default function DashboardLayout({
     "/dashboard": "Painel Operacional",
     "/dashboard/servidores": "Servidores",
     "/dashboard/consignatarias": "Consignatárias",
+    "/dashboard/consignacoes": "Consignações",
+    "/dashboard/produtos": "Produtos",
+    "/dashboard/margens": "Margens",
     "/dashboard/usuarios": "Usuários",
   };
 
@@ -39,6 +42,26 @@ export default function DashboardLayout({
           icon: "🏦",
         },
         { name: "Usuários", path: "/dashboard/usuarios", icon: "🔐" },
+      ],
+    },
+    {
+      label: "Consignações",
+      items: [
+        {
+          name: "Consignações",
+          path: "/dashboard/consignacoes",
+          icon: "💼",
+        },
+        {
+          name: "Produtos",
+          path: "/dashboard/produtos",
+          icon: "📦",
+        },
+        {
+          name: "Margens",
+          path: "/dashboard/margens",
+          icon: "📊",
+        },
       ],
     },
   ];
