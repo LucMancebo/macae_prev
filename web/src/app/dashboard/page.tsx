@@ -10,6 +10,8 @@ import {
   Servidor,
   Usuario,
 } from "../../types/entidades";
+import { Consignacao } from "../../services/consignacoes";
+import { Margem } from "../../services/margens";
 import styles from "./overview.module.css";
 
 type UsuarioExt = Usuario & {
@@ -73,12 +75,14 @@ export default function DashboardOverview() {
 
   async function fetchStats() {
     try {
-      const [serv, cons, user] = await Promise.all([
+      const [serv, cons, user, consign, marg] = await Promise.all([
         apiFetch<PaginatedResponse<Servidor>>("/v1/servidores?limit=1000"),
         apiFetch<PaginatedResponse<Consignataria>>(
           "/v1/consignatarias?limit=1000",
         ),
         apiFetch<PaginatedResponse<UsuarioExt>>("/v1/usuarios?limit=1000"),
+        apiFetch<PaginatedResponse<Consignacao>>("/v1/consignacoes?limit=1000"),
+        apiFetch<PaginatedResponse<Margem>>("/v1/margens?limit=1000"),
       ]);
 
       const servidoresInativosOuBloqueados = serv.items.filter(
@@ -126,6 +130,30 @@ export default function DashboardOverview() {
         usuariosAtivos,
       });
       setRecentServidores(recentes);
+
+      const consignacoesByStatus = (consign.items || []).reduce(
+        (acc: Record<string, number>, c: Consignacao) => {
+          const s = (c.status_fluxo || "").toUpperCase();
+          acc[s] = (acc[s] || 0) + 1;
+          return acc;
+        },
+        {},
+      );
+
+      (window as any).__m3Stats = {
+        totalConsignacoes: consign.meta.total,
+        consignacoesByStatus,
+        totalMargens: marg.meta.total,
+        avgPercentualMaximo:
+          marg.items && marg.items.length
+            ? Math.round(
+                marg.items.reduce(
+                  (s: number, m: Margem) => s + (m.percentual_maximo || 0),
+                  0,
+                ) / marg.items.length,
+              )
+            : 0,
+      };
     } catch (err) {
       const anyErr = err as any;
       const details =
@@ -202,6 +230,32 @@ export default function DashboardOverview() {
             {loading
               ? ""
               : `${stats.usuariosPendentesLgpd} pendentes de aceite LGPD`}
+          </span>
+        </Card>
+
+        <Card className={styles.kpiCard}>
+          <span className={styles.kpiLabel}>Consignações (total)</span>
+          <strong className={styles.kpiValue}>
+            {loading
+              ? "..."
+              : ((window as any).__m3Stats?.totalConsignacoes ?? 0)}
+          </strong>
+          <span className={styles.kpiMeta}>
+            {loading
+              ? ""
+              : `S:${(window as any).__m3Stats?.consignacoesByStatus?.SOLICITADA || 0} • A:${(window as any).__m3Stats?.consignacoesByStatus?.APROVADA || 0} • T:${(window as any).__m3Stats?.consignacoesByStatus?.ATIVA || 0}`}
+          </span>
+        </Card>
+
+        <Card className={styles.kpiCard}>
+          <span className={styles.kpiLabel}>Margens</span>
+          <strong className={styles.kpiValue}>
+            {loading ? "..." : ((window as any).__m3Stats?.totalMargens ?? 0)}
+          </strong>
+          <span className={styles.kpiMeta}>
+            {loading
+              ? ""
+              : `Média % máx: ${(window as any).__m3Stats?.avgPercentualMaximo || 0}%`}
           </span>
         </Card>
       </section>
