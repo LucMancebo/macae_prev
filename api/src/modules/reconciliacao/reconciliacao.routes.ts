@@ -8,8 +8,7 @@ export async function reconciliacaoRoutes(app: FastifyInstance) {
         try {
             await request.jwtVerify();
 
-            const user = request.user as any;
-            if (user?.perfil !== 'ADMINISTRADOR') {
+            if (request.user?.perfil !== 'ADMINISTRADOR') {
                 return reply.status(403).send({ error: 'Acesso restrito', message: 'Somente usuários ADMINISTRADOR podem acessar a reconciliação.' });
             }
         } catch {
