@@ -27,6 +27,7 @@ export default function DashboardLayout({
     "/dashboard/arquivos": "Arquivos",
     "/dashboard/reconciliacao": "Reconciliação",
     "/dashboard/usuarios": "Usuários",
+    "/dashboard/ajuda": "Manual On-line",
   };
 
   const breadcrumbTitle = breadcrumbMap[pathname] ?? "Painel Operacional";
@@ -74,6 +75,10 @@ export default function DashboardLayout({
         { name: "Arquivos", path: "/dashboard/arquivos", icon: "🗂" },
         { name: "Reconciliação", path: "/dashboard/reconciliacao", icon: "🔄" },
       ],
+    },
+    {
+      label: "Suporte",
+      items: [{ name: "Manual On-line", path: "/dashboard/ajuda", icon: "❓" }],
     },
   ];
 
@@ -150,9 +155,13 @@ export default function DashboardLayout({
           </div>
 
           <div className={styles.topbarActions}>
-            <button className={styles.topbarIconBtn} aria-label="Manual online">
+            <Link
+              href="/dashboard/ajuda"
+              className={styles.topbarIconBtn}
+              aria-label="Manual online"
+            >
               ?
-            </button>
+            </Link>
             <button
               className={styles.topbarIconBtn}
               aria-label="Notificações de aprovação"

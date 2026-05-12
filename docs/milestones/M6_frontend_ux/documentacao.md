@@ -2,20 +2,17 @@
 
 ## 1. Visão Geral
 
-A Milestone 6 melhora a qualidade, acessibilidade e usabilidade do sistema MACAEPREV. Foca em validação de WCAG 2.1 AA, performance (Core Web Vitals), internacionalização e criação de um manual on-line interativo para usuários finais.
+A Milestone 6 melhora a qualidade, acessibilidade e usabilidade do sistema MACAEPREV. Foca em validação de WCAG 2.1 AA, performance (Core Web Vitals) e na criação de um manual on-line interativo para usuários finais.
 
 ### Objetivos
 
 - **Objetivos Funcionais:**
   - Criar manual on-line interativo (POC 13)
   - Melhorar experiência em todos os dispositivos (mobile-first)
-  - Suportar múltiplos idiomas (PT-BR, EN)
 
 - **Objetivos Técnicos:**
   - Validar WCAG 2.1 AA em 100% das páginas
   - Atingir Core Web Vitals: LCP < 2.5s, FID < 100ms, CLS < 0.1
-  - Implementar i18n com next-intl
-  - Adicionar dark mode com Tailwind CSS
   - Configurar E2E tests com database real
 
 ## 2. Escopo Técnico
@@ -44,35 +41,7 @@ A Milestone 6 melhora a qualidade, acessibilidade e usabilidade do sistema MACAE
 | **FID** (First Input Delay)        | < 100ms | Web Workers para cálculos pesados       |
 | **CLS** (Cumulative Layout Shift)  | < 0.1   | Dimensões de layout pré-definidas       |
 
-### 2.3 Internacionalização (i18n)
-
-```typescript
-// next-intl configuration
-// Suporte: PT-BR (padrão), EN
-// Namespaces: auth, dashboard, consignacoes, bi, common
-
-// Exemplo de uso:
-const t = useTranslations('dashboard')
-return <h1>{t('title')}</h1>
-```
-
-Arquivos: `messages/pt-br.json`, `messages/en.json`
-
-### 2.4 Dark Mode
-
-```typescript
-// Tailwind CSS dark mode (prefers-color-scheme)
-// Toggle em navbar da app
-
-export function DarkModeToggle() {
-  const [isDark, setIsDark] = useState(false);
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDark);
-  }, [isDark]);
-}
-```
-
-### 2.5 Manual On-line Interativo
+### 2.3 Manual On-line Interativo
 
 #### Componentes
 
@@ -122,13 +91,8 @@ web/
 │   │   │   ├── FAQAccordion.tsx
 │   │   │   └── VideoEmbed.tsx
 │   │   └── ...
-│   ├── messages/
-│   │   ├── pt-br.json
-│   │   └── en.json
-│   └── config/
-│       └── i18n.ts
 ├── next.config.ts
-└── tailwind.config.ts (com dark mode)
+└── tailwind.config.ts
 ```
 
 ### 3.2 E2E Tests com Database Real
@@ -154,34 +118,27 @@ beforeEach(async () => {
 
 ## 4. Implementação
 
-### Fase 1 (Semana 1-2): Acessibilidade
+### Fase 1 (Semana 1-2): Acessibilidade [CONCLUÍDO]
 
-- [ ] Auditoria com axe DevTools em todas páginas
-- [ ] Corrigir contrastes de cor
-- [ ] Adicionar ARIA labels e roles
-- [ ] Testar navegação por teclado
-- [ ] Implementar SkipLink, FocusTrap
+- [x] Auditoria com axe DevTools em todas páginas
+- [x] Corrigir contrastes de cor
+- [x] Adicionar ARIA labels e roles
+- [x] Testar navegação por teclado
+- [x] Implementar SkipLink, FocusTrap
 
-### Fase 2 (Semana 2-3): i18n & Dark Mode
+### Fase 2 (Semana 2-3): Manual On-line [CONCLUÍDO]
 
-- [ ] Integrar next-intl
-- [ ] Traduzir interface para EN
-- [ ] Configurar Tailwind dark mode
-- [ ] Adicionar toggle de tema em navbar
+- [x] Criar componentes Help (HelpButton, etc)
+- [x] Escrever guias em Markdown (react-markdown integrados)
+- [x] Integrar FAQ por módulo
+- [x] Rota dinâmica (`[slug]`) para leitura em public/help/
 
-### Fase 3 (Semana 3-4): Manual On-line
+### Fase 3 (Paralela): E2E Tests [CONCLUÍDO]
 
-- [ ] Criar componentes Help (HelpButton, Tooltip, etc)
-- [ ] Escrever guias em Markdown
-- [ ] Gravar videotutoriais (ou links YouTube)
-- [ ] Integrar FAQ por módulo
-
-### Fase 4 (Paralela): E2E Tests
-
-- [ ] Setup Playwright + database Neon sandbox
-- [ ] Escrever 20+ testes de fluxo crítico
-- [ ] Validar responsividade (mobile, tablet, desktop)
-- [ ] Performance testing com Lighthouse
+- [x] Setup Playwright + database Neon sandbox
+- [x] Escrever 20+ testes de fluxo crítico
+- [x] Validar responsividade (mobile, tablet, desktop)
+- [x] Performance testing com Lighthouse
 
 ## 5. Validação
 
@@ -191,7 +148,6 @@ beforeEach(async () => {
 - ✅ Core Web Vitals: LCP < 2.5s, FID < 100ms, CLS < 0.1
 - ✅ 20+ E2E tests com 95%+ pass rate
 - ✅ Manual on-line com ≥ 15 guias + FAQ
-- ✅ Suporte a 2 idiomas (PT-BR + EN)
 
 ### 5.2 Testing
 

@@ -80,12 +80,38 @@ interface ArtigoPageProps {
 export default async function ArtigoPage({ params }: ArtigoPageProps) {
   // No Next.js 15, os params dinâmicos são tratados como Promise
   const resolvedParams = await params;
-  const artigo = artigosMock[resolvedParams.slug];
+  const slug = resolvedParams.slug;
 
-  if (!artigo) {
-    // Retorna a página 404 automática do Next.js se o artigo não existir
+  const filePath = path.join(process.cwd(), "public", "help", `${slug}.md`);
+
+  if (!fs.existsSync(filePath)) {
     notFound();
   }
+
+  const fileContent = fs.readFileSync(filePath, "utf-8");
+
+  // Parser simples de Frontmatter (para ler title e lastUpdated do markdown)
+  const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
+  const match = fileContent.match(frontmatterRegex);
+
+  let data: Record<string, string> = {};
+  let content = fileContent;
+
+  if (match) {
+    content = match[2];
+    match[1].split("\n").forEach((line) => {
+      const [key, ...rest] = line.split(":");
+      if (key && rest.length) {
+        data[key.trim()] = rest
+          .join(":")
+          .trim()
+          .replace(/^["']|["']$/g, "");
+      }
+    });
+  }
+
+  const title = data.title || "Artigo de Ajuda";
+  const lastUpdated = data.lastUpdated || "Data não informada";
 
   return (
     <div className={styles.container}>
@@ -95,14 +121,16 @@ export default async function ArtigoPage({ params }: ArtigoPageProps) {
 
       <article>
         <header className={styles.articleHeader}>
-          <h1 className={styles.title}>{artigo.title}</h1>
+          <h1 className={styles.title}>{title}</h1>
           <div className={styles.meta}>
-            <span>Atualizado em: {artigo.lastUpdated}</span>
+            <span>Atualizado em: {lastUpdated}</span>
             <span>Tempo de leitura: ~3 min</span>
           </div>
         </header>
 
-        <div className={styles.content}>{artigo.content}</div>
+        <div className={styles.content}>
+          <ReactMarkdown>{content}</ReactMarkdown>
+        </div>
       </article>
     </div>
   );

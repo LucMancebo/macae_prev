@@ -3,7 +3,7 @@
 > **Sistema de Controle Operacional de Consignações com Desconto em Folha**  
 > Instituto de Previdência Social do Município de Macaé — Rio de Janeiro, Brasil
 
-**Status:** Milestones 1–5 Concluídas (83%+) | **Próximas:** M6 (Frontend UX), M7 (Suporte & Operação)
+**Status:** Milestones 1–6 Concluídas (90%) | **Próximas:** M7 (Suporte & Operação)
 
 ---
 
@@ -137,10 +137,10 @@ docs/
 | **M3**    | Núcleo de Consignações    | ✅ Completo  | 10/10 |
 | **M4**    | Integração com Folha      | ✅ Completo  | 4/4   |
 | **M5**    | Relatórios & BI           | ✅ Completo  | 4/4   |
-| **M6**    | Frontend & UX             | ⏳ Planejado | 3/3   |
+| **M6**    | Frontend & UX             | ✅ Completo  | 3/3   |
 | **M7**    | Suporte & Operação        | ⏳ Planejado | 3/3   |
 
-**Taxa de conclusão:** 25/30 POCs (83%+) | **Próximas:** M6, M7 para 100%
+**Taxa de conclusão:** 27/30 POCs (90%) | **Próxima:** M7 para 100%
 
 ---
 

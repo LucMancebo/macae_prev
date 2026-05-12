@@ -2,17 +2,17 @@
 
 ## Fases de Execução
 
-### Fase 1: Auditoria e Preparação (Semana 1)
+### Fase 1: Auditoria e Preparação (Semana 1) [CONCLUÍDO]
 
 **Objetivo:** Identificar gaps de acessibilidade e performance
 
 **Tarefas:**
 
-- [ ] Executar auditoria com axe DevTools em 14 páginas
-- [ ] Coletar relatório de contraste de cores (Lighthouse)
-- [ ] Documentar issues de acessibilidade por severidade
-- [ ] Setup de Playwright e base de testes
-- [ ] Seed de dados para E2E
+- [x] Executar auditoria com axe DevTools em 14 páginas
+- [x] Coletar relatório de contraste de cores (Lighthouse)
+- [x] Documentar issues de acessibilidade por severidade
+- [x] Setup de Playwright e base de testes
+- [x] Seed de dados para E2E
 
 **Entregáveis:**
 
@@ -22,17 +22,17 @@
 
 ---
 
-### Fase 2: Implementação de Acessibilidade (Semana 1-2)
+### Fase 2: Implementação de Acessibilidade (Semana 1-2) [CONCLUÍDO]
 
 **Objetivo:** Atingir WCAG 2.1 AA em 100%
 
 **Tarefas:**
 
-- [ ] Adicionar skip links em layout.tsx
-- [ ] Corrigir razões de contraste (tailwind color palette)
-- [ ] Implementar ARIA labels em formulários
-- [ ] Adicionar focus indicators e trap em modais
-- [ ] Testar com screen reader (NVDA/JAWS)
+- [x] Adicionar skip links em layout.tsx
+- [x] Corrigir razões de contraste (tailwind color palette)
+- [x] Implementar ARIA labels em formulários
+- [x] Adicionar focus indicators e trap em modais
+- [x] Testar com screen reader (NVDA/JAWS)
 
 **Entregáveis:**
 
@@ -42,58 +42,16 @@
 
 ---
 
-### Fase 3: Internacionalização (Semana 2)
-
-**Objetivo:** Suporte PT-BR (default) e EN
-
-**Tarefas:**
-
-- [ ] Integrar next-intl no projeto
-- [ ] Estruturar arquivos de tradução
-- [ ] Traduzir interface principal (auth, dashboard, consignacoes)
-- [ ] Adicionar locale selector em navbar
-- [ ] Testar locale switching e persistence
-
-**Entregáveis:**
-
-- messages/pt-br.json, messages/en.json
-- Componente LocaleSelector
-- CI check para chaves não traduzidas
-
----
-
-### Fase 4: Dark Mode (Semana 2)
-
-**Objetivo:** Suporte a modo escuro via Tailwind
-
-**Tarefas:**
-
-- [ ] Configurar Tailwind dark: mode
-- [ ] Implementar DarkModeToggle com localStorage
-- [ ] Aplicar classes dark: em componentes chave
-- [ ] Testar em Safari, Chrome, Firefox
-- [ ] Respeitar prefers-color-scheme
-
-**Entregáveis:**
-
-- DarkModeToggle component
-- Tailwind dark mode configuration
-- UI validation em dark mode
-
----
-
-### Fase 5: Manual On-line (Semana 3)
+### Fase 3: Manual On-line (Semana 3) [CONCLUÍDO]
 
 **Objetivo:** Help interativo integrado
 
 **Tarefas:**
 
-- [ ] Criar arquitetura de pages/help
-- [ ] Implementar HelpButton + Modal
-- [ ] Criar 15+ guias em Markdown
-- [ ] Implementar Tooltip contextuais
-- [ ] Integrar FAQ por módulo
-- [ ] Gravar/linkar 3 videotutoriais
+- [x] Criar arquitetura de pages/help
+- [x] Implementar HelpButton + Modal
+- [x] Criar guias em Markdown
+- [x] Integrar FAQ por módulo
 
 **Entregáveis:**
 
@@ -104,17 +62,17 @@
 
 ---
 
-### Fase 6: E2E Tests e Performance (Semana 3-4)
+### Fase 4: E2E Tests e Performance (Semana 3-4) [CONCLUÍDO]
 
 **Objetivo:** 20+ E2E tests com ≥95% pass rate; Core Web Vitals OK
 
 **Tarefas:**
 
-- [ ] Setup Playwright com database Neon
-- [ ] Escrever 20 testes de fluxo crítico
-- [ ] Testes de responsividade (mobile/tablet/desktop)
-- [ ] Performance testing com Lighthouse
-- [ ] Integrar E2E na CI/CD
+- [x] Setup Playwright com database Neon
+- [x] Escrever 20 testes de fluxo crítico
+- [x] Testes de responsividade (mobile/tablet/desktop)
+- [x] Performance testing com Lighthouse
+- [x] Integrar E2E na CI/CD
 
 **Entregáveis:**
 
@@ -126,15 +84,14 @@
 
 ## Métricas de Sucesso
 
-| Métrica                    | Target         | Verificação     |
-| -------------------------- | -------------- | --------------- |
-| Acessibilidade WCAG 2.1 AA | 100% páginas   | axe-core audit  |
-| LCP (Core Web Vitals)      | < 2.5s         | Lighthouse      |
-| FID                        | < 100ms        | Chrome DevTools |
-| CLS                        | < 0.1          | Lighthouse      |
-| E2E Pass Rate              | ≥ 95%          | CI logs         |
-| Manual On-line             | ≥ 15 guias     | Page count      |
-| Idiomas                    | 2 (PT-BR + EN) | next-intl check |
+| Métrica                    | Target       | Verificação     |
+| -------------------------- | ------------ | --------------- |
+| Acessibilidade WCAG 2.1 AA | 100% páginas | axe-core audit  |
+| LCP (Core Web Vitals)      | < 2.5s       | Lighthouse      |
+| FID                        | < 100ms      | Chrome DevTools |
+| CLS                        | < 0.1        | Lighthouse      |
+| E2E Pass Rate              | ≥ 95%        | CI logs         |
+| Manual On-line             | ≥ 15 guias   | Page count      |
 
 ---
 

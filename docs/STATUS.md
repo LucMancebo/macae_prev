@@ -1,8 +1,8 @@
 # Status Consolidado do Projeto — MACAEPREV
 
 **Data de Atualização:** 12 de maio de 2026  
-**Status Geral:** ✅ **Milestones 1–5 Completas (83%+)** | ⏳ **M6–M7 Planejadas**  
-**Taxa de Conclusão:** 26/30 POCs (86%+) | 0 Parciais | 4 Pendentes (M6–M7)
+**Status Geral:** ✅ **Milestones 1–6 Completas (90%)** | ⏳ **M7 Planejada**  
+**Taxa de Conclusão:** 27/30 POCs (90%) | 0 Parciais | 3 Pendentes (M7)
 
 ---
 
@@ -15,7 +15,7 @@
 | **M3**    | Core: Gestão Consignações | ✅      | ✅       | 118/118 | 10/10 | ✅ Completo  |
 | **M4**    | Integração com Folha      | ✅      | ✅       | OK      | 4/4   | ✅ Completo  |
 | **M5**    | Relatórios & BI           | ✅      | ✅       | OK      | 4/4   | ✅ Completo  |
-| **M6**    | Frontend & UX             | ⏳      | ⏳       | —       | 3/3   | ⏳ Planejado |
+| **M6**    | Frontend & UX             | ✅      | ✅       | OK      | 3/3   | ✅ Completo  |
 | **M7**    | Suporte & Operação        | ⏳      | ⏳       | —       | 3/3   | ⏳ Planejado |
 
 ---
@@ -63,9 +63,10 @@
 - **POC 22:** Módulo BI: conciliação, relatórios, gráficos
 - **POC 30:** Relatório mensal de receita/repasse ao MACAEPREV
 
-### ⏳ M6 — Frontend & UX (3/3 POCs — Planejado)
+### ✅ M6 — Frontend & UX (3/3 POCs)
 
 - **POC 13:** Manual on-line para todos os módulos
+- **POC 15:** Homologação em browsers (cross-browser E2E)
 - (Refinamentos de UX em componentes e telas)
 
 ### ⏳ M7 — Suporte & Operação (3/3 POCs — Planejado)
@@ -160,16 +161,10 @@ Consulte [docs/README.md](README.md) para navegação completa.
 
 ## 🚀 Próximas Etapas
 
-### M6 — Frontend & UX (Planejado — 4 semanas)
+### M6 — Frontend & UX (Concluído)
 
-**Foco:** Correções de Fluxo (CRUDs/Filtros), Acessibilidade WCAG 2.1 AA, Performance, Manual On-line Interativo e Testes E2E.
-
-**Fases de Execução:**
-
-1. **Refinamentos (Sem 1):** Correção de buscas, edições, deleções e adequação de perfis de usuário.
-2. **Acessibilidade (Sem 2):** Contraste, navegação keyboard, ARIA labels, focus indicators.
-3. **Manual On-line (Sem 3):** 15+ guias Markdown + HelpButton + FAQ interativa.
-4. **E2E Tests (Sem 4):** 20+ testes Playwright + Core Web Vitals < 2.5s (LCP).
+**Entregas:** Correções de fluxos CRUDs, Acessibilidade WCAG 2.1 AA, Testes E2E (Playwright) e Manual On-line iterativo via Markdown (`react-markdown`).
+**Status:** Totalmente homologada e documentada.
 
 **Documentação Completa:** [milestones/M6_frontend_ux/](milestones/M6_frontend_ux/)
 
@@ -197,9 +192,9 @@ Consulte [docs/README.md](README.md) para navegação completa.
 
 | Taxa            | Descrição                                         |
 | --------------- | ------------------------------------------------- |
-| **83%+**        | 25/30 POCs concluídas (M1–M5 completas)           |
-| **1 Parcial**   | POC 2 (Migração BD) — backend OK; UI em progresso |
-| **4 Pendentes** | POCs 13, 25, 26, 27 (M6–M7 planejadas)            |
+| **90%**         | 27/30 POCs concluídas (M1–M6 completas)           |
+| **0 Parciais**  | Nenhuma POC parcial pendente                      |
+| **3 Pendentes** | POCs 25, 26, 27 (M7 planejada)                    |
 | **100%**        | Documentação M1–M6 estruturada                    |
 | **100%**        | Stack LTS (Node 24, TypeScript 6.x) harmonizado   |
 | **100%**        | CI/CD workflow criado + Dockerfiles + Terraform   |

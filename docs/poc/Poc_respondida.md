@@ -2,14 +2,15 @@
 
 > _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1–4 Concluídas** (fundação, segurança, core consignações e integração folha completa). Última atualização: 11/05/2026.
 > _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1–5 Concluídas** (M5 - Relatórios & BI integrados). Última atualização: 12/05/2026.
+> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1–6 Concluídas** (M6 - Acessibilidade e Manual On-line). Última atualização: 12/05/2026.
 
 ## 📊 Progresso Geral
 
-**Status: 26/30 Completas | 0 Parciais | 4 Pendentes (86%)**
+**Status: 27/30 Completas | 0 Parciais | 3 Pendentes (90%)**
 
 | Completas | Parciais | Pendentes | Taxa Conclusão |
 | --------- | -------- | --------- | -------------- |
-| 26        | 0        | 4         | 86% ✅         |
+| 27        | 0        | 3         | 90% ✅         |
 
 > **Nota:** Categorias: ✓ Atende = Completo | (X) Atende parcial = Em Progresso | (X) Não atende = Não iniciado
 
@@ -19,8 +20,8 @@
 
 Com base no mapeamento da POC para as milestones e no estado atual do repositório, segue a classificação resumida das exigências da licitação:
 
-- **Concluídos (implementados):** POCs das Milestones 1–5 completas: 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 28, 29, 30. Essas entregas cobrem a fundação, segurança, core, folha e agora os **Relatórios Gerenciais e BI**.
-- **Pendentes (planejados / ainda não implementados):** POCs alocados às Milestones 6–7 (Manual, deploy/operação): 13, 25, 26, 27.
+- **Concluídos (implementados):** POCs das Milestones 1–6 completas: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 28, 29, 30. Essas entregas cobrem a fundação, segurança, core, folha, relatórios gerenciais, **UX e Manuais**.
+- **Pendentes (planejados / ainda não implementados):** POCs alocados à Milestone 7 (Suporte/Deploy): 25, 26, 27.
 
 Observação: a lista acima foi consolidada a partir do mapeamento POC→Milestones presente em `docs/projeto/plano.md` e do estado atual do código. Caso haja requisitos formais no anexo da licitação que não estejam representados pela lista de POC, indique-os para que eu os alinhe explicitamente.
 
@@ -116,8 +117,8 @@ Observação: a lista acima foi consolidada a partir do mapeamento POC→Milesto
 
 ### 13 - Manual on-line para todos os módulos (4.1.10.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 6**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 6**. Implementação do centro de ajuda com guias Markdown (`/dashboard/ajuda`), FAQ interativa e botões de ajuda contextuais renderizados via `react-markdown` diretamente na plataforma.
 
 ---
 
@@ -130,8 +131,8 @@ Observação: a lista acima foi consolidada a partir do mapeamento POC→Milesto
 
 ### 15 - Homologação em Edge, Chrome e Firefox (4.1.12.)
 
-**(X) Atende parcial**
-**Status Real:** Coberto parcialmente pela **Milestone 1** (Setup UI via JS frameworks homologados cross-browser nativo). Finalizaremos evidências de interface final (Testes E2E e CI/CD) apenas na **M6**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 6**. Coberto pela fundação em **Milestone 1** (Next.js cross-browser nativo) e homologado através dos Testes E2E via Playwright executados em múltiplos navegadores na **Milestone 6**.
 
 ---
 

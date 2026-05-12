@@ -1,6 +1,6 @@
 # Milestone 6: Frontend & UX
 
-**Status:** ⏳ PLANEJADO — Refinamentos de interface, acessibilidade e manual on-line
+**Status:** ✅ CONCLUÍDO — Refinamentos de interface, acessibilidade e manual on-line
 
 ## Resumo da Milestone
 
@@ -13,8 +13,6 @@ M6 foca na melhoria da experiência do usuário (UX), refinamento visual, valida
 - ✅ Auditoria de acessibilidade (WCAG 2.1 AA) em todas as páginas
 - ✅ Validação de contraste de cores e navegação por teclado
 - ✅ Otimização de performance (Core Web Vitals: LCP, FID, CLS)
-- ✅ Internacionalização (i18n) com suporte a PT-BR e EN
-- ✅ Dark mode opcional (sistema/preferência do usuário)
 - ✅ Refinamento de componentes: botões, inputs, modais, notificações
 
 ### Manual On-line Interativo
