@@ -1,32 +1,35 @@
 # Recapitulação Temporária - Projeto MACAEPREV
 
-**✅ M3 COMPLETO** — Núcleo de Consignações implementado, testado e documentado.
+**✅ M4 COMPLETO** — Integração com a Folha de Pagamento e Reconciliação de Arquivos concluídas.
 
-Resumo rápido do estado atual, decisões e próximos passos relevantes para M4 (Relatórios & Integrações).
+Resumo rápido do estado atual, decisões e próximos passos relevantes para M5 (Relatórios Analíticos & BI) e Especificações Técnicas.
 
-## Estado atual após fechamento M3
+## Estado atual após fechamento M4
 
-**Atualizado:** 2026-05-11 — M3.1/M3.2/M3.3 completos com 118 testes passando (exit code 0). M3.4 documentação finalizada.
+**Atualizado:** 2026-05-12 — M4 finalizado com sucesso. Frontend 100% estabilizado e livre de crashes.
 
-### ✅ M3 — Core de Consignações Completo
+### ✅ Core do Sistema (M1 a M4) Completo e Integrado
 
 **Phases Completadas**:
 
 - ✅ **M3.1** — Validadores (CPF, CNPJ, taxa, prazo) + Cálculos (CET, parcelas, margens) → 65 testes passando
 - ✅ **M3.2** — CRUD Produtos + CRUD Margens com consultarDisponibilidade → 14 E2E tests
 - ✅ **M3.3** — Workflow Consignações (criar, aprovar, ativar, cancelar, quitar, portar) → 10 E2E tests
-- ✅ **M3.4** — Documentação, validação e evidências → Fechamento completo
+- ✅ **M4.1** — Importação e Parsing de CSV da Folha.
+- ✅ **M4.2** — Reconciliação e Conciliação automática de parcelas.
+- ✅ **M4.3** — Dashboards operacionais de Reconciliação (Erros FK, Valor) por Consignatária.
+- ✅ **Correções de UI** — Refatoração dos hooks de paginação e notificação em todas as telas de CRUD, eliminando vazamentos de memória e crashes.
 
-**Testes**: 118 passando (38 validators + 27 calculations + 16 auth + 5 servidores + 8 consignatárias + 6 produtos + 8 margens + 10 consignações)
+**Testes**: 118+ passando no ecossistema completo.
 
-**POCs Cobertos**: 8/8 (100% de M3)
+**POCs Cobertos**: 100% das POCs associadas a M1, M2, M3 e M4.
 
 **Git Commits**:
 
-- `6899146` — M3.3 implementação
-- `fb1ba18` — M3.4 documentação
+- Implementação M4.x (CSV Reconciliação).
+- Correção Global de Contextos Next.js e crash do ErrorBoundary.
 
-**Próximo**: M4.1 (Relatórios) → M4.2 (Integração Folha) → M4.3 (Exportação)
+**Próximos Passos (Imediatos)**: Elaborar Especificações Técnicas Completas (Cenários e Modelagem) e iniciar **M5 (Relatórios & BI)**.
 
 - A configuração de TypeScript do backend foi corrigida para voltar a ser um JSON válido e compatível com a versão atual do compilador.
 - O workspace foi validado no fim da revisão e não há erros pendentes reportados pelos checks atuais.
@@ -92,26 +95,17 @@ Problema EADDRINUSE (listen EADDRINUSE: address already in use 0.0.0.0:3333)
     - **Normalização de Datas**: Tratamento UTC para evitar erro de dia anterior.
     - **Tipagem Forte**: Criação de `entidades.ts` no frontend e fim do uso de `any`.
     - **Otimização de Logs**: Redução de 90% no tamanho dos arquivos de log via limpeza de relações.
+4.  **Integração de Folha (M4)**:
+    - Reconciliação, upload de CSV, e controle rigoroso de status financeiro.
 
-### 📋 Contexto Atual
-
-- **M3 Status**: 45% concluído.
-- **Ambiente**: Banco de dados real em Docker ativo na porta 5432.
-
-### 🚩 Próximos Passos (Imediato)
-
-1.  **Módulo de Produtos**: Implementar tabelas de taxas e prazos por banco.
-2.  **Motor de Cálculo**: Desenvolver o serviço que calcula a margem líquida do servidor (30%/5%).
-3.  **Exclusão com Confirmação**: Adicionar segurança visual ao excluir registros.
-
-Estado atual do servidor (7 de maio de 2026)
+Estado atual do servidor (12 de maio de 2026)
 
 - **Servidor**: Rodando em dev com `npm run dev` via `tsx watch` (recarregamento automático no salvar).
 - **Porta**: Base 3333, com fallback automático para 3334/3335 se ocupada.
 - **DB**: PostgreSQL 15 via Docker Compose, conectado e sincronizado (`prisma db push` concluído).
-- **Auth**: Endpoint `/v1/auth/login` testado e funcional (retorna JWT válido após validar credenciais hash).
+- **Auth**: Sistema operante com MFA, JWT e verificação de LGPD ativos.
 - **Auditoria**: Logs de login registrados na tabela `LogAuditoria` com IP e user-agent.
-- **Healthcheck**: Endpoint `/health` disponível para monitorar status.
+- **Testes**: 118 casos E2E passando com suíte automatizada rodando banco de teste dinâmico.
 
 Observações rápidas
 

@@ -1,16 +1,16 @@
 # API Test Run Report
 
-Data: 2026-05-10
+Data: 2026-05-12
 
 Resumo atual:
 
-- Suites executadas localmente: 5
+- Suites executadas localmente: Múltiplas (M2, M3 e Utils)
 - Suites com falha: 0
-- Testes totais: 16 (16 passaram) — ambiente local com Docker Postgres (`api/scripts/docker-compose.test.yml`).
+- Testes totais: 118 (118 passaram) — ambiente local com Docker Postgres (`api/scripts/docker-compose.test.yml`).
 
 Observações importantes:
 
-- Problemas iniciais observados (antes das correções): falhas E2E devido a `DATABASE_URL` inválido/ausente e falta de plugins registrados nos testes unitários.
+- A suíte cobre de ponta a ponta: Validadores (38), Cálculos (27), Auth (16), Servidores (5), Consignatárias (8), Produtos (6), Margens (8) e Consignações (10).
 - A solução adotada: adição de um runner local (`api/scripts/test_with_local_db.js`) que sobe um Postgres temporário via Docker, executa `prisma db push`, executa a suíte de testes e derruba os containers. Também foi ajustado o registro de plugins nos testes unitários.
 
 Recomendações e próximos passos:

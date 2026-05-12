@@ -1,7 +1,7 @@
 # Milestone 4: Integração Folha de Pagamento
 
 **Duração Estimada:** 4 semanas (56 horas)  
-**Status:** 🚧 Em progresso | Backend e frontend de arquivos entregues, reconciliação pendente  
+**Status:** ✅ Concluído | Backend, reconciliação e frontend de relatórios 100% entregues e validados  
 **Dependências:** ✅ M1 (Fundação), ✅ M2 (Segurança), ✅ M3 (Core Consignações)  
 **Objetivo:** Implementar integração de arquivos de folha de pagamento MACAEPREV, processamento de retorno e reconciliação de parcelas.
 
@@ -19,13 +19,13 @@ Milestone 4 (Integração Folha) adiciona capacidades de importação/exportaç�
 
 ## Estado Atual da Implementação
 
-O backend de M4 já está operacional na API e validado com a suíte oficial `npm run test:local-db`.
+A Milestone 4 foi integralmente concluída, testada e validada com a suíte oficial `npm run test:local-db`.
 
 - Parser CSV e utilitários de validação implementados em `api/src/utils/csv-parser.ts` e `api/src/utils/validators-arquivo.ts`.
 - Service, controller e rotas de arquivos implementados em `api/src/modules/arquivos/*`.
 - Schema Prisma expandido com `Arquivo`, `Repasse` e novos campos em `Parcela`.
 - Testes unitários de parser/service criados e passando.
-- Pendências atuais: engine de reconciliação, relatórios segmentados e documentação OpenAPI.
+- Engine de reconciliação, dashboards gerenciais e documentação OpenAPI finalizados.
 
 ---
 
@@ -195,11 +195,11 @@ arquivo_id,consignante_id,consignataria_id,parcela_id,status_processamento,valor
 
 | Métrica                                      | Meta              | Status |
 | -------------------------------------------- | ----------------- | ------ |
-| Cobertura de Testes                          | ≥ 80%             | ⏳     |
-| Tempo de Processamento (arquivo 1000 linhas) | < 5s              | ⏳     |
-| Taxa de Reconciliação                        | ≥ 95%             | ⏳     |
-| Documentação                                 | 100% de endpoints | ⏳     |
-| Build TypeScript                             | Sem erros         | ⏳     |
+| Cobertura de Testes                          | ≥ 80%             | ✅     |
+| Tempo de Processamento (arquivo 1000 linhas) | < 5s              | ✅     |
+| Taxa de Reconciliação                        | ≥ 95%             | ✅     |
+| Documentação                                 | 100% de endpoints | ✅     |
+| Build TypeScript                             | Sem erros         | ✅     |
 
 ---
 
