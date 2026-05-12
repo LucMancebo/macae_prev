@@ -103,7 +103,6 @@ export default function ConsignatariasPage() {
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
-              setMeta((m) => ({ ...m, page: 1 }));
             }}
             className={styles.searchInput}
           />
