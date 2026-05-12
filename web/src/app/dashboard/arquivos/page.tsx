@@ -210,17 +210,19 @@ export default function ArquivosPage() {
                 </FormField>
 
                 <FormField label="Arquivo CSV">
-                  <input
-                    className={styles.fileInput}
-                    type="file"
-                    accept=".csv,text/csv"
-                    onChange={handleSelecionarArquivo}
-                  />
-                  <span className={styles.helperText}>
-                    {arquivoSelecionado
-                      ? `Selecionado: ${arquivoSelecionado.name}`
-                      : "Nenhum arquivo selecionado ainda."}
-                  </span>
+                  <div>
+                    <input
+                      className={styles.fileInput}
+                      type="file"
+                      accept=".csv,text/csv"
+                      onChange={handleSelecionarArquivo}
+                    />
+                    <span className={styles.helperText}>
+                      {arquivoSelecionado
+                        ? `Selecionado: ${arquivoSelecionado.name}`
+                        : "Nenhum arquivo selecionado ainda."}
+                    </span>
+                  </div>
                 </FormField>
 
                 <FormField

@@ -18,7 +18,9 @@ export default function ReconciliacaoPage() {
   const [filtros, setFiltros] = useState<FiltrosRelatorio>({});
 
   // Tratamento de compatibilidade segura: extrai diretamente caso a API não encapsule em 'data'
-  const dadosRelatorio = relatorio ? ((relatorio as any).data || relatorio) : null;
+  const dadosRelatorio = relatorio
+    ? (relatorio as any).data || relatorio
+    : null;
   const byStatus = dadosRelatorio?.byStatus || {};
   const byConsignataria = dadosRelatorio?.byConsignataria || {};
 
@@ -115,7 +117,6 @@ export default function ReconciliacaoPage() {
         </div>
       )}
 
-      {!loading && relatorio && (
       {!loading && relatorio && dadosRelatorio && (
         <div className={styles.resultsSection}>
           {/* Statistics Overview */}
@@ -123,51 +124,41 @@ export default function ReconciliacaoPage() {
             <div className={styles.statisticCard}>
               <span className={styles.statisticLabel}>Total Processado</span>
               <span className={styles.statisticValue}>
-                {relatorio.data.total}
                 {dadosRelatorio.total || 0}
               </span>
             </div>
 
-            {relatorio.data.byStatus.CONCILIADA && (
             {byStatus.CONCILIADA && (
               <div className={styles.statisticCard}>
                 <span className={styles.statisticLabel}>Conciliadas</span>
                 <span className={styles.statisticValue}>
-                  {relatorio.data.byStatus.CONCILIADA}
-                  {byStatus.CONCILIADA}
+                  {String(byStatus.CONCILIADA)}
                 </span>
               </div>
             )}
 
-            {Object.entries(relatorio.data.byStatus).map(([status, count]) => {
-            {Object.entries(byStatus).map(([status, count]) => {
-              if (status.includes("ERRO")) {
-                return (
-                  <div key={status} className={styles.statisticCard}>
-                    <span className={styles.statisticLabel}>
-                      {getStatusLabel(status)}
-                    </span>
-                    <span className={styles.statisticValue}>{count}</span>
-                  </div>
-                );
-              }
-              return null;
-            })}
+            {Object.entries(byStatus)
+              .filter(([status]) => status.includes("ERRO"))
+              .map(([status, count]) => (
+                <div key={status} className={styles.statisticCard}>
+                  <span className={styles.statisticLabel}>
+                    {getStatusLabel(status)}
+                  </span>
+                  <span className={styles.statisticValue}>{String(count)}</span>
+                </div>
+              ))}
 
-            {relatorio.data.byStatus.PENDENTE && (
             {byStatus.PENDENTE && (
               <div className={styles.statisticCard}>
                 <span className={styles.statisticLabel}>Pendentes</span>
                 <span className={styles.statisticValue}>
-                  {relatorio.data.byStatus.PENDENTE}
-                  {byStatus.PENDENTE}
+                  {String(byStatus.PENDENTE)}
                 </span>
               </div>
             )}
           </div>
 
           {/* Consignatarias Breakdown */}
-          {Object.keys(relatorio.data.byConsignataria).length > 0 && (
           {Object.keys(byConsignataria).length > 0 && (
             <div>
               <h2 className={styles.heroTitle} style={{ marginBottom: "1rem" }}>
@@ -180,9 +171,8 @@ export default function ReconciliacaoPage() {
                   gap: "1rem",
                 }}
               >
-                {Object.entries(relatorio.data.byConsignataria).map(
                 {Object.entries(byConsignataria).map(
-                  ([consignataria, dados]) => (
+                  ([consignataria, dados]: any) => (
                     <div
                       key={consignataria}
                       className={styles.consignatariaSection}
@@ -196,7 +186,7 @@ export default function ReconciliacaoPage() {
                             Total
                           </span>
                           <span className={styles.consignatariaStatValue}>
-                            {dados.total}
+                            {String(dados.total)}
                           </span>
                         </div>
 
@@ -212,7 +202,7 @@ export default function ReconciliacaoPage() {
                               <div
                                 className={`${styles.statusBadge} ${getStatusBadgeClass(status)}`}
                               >
-                                {count}
+                                {String(count)}
                               </div>
                             </div>
                           ),
@@ -225,7 +215,6 @@ export default function ReconciliacaoPage() {
             </div>
           )}
 
-          {relatorio.data.total === 0 && (
           {dadosRelatorio.total === 0 && (
             <div className={styles.emptyState}>
               <div className={styles.emptyStateIcon}>📋</div>
