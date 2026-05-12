@@ -1,26 +1,26 @@
 # POC — Prova de Conceito — Respostas (Status Real do Projeto)
 
-> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1, 2 & 3 Concluídas** e **M4 em progresso** (backend e frontend de arquivos entregues; reconciliação pendente). Última atualização: 11/05/2026.
+> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1–4 Concluídas** (fundação, segurança, core consignações e integração folha completa). Última atualização: 11/05/2026.
 
 ## 📊 Progresso Geral
 
-**Status: 16/30 Completas | 7 Parciais | 7 Pendentes (53% + Parciais)**
+**Status: 21/30 Completas | 1 Parcial | 8 Pendentes (70% + Parciais)**
 
 | Completas | Parciais | Pendentes | Taxa Conclusão |
 | --------- | -------- | --------- | -------------- |
-| 16        | 7        | 7         | 53% ✅         |
+| 21        | 1        | 8         | 70% ✅         |
 
 > **Nota:** Categorias: ✓ Atende = Completo | (X) Atende parcial = Em Progresso | (X) Não atende = Não iniciado
 
 ---
 
-**Análise da Licitação — Status Consolidado (11/05/2026)**
+**Análise da Licitação — Status Consolidado (12/05/2026)**
 
 Com base no mapeamento da POC para as milestones e no estado atual do repositório, segue a classificação resumida das exigências da licitação:
 
-- **Concluídos (implementados):** POC relacionados às Milestones 1–3, e a POC 17 da Milestone 4: 1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 16, 17, 20, 21, 23, 24, 28, 29. Essas entregas cobrem a fundação, segurança, o core de consignações e a integração de arquivos (endpoint + UI básica).
-- **Parciais (em progresso / entregas parciais):** POC da Milestone 4 (Integração Folha): 2, 18, 19. Backend para import/export e parser CSV foi entregue; frontend operacional para arquivos foi adicionado; faltam engine de reconciliação e relatórios segmentados.
-- **Pendentes (planejados / ainda não implementados):** POC alocados às Milestones 5–7 (relatórios, BI, frontend final, operação e suporte): 10, 13, 14, 22, 25, 26, 27, 30. Essas cobrem BI, manual online, relatórios, deploy/operação e suporte continuado.
+- **Concluídos (implementados):** POCs das Milestones 1–4 completas: 1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 16, 17, 18, 19, 20, 21, 23, 24, 28, 29. Essas entregas cobrem a fundação, segurança, core de consignações e integração folha completa (importação, reconciliação, relatórios segmentados).
+- **Parciais (em progresso / entregas parciais):** POCs de Milestone 4+ ainda incompletas: 2. Migração legado possui backend (parser, service, migration) mas faltam script formal de migração histórica e fluxo de UI completo.
+- **Pendentes (planejados / ainda não implementados):** POCs alocados às Milestones 5–7 (BI avançado, manual, relatórios gerenciais, deploy/operação): 10, 13, 14, 22, 25, 26, 27, 30. Essas cobrem BI/analytics, manual online, relatórios gerenciais, deploy, operação e suporte continuado.
 
 Observação: a lista acima foi consolidada a partir do mapeamento POC→Milestones presente em `docs/projeto/plano.md` e do estado atual do código. Caso haja requisitos formais no anexo da licitação que não estejam representados pela lista de POC, indique-os para que eu os alinhe explicitamente.
 
@@ -32,8 +32,8 @@ Observação: a lista acima foi consolidada a partir do mapeamento POC→Milesto
 
 ### 1 - Plataforma web compatível com Edge, Chrome e Firefox (4.1.1.)
 
-**(X) Atende**
-**Status Real:** O projeto frontend base foi inicializado (Milestone 1) utilizando **Next.js + React + TypeScript**. A fundação arquitetural foi criada assegurando a acessibilidade cross-browser nativa que o framework web garante. A regra rígida de CSS externo/modules foi adicionada às memórias e enforced. Telas visuais entrarão na estimativa da M6.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 1**. Frontend base inicializado com **Next.js + React + TypeScript**. Fundação arquitetural criada com CSS modules (enforced) garantindo compatibilidade cross-browser nativa (Edge, Chrome, Firefox). Design system implementado com componentes reutilizáveis. Telas operacionais entregues em M2-M4.
 
 ---
 
@@ -145,21 +145,21 @@ Observação: a lista acima foi consolidada a partir do mapeamento POC→Milesto
 ### 17 - Integração de arquivos compatível com folha MACAEPREV (4.1.14.)
 
 **(✓) Atende**
-**Status Real:** A integração mensal da **Milestone 4** possui backend funcional na API e a tela `/dashboard/arquivos` entregue no frontend: `POST /v1/arquivos/import`, `GET /v1/arquivos/:id` e `GET /v1/arquivos/export`, com parser CSV, validações e persistência do metadado de arquivo. A reconciliação automatizada (engine) permanece pendente e é tratada separadamente (POC 18/19).
+**Status Real:** ✅ **Concluído em Milestone 4**. Backend funcional: `POST /v1/arquivos/import`, `GET /v1/arquivos/:id`, `GET /v1/arquivos/export` com parser CSV (detecção automática UTF-8/ISO-8859-1), validações de schema e persistência. Frontend: tela `/dashboard/arquivos` com importação de CSVs, consulta por ID e exportação. Motor de reconciliação também implementado (POC 18/19).
 
 ---
 
 ### 18 - Arquivos mensais + processamento de retorno da folha (4.1.15.)
 
-**(X) Atende parcial**
-**Status Real:** O processamento mensal de arquivos já está coberto na **Milestone 4** com importação, leitura por ID, exportação CSV de retorno e a interface operacional em `/dashboard/arquivos`. Falta o fluxo completo de reconciliação.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 4**. Processamento mensal de arquivos completo: importação, validação, parsing, reconciliação automática e exportação de retorno. Tela `/dashboard/arquivos` fornece interface operacional para upload e gestão. Motor de reconciliação integrado ao fluxo de importação.
 
 ---
 
 ### 19 - Dados segmentados por Consignante e Consignatária (4.1.16.)
 
-**(X) Atende parcial**
-**Status Real:** A base para segmentação por Consignante e Consignatária já está entregue na **Milestone 4** via metadados, schema do arquivo e interface operacional. O relatório completo de conciliação por perfil ainda depende da engine de reconciliação.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 4**. Segmentação por Consignante e Consignatária implementada: endpoint `/v1/reconciliacao/relatorio` com filtros por data e consignatária_id. Dashboard `/dashboard/reconciliacao` exibe estatísticas consolidadas por status e breakdown detalhado por consignatária. Dados de reconciliação relacionados por consignataria_id.
 
 ---
 

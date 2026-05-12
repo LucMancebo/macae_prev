@@ -5,6 +5,7 @@
 ## Entregáveis Concluídos
 
 ### Backend - Importação de Arquivo
+
 - Parser CSV e validadores em `api/src/utils/`.
 - Service, controller e rotas de arquivos em `api/src/modules/arquivos/`.
 - Detecção automática de encoding (UTF-8, ISO-8859-1).
@@ -13,7 +14,8 @@
 - Testes unitários de parser e service com cobertura de casos de erro.
 
 ### Backend - Motor de Reconciliação
-- Engine de reconciliação MVP: `api/src/utils/reconciliacao.ts` 
+
+- Engine de reconciliação MVP: `api/src/utils/reconciliacao.ts`
   - Integrada ao fluxo de importação (`arquivo.service.ts`)
   - Matching: servidor.matricula → parcela.numero_parcela + consignataria_id
   - Tolerância de divergência: 0.05 (5 centavos)
@@ -22,6 +24,7 @@
 - Integração com atualização de parcelas e processamento de folha
 
 ### Backend - API de Relatórios
+
 - Endpoint REST: `GET /v1/reconciliacao/relatorio`
 - Filtros: data_inicio, data_fim, consignataria_id
 - Controller: `api/src/modules/reconciliacao/reconciliacao.controller.ts`
@@ -31,6 +34,7 @@
 - Documentação OpenAPI spec completa em `docs/openapi.json`
 
 ### Frontend - Dashboards
+
 - Service frontend `web/src/services/arquivos.ts` para gerenciamento de uploads.
 - Tela `/dashboard/arquivos` para importação de arquivos.
 - Service frontend `web/src/services/reconciliacao.ts` consumindo relatório.
@@ -44,6 +48,7 @@
 - Estilos responsivos em CSS modules
 
 ### Validação & Testes
+
 - Suite oficial do backend aprovada com `npm run test:local-db`.
 - Next.js build compilado com sucesso (`npm run build`).
 - Testes unitários de reconciliação: 4/4 PASS
@@ -90,6 +95,7 @@ docs/
 ## Próximo Passo Recomendado
 
 Integração com M5 (Relatórios BI) para:
+
 - Geração de Repasse automático pós-reconciliação
 - Dashboard analítico de reconciliação por período
 - Exportação de relatórios consolidados (Excel, PDF)
