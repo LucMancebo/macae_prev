@@ -8,7 +8,8 @@ export async function arquivosRoutes(app: FastifyInstance) {
         try {
             await request.jwtVerify();
 
-            if (request.user?.perfil !== 'ADMINISTRADOR') {
+            const user = request.user as { perfil?: string } | undefined;
+            if (user?.perfil !== 'ADMINISTRADOR') {
                 return reply.status(403).send({
                     error: 'Acesso restrito',
                     message: 'Somente usuários ADMINISTRADOR podem acessar o módulo de arquivos.'

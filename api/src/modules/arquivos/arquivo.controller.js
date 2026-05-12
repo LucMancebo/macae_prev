@@ -14,26 +14,29 @@ class ArquivoController {
         if (!conteudo) {
             return reply.status(400).send({ error: 'Conteúdo CSV é obrigatório' });
         }
+        const user = request.user;
         const resultado = await this.arquivoService.importarArquivo({
             nomeArquivo,
             conteudo,
-            usuarioId: request.user.id
+            usuarioId: user.id
         });
         return reply.status(201).send(resultado);
     };
     buscarArquivo = async (request, reply) => {
         const { id } = request.params;
-        const arquivo = await this.arquivoService.buscarArquivo(id, request.user?.perfil === 'ADMINISTRADOR' ? undefined : request.user.id);
+        const user = request.user;
+        const arquivo = await this.arquivoService.buscarArquivo(id, user?.perfil === 'ADMINISTRADOR' ? undefined : user.id);
         return reply.send(arquivo);
     };
     exportarArquivos = async (request, reply) => {
         const query = request.query;
         const dataInicio = query?.data_inicio ? new Date(query.data_inicio) : undefined;
         const dataFim = query?.data_fim ? new Date(query.data_fim) : undefined;
+        const user = request.user;
         const resultado = await this.arquivoService.exportarArquivos({
             dataInicio,
             dataFim,
-            usuarioId: request.user?.perfil === 'ADMINISTRADOR' ? undefined : request.user.id
+            usuarioId: user?.perfil === 'ADMINISTRADOR' ? undefined : user.id
         });
         reply.header('Content-Type', 'text/csv; charset=utf-8');
         reply.header('Content-Disposition', `attachment; filename="${resultado.nome_arquivo}"`);
