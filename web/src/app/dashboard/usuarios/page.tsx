@@ -94,11 +94,39 @@ export default function UsuariosPage() {
             type="text"
             placeholder="Buscar por nome ou e-mail..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setMeta((m) => ({ ...m, page: 1 }));
+            }}
             className={styles.searchInput}
           />
         </div>
         <Button onClick={handleNew}>+ Novo Usuário</Button>
+      </div>
+
+      {/* Paginação */}
+      <div className={styles.pagination}>
+        <Button
+          variant="ghost"
+          disabled={meta.page === 1}
+          onClick={() =>
+            setMeta((m) => ({ ...m, page: Math.max(1, m.page - 1) }))
+          }
+        >
+          ← Anterior
+        </Button>
+
+        <span className={styles.pageInfo}>
+          Página {meta.page} de {meta.lastPage} ({meta.total} total)
+        </span>
+
+        <Button
+          variant="ghost"
+          disabled={meta.page >= meta.lastPage}
+          onClick={() => setMeta((m) => ({ ...m, page: m.page + 1 }))}
+        >
+          Próxima →
+        </Button>
       </div>
 
       <div className={styles.tableContainer}>

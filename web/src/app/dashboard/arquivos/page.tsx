@@ -164,46 +164,13 @@ export default function ArquivosPage() {
   }
 
   return (
-    <div className={styles.page}>
-      <section className={styles.hero}>
-        <div className={styles.heroCopy}>
-          <div className={styles.heroKicker}>M4 · Integração Folha</div>
-          <h1 className={styles.heroTitle}>
-            Arquivos de folha com importação, consulta e exportação CSV.
-          </h1>
-          <p className={styles.heroSubtitle}>
-            A operação já conversa com o backend M4. Esta tela concentra o fluxo
-            de envio de folha, inspeção do arquivo processado e geração do
-            retorno CSV para download.
-          </p>
-
-          <div className={styles.heroBadges}>
-            <Badge tone="success">Importação pronta</Badge>
-            <Badge tone="warning">Reconciliação pendente</Badge>
-            <Badge tone="neutral">Exportação CSV ativa</Badge>
-          </div>
-        </div>
-
-        <Card className={styles.heroPanel}>
-          <span className={styles.heroPanelLabel}>Atalhos operacionais</span>
-          <div className={styles.heroPanelMetric}>
-            <strong>
-              {importacao ? importacao.processamento.parse.linhas_validas : "0"}
-            </strong>
-            <span>linhas válidas na última importação</span>
-          </div>
-          <div className={styles.heroPanelMetric}>
-            <strong>
-              {importacao ? importacao.processamento.parse.linhas_erro : "0"}
-            </strong>
-            <span>linhas com erro processadas</span>
-          </div>
-          <div className={styles.heroPanelMetric}>
-            <strong>{arquivoDetalhe?.id ? "1" : "0"}</strong>
-            <span>arquivo carregado na consulta</span>
-          </div>
-        </Card>
-      </section>
+    <div className={styles.pageHeader}>
+      <div className={styles.titleArea}>
+        <h1 className={styles.title}>Arquivos de Folha</h1>
+        <p className={styles.subtitle}>
+          Importação, inspeção e exportação de arquivos de folha de pagamento.
+        </p>
+      </div>
 
       {mensagem ? (
         <Card className={styles.noticeCard} elevated={false}>
@@ -212,277 +179,330 @@ export default function ArquivosPage() {
         </Card>
       ) : null}
 
-      <section className={styles.contentGrid}>
-        <div className={styles.stack}>
-          <Card className={styles.sectionCard}>
-            <div className={styles.sectionHeader}>
-              <div>
-                <h2>Importar folha</h2>
-                <p>
-                  Envie um CSV válido ou cole o conteúdo bruto para testar o
-                  processamento do backend.
-                </p>
-              </div>
-              <Badge
-                tone={resolveTone(importacao?.processamento.resumo.status)}
-              >
-                {importacao
-                  ? importacao.processamento.resumo.status
-                  : "Pendente"}
-              </Badge>
-            </div>
-
-            <div className={styles.formGrid}>
-              <FormField label="Nome do arquivo" required>
-                <Input
-                  value={nomeArquivo}
-                  onChange={(event) => setNomeArquivo(event.target.value)}
-                  placeholder="FOLHA_CONSIGNACOES_MACAEPREV_202605_140230.csv"
-                />
-              </FormField>
-
-              <FormField label="Arquivo CSV">
-                <input
-                  className={styles.fileInput}
-                  type="file"
-                  accept=".csv,text/csv"
-                  onChange={handleSelecionarArquivo}
-                />
-                <span className={styles.helperText}>
-                  {arquivoSelecionado
-                    ? `Selecionado: ${arquivoSelecionado.name}`
-                    : "Nenhum arquivo selecionado ainda."}
-                </span>
-              </FormField>
-
-              <FormField
-                className={styles.fullWidth}
-                label="Conteúdo CSV"
-                required
-              >
-                <textarea
-                  className={styles.textarea}
-                  value={conteudoCsv}
-                  onChange={(event) => setConteudoCsv(event.target.value)}
-                  placeholder={CSV_EXEMPLO}
-                />
-              </FormField>
-            </div>
-
-            <div className={styles.actionsRow}>
-              <Button onClick={handleImportar} loading={loadingImportacao}>
-                Importar arquivo
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => setConteudoCsv(CSV_EXEMPLO)}
-              >
-                Restaurar exemplo
-              </Button>
-            </div>
-
-            {resumoImportacao ? (
-              <div className={styles.metricGrid}>
-                {resumoImportacao.map((item) => (
-                  <Card
-                    key={item.label}
-                    className={styles.metricCard}
-                    elevated={false}
-                  >
-                    <span>{item.label}</span>
-                    <strong>{item.value}</strong>
-                  </Card>
-                ))}
-              </div>
-            ) : null}
-          </Card>
-
-          <Card className={styles.sectionCard}>
-            <div className={styles.sectionHeader}>
-              <div>
-                <h2>Consultar arquivo</h2>
-                <p>
-                  Busque um arquivo já gravado no backend para revisar o resumo
-                  e os metadados retornados.
-                </p>
-              </div>
-              <Badge tone="neutral">GET /v1/arquivos/:id</Badge>
-            </div>
-
-            <div className={styles.inlineForm}>
-              <FormField label="ID do arquivo">
-                <Input
-                  value={arquivoId}
-                  onChange={(event) => setArquivoId(event.target.value)}
-                  placeholder="uuid-do-arquivo"
-                />
-              </FormField>
-
-              <Button onClick={handleConsultar} loading={loadingConsulta}>
-                Consultar
-              </Button>
-            </div>
-
-            {arquivoDetalhe ? (
-              <div className={styles.detailGrid}>
-                <div className={styles.detailItem}>
-                  <span>Arquivo</span>
-                  <strong>
-                    {arquivoDetalhe.nome_arquivo || arquivoDetalhe.id}
-                  </strong>
+      <div className={styles.tableContainer}>
+        <div className={styles.contentGrid}>
+          <div className={styles.stack}>
+            <Card className={styles.sectionCard}>
+              <div className={styles.sectionHeader}>
+                <div>
+                  <h2>Importar folha</h2>
+                  <p>
+                    Envie um CSV válido ou cole o conteúdo bruto para testar o
+                    processamento do backend.
+                  </p>
                 </div>
-                <div className={styles.detailItem}>
-                  <span>Status</span>
-                  <Badge tone={resolveTone(arquivoDetalhe.status)}>
-                    {arquivoDetalhe.status || "—"}
-                  </Badge>
+                <Badge
+                  tone={resolveTone(importacao?.processamento.resumo.status)}
+                >
+                  {importacao
+                    ? importacao.processamento.resumo.status
+                    : "Pendente"}
+                </Badge>
+              </div>
+
+              <div className={styles.formGrid}>
+                <FormField label="Nome do arquivo" required>
+                  <Input
+                    value={nomeArquivo}
+                    onChange={(event) => setNomeArquivo(event.target.value)}
+                    placeholder="FOLHA_CONSIGNACOES_MACAEPREV_202605_140230.csv"
+                  />
+                </FormField>
+
+                <FormField label="Arquivo CSV">
+                  <input
+                    className={styles.fileInput}
+                    type="file"
+                    accept=".csv,text/csv"
+                    onChange={handleSelecionarArquivo}
+                  />
+                  <span className={styles.helperText}>
+                    {arquivoSelecionado
+                      ? `Selecionado: ${arquivoSelecionado.name}`
+                      : "Nenhum arquivo selecionado ainda."}
+                  </span>
+                </FormField>
+
+                <FormField
+                  className={styles.fullWidth}
+                  label="Conteúdo CSV"
+                  required
+                >
+                  <textarea
+                    className={styles.textarea}
+                    value={conteudoCsv}
+                    onChange={(event) => setConteudoCsv(event.target.value)}
+                    placeholder={CSV_EXEMPLO}
+                  />
+                </FormField>
+              </div>
+
+              <div className={styles.actionsRow}>
+                <Button onClick={handleImportar} loading={loadingImportacao}>
+                  Importar arquivo
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => setConteudoCsv(CSV_EXEMPLO)}
+                >
+                  Restaurar exemplo
+                </Button>
+              </div>
+
+              {resumoImportacao ? (
+                <div className={styles.metricGrid}>
+                  {resumoImportacao.map((item) => (
+                    <Card
+                      key={item.label}
+                      className={styles.metricCard}
+                      elevated={false}
+                    >
+                      <span>{item.label}</span>
+                      <strong>{item.value}</strong>
+                    </Card>
+                  ))}
                 </div>
-                <div className={styles.detailItem}>
-                  <span>Usuário</span>
-                  <strong>{arquivoDetalhe.usuario?.nome || "—"}</strong>
-                </div>
-                <div className={styles.detailItem}>
-                  <span>Total de linhas</span>
-                  <strong>{formatCount(arquivoDetalhe.total_registros)}</strong>
-                </div>
-              </div>
-            ) : (
-              <div className={styles.emptyState}>
-                Nenhum arquivo consultado ainda.
-              </div>
-            )}
-          </Card>
-        </div>
+              ) : null}
+            </Card>
 
-        <div className={styles.stack}>
-          <Card className={styles.sectionCard}>
-            <div className={styles.sectionHeader}>
-              <div>
-                <h2>Exportar retorno</h2>
-                <p>
-                  Gera e baixa o CSV de retorno com base no período informado.
-                </p>
-              </div>
-              <Badge tone="neutral">GET /v1/arquivos/export</Badge>
-            </div>
-
-            <div className={styles.formGrid}>
-              <FormField label="Data inicial">
-                <Input
-                  type="date"
-                  value={dataInicio}
-                  onChange={(event) => setDataInicio(event.target.value)}
-                />
-              </FormField>
-
-              <FormField label="Data final">
-                <Input
-                  type="date"
-                  value={dataFim}
-                  onChange={(event) => setDataFim(event.target.value)}
-                />
-              </FormField>
-            </div>
-
-            <div className={styles.actionsRow}>
-              <Button onClick={handleExportar} loading={loadingExportacao}>
-                Baixar CSV
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setDataInicio("");
-                  setDataFim("");
-                }}
-              >
-                Limpar filtro
-              </Button>
-            </div>
-
-            <div className={styles.previewBox}>
-              <span className={styles.previewLabel}>Prévia do CSV</span>
-              <pre>
-                {(importacao?.processamento.resumo.resultado_reconciliacao &&
-                  JSON.stringify(
-                    importacao.processamento.resumo.resultado_reconciliacao,
-                    null,
-                    2,
-                  )) ||
-                  "Importe um arquivo para visualizar o resumo da conciliação."}
-              </pre>
-            </div>
-          </Card>
-
-          <Card className={styles.sectionCard}>
-            <div className={styles.sectionHeader}>
-              <div>
-                <h2>Checklist M4</h2>
-                <p>Estado atual do módulo de folha dentro da milestone.</p>
-              </div>
-              <Badge tone="warning">Parcial</Badge>
-            </div>
-
-            <ul className={styles.checklist}>
-              <li>Importação CSV funcional na API.</li>
-              <li>Consulta por ID integrada com o backend.</li>
-              <li>Exportação de retorno com download direto.</li>
-              <li>Reconciliação e relatórios segmentados ainda pendentes.</li>
-            </ul>
-          </Card>
-
-          {importacao ? (
             <Card className={styles.sectionCard}>
               <div className={styles.sectionHeader}>
                 <div>
                   <h2>Última importação</h2>
-                  <p>Resumo rápido do processamento retornado pela API.</p>
+                  <p>Resumo e ações rápidas sobre o arquivo processado.</p>
                 </div>
-                <Badge
-                  tone={resolveTone(importacao.processamento.resumo.status)}
-                >
-                  {importacao.processamento.resumo.status}
-                </Badge>
               </div>
 
-              <div className={styles.importSummary}>
+              <div className={styles.heroPanelMetric}>
+                <strong>
+                  {importacao
+                    ? importacao.processamento.parse.linhas_validas
+                    : "0"}
+                </strong>
+                <span>linhas válidas na última importação</span>
+              </div>
+              <div className={styles.heroPanelMetric}>
+                <strong>
+                  {importacao
+                    ? importacao.processamento.parse.linhas_erro
+                    : "0"}
+                </strong>
+                <span>linhas com erro processadas</span>
+              </div>
+
+              <div style={{ marginTop: 12 }}>
+                <Button onClick={handleExportar} loading={loadingExportacao}>
+                  {loadingExportacao ? "Exportando..." : "Exportar retorno CSV"}
+                </Button>
+                <Button variant="ghost" onClick={() => setArquivoId(arquivoId)}>
+                  Consultar por ID
+                </Button>
+              </div>
+            </Card>
+          </div>
+
+          <div className={styles.stack}>
+            <Card className={styles.sectionCard}>
+              <div className={styles.sectionHeader}>
                 <div>
-                  <span>Nome</span>
-                  <strong>{importacao.arquivo.nome_arquivo}</strong>
+                  <h2>Consultar arquivo</h2>
+                  <p>
+                    Busque um arquivo já gravado no backend para revisar o
+                    resumo e os metadados retornados.
+                  </p>
                 </div>
+                <Badge tone="neutral">GET /v1/arquivos/:id</Badge>
+              </div>
+
+              <div className={styles.inlineForm}>
+                <FormField label="ID do arquivo">
+                  <Input
+                    value={arquivoId}
+                    onChange={(event) => setArquivoId(event.target.value)}
+                    placeholder="uuid-do-arquivo"
+                  />
+                </FormField>
+
+                <Button onClick={handleConsultar} loading={loadingConsulta}>
+                  Consultar
+                </Button>
+              </div>
+
+              {arquivoDetalhe ? (
+                <div className={styles.detailGrid}>
+                  <div className={styles.detailItem}>
+                    <span>Arquivo</span>
+                    <strong>
+                      {arquivoDetalhe.nome_arquivo || arquivoDetalhe.id}
+                    </strong>
+                  </div>
+                  <div className={styles.detailItem}>
+                    <span>Status</span>
+                    <Badge tone={resolveTone(arquivoDetalhe.status)}>
+                      {arquivoDetalhe.status || "—"}
+                    </Badge>
+                  </div>
+                  <div className={styles.detailItem}>
+                    <span>Usuário</span>
+                    <strong>{arquivoDetalhe.usuario?.nome || "—"}</strong>
+                  </div>
+                  <div className={styles.detailItem}>
+                    <span>Total de linhas</span>
+                    <strong>
+                      {formatCount(arquivoDetalhe.total_registros)}
+                    </strong>
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.emptyState}>
+                  Nenhum arquivo consultado ainda.
+                </div>
+              )}
+            </Card>
+
+            <Card className={styles.sectionCard}>
+              <div className={styles.sectionHeader}>
                 <div>
-                  <span>ID</span>
-                  <strong>{importacao.arquivo.id}</strong>
+                  <h2>Exportar retorno</h2>
+                  <p>
+                    Gera e baixa o CSV de retorno com base no período informado.
+                  </p>
                 </div>
-                <div>
-                  <span>Registros</span>
-                  <strong>
-                    {formatCount(importacao.arquivo.total_registros)}
-                  </strong>
-                </div>
-                <div>
-                  <span>Sucesso</span>
-                  <strong>
-                    {formatCount(importacao.arquivo.registros_sucesso)}
-                  </strong>
-                </div>
+                <Badge tone="neutral">GET /v1/arquivos/export</Badge>
+              </div>
+
+              <div className={styles.formGrid}>
+                <FormField label="Data inicial">
+                  <Input
+                    type="date"
+                    value={dataInicio}
+                    onChange={(event) => setDataInicio(event.target.value)}
+                  />
+                </FormField>
+
+                <FormField label="Data final">
+                  <Input
+                    type="date"
+                    value={dataFim}
+                    onChange={(event) => setDataFim(event.target.value)}
+                  />
+                </FormField>
+              </div>
+
+              <div className={styles.actionsRow}>
+                <Button onClick={handleExportar} loading={loadingExportacao}>
+                  Baixar CSV
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setDataInicio("");
+                    setDataFim("");
+                  }}
+                >
+                  Limpar filtro
+                </Button>
               </div>
 
               <div className={styles.previewBox}>
-                <span className={styles.previewLabel}>
-                  Erros da última importação
-                </span>
+                <span className={styles.previewLabel}>Prévia do CSV</span>
                 <pre>
-                  {JSON.stringify(
-                    importacao.processamento.parse.erros,
-                    null,
-                    2,
-                  )}
+                  {(importacao?.processamento.resumo.resultado_reconciliacao &&
+                    JSON.stringify(
+                      importacao.processamento.resumo.resultado_reconciliacao,
+                      null,
+                      2,
+                    )) ||
+                    "Importe um arquivo para visualizar o resumo da conciliação."}
                 </pre>
               </div>
             </Card>
-          ) : null}
+
+            <Card className={styles.sectionCard}>
+              <div className={styles.sectionHeader}>
+                <div>
+                  <h2>Checklist M4</h2>
+                  <p>Estado atual do módulo de folha dentro da milestone.</p>
+                </div>
+                <Badge tone="warning">Parcial</Badge>
+              </div>
+
+              <ul className={styles.checklist}>
+                <li>Importação CSV funcional na API.</li>
+                <li>Consulta por ID integrada com o backend.</li>
+                <li>Exportação de retorno com download direto.</li>
+                <li>Reconciliação e relatórios segmentados ainda pendentes.</li>
+              </ul>
+            </Card>
+
+            {importacao ? (
+              <Card className={styles.sectionCard}>
+                <div className={styles.sectionHeader}>
+                  <div>
+                    <h2>Última importação</h2>
+                    <p>Resumo rápido do processamento retornado pela API.</p>
+                  </div>
+                  <Badge
+                    tone={resolveTone(importacao.processamento.resumo.status)}
+                  >
+                    {importacao.processamento.resumo.status}
+                  </Badge>
+                </div>
+
+                <div className={styles.importSummary}>
+                  <div>
+                    <span>Nome</span>
+                    <strong>{importacao.arquivo.nome_arquivo}</strong>
+                  </div>
+                  <div>
+                    <span>ID</span>
+                    <strong>{importacao.arquivo.id}</strong>
+                  </div>
+                  <div>
+                    <span>Registros</span>
+                    <strong>
+                      {formatCount(importacao.arquivo.total_registros)}
+                    </strong>
+                  </div>
+                  <div>
+                    <span>Sucesso</span>
+                    <strong>
+                      {formatCount(importacao.arquivo.registros_sucesso)}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className={styles.previewBox}>
+                  <span className={styles.previewLabel}>
+                    Erros da última importação
+                  </span>
+                  <pre>
+                    {JSON.stringify(
+                      importacao.processamento.parse.erros,
+                      null,
+                      2,
+                    )}
+                  </pre>
+                </div>
+              </Card>
+            ) : null}
+          </div>
         </div>
-      </section>
+      </div>
+
+      {/* Espaço para lista de arquivos processados */}
+      <div style={{ padding: 16 }}>
+        <Card className={styles.sectionCard}>
+          <h3>Arquivos recentementes processados</h3>
+          <p className={styles.subtitle}>
+            Resultados do processamento e ações.
+          </p>
+          {/* Placeholder: tabela/listagem pode ser implementada aqui conectando com backend */}
+          <div style={{ padding: 12, color: "#666" }}>
+            Implementação da listagem de arquivos processados (em progresso).
+          </div>
+        </Card>
+      </div>
     </div>
   );
 }

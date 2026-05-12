@@ -95,7 +95,10 @@ export default function ConsignatariasPage() {
             type="text"
             placeholder="Buscar por razão social ou CNPJ..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setMeta((m) => ({ ...m, page: 1 }));
+            }}
             className={styles.searchInput}
           />
         </div>
@@ -169,6 +172,31 @@ export default function ConsignatariasPage() {
             </tbody>
           </table>
         )}
+      </div>
+
+      {/* Paginação */}
+      <div className={styles.pagination}>
+        <Button
+          variant="ghost"
+          disabled={meta.page === 1}
+          onClick={() =>
+            setMeta((m) => ({ ...m, page: Math.max(1, m.page - 1) }))
+          }
+        >
+          ← Anterior
+        </Button>
+
+        <span className={styles.pageInfo}>
+          Página {meta.page} de {meta.lastPage} ({meta.total} total)
+        </span>
+
+        <Button
+          variant="ghost"
+          disabled={meta.page >= meta.lastPage}
+          onClick={() => setMeta((m) => ({ ...m, page: m.page + 1 }))}
+        >
+          Próxima →
+        </Button>
       </div>
 
       {isModalOpen && (
