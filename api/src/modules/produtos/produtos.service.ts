@@ -257,15 +257,10 @@ export class ProdutosService {
         const produto = await prisma.produto.findUnique({ where: { id } });
         if (!produto) throw new Error('Produto não encontrado');
 
-        // Verificar se há contratos associados
-        const contratoAssociado = await prisma.contrato.findFirst({
-            where: { produto_id: id }
+        // Soft Delete: Altera o status para INATIVO para manter a integridade referencial e auditoria
+        return prisma.produto.update({
+            where: { id },
+            data: { status: 'INATIVO' }
         });
-
-        if (contratoAssociado) {
-            throw new Error('Não é possível excluir produto com contratos associados. Altere o status para INATIVO.');
-        }
-
-        return prisma.produto.delete({ where: { id } });
     }
 }

@@ -2,7 +2,7 @@
 
 **Data de Atualização:** 12 de maio de 2026  
 **Status Geral:** ✅ **Milestones 1–5 Completas (83%+)** | ⏳ **M6–M7 Planejadas**  
-**Taxa de Conclusão:** 25/30 POCs (83%+) | 1 Parcial | 4 Pendentes (M6–M7)
+**Taxa de Conclusão:** 26/30 POCs (86%+) | 0 Parciais | 4 Pendentes (M6–M7)
 
 ---
 
@@ -162,16 +162,14 @@ Consulte [docs/README.md](README.md) para navegação completa.
 
 ### M6 — Frontend & UX (Planejado — 4 semanas)
 
-**Foco:** Acessibilidade WCAG 2.1 AA, Performance, Manual On-line Interativo, i18n, Dark Mode, E2E Tests
+**Foco:** Correções de Fluxo (CRUDs/Filtros), Acessibilidade WCAG 2.1 AA, Performance, Manual On-line Interativo e Testes E2E.
 
 **Fases de Execução:**
 
-1. **Auditoria (Sem 1):** axe-core scan + Lighthouse baseline
-2. **Acessibilidade (Sem 1-2):** Contraste, navegação keyboard, ARIA labels, focus indicators
-3. **i18n (Sem 2):** next-intl integrado + suporte PT-BR/EN
-4. **Dark Mode (Sem 2):** Tailwind dark mode + toggle em navbar
-5. **Manual On-line (Sem 3):** 15+ guias Markdown + HelpButton + FAQ interativa
-6. **E2E Tests (Sem 3-4):** 20+ testes Playwright + Core Web Vitals < 2.5s (LCP)
+1. **Refinamentos (Sem 1):** Correção de buscas, edições, deleções e adequação de perfis de usuário.
+2. **Acessibilidade (Sem 2):** Contraste, navegação keyboard, ARIA labels, focus indicators.
+3. **Manual On-line (Sem 3):** 15+ guias Markdown + HelpButton + FAQ interativa.
+4. **E2E Tests (Sem 4):** 20+ testes Playwright + Core Web Vitals < 2.5s (LCP).
 
 **Documentação Completa:** [milestones/M6_frontend_ux/](milestones/M6_frontend_ux/)
 

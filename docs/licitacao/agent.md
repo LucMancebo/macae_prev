@@ -45,6 +45,15 @@
   - **Sub-tarefa 5.3.1:** Criação da estrutura base da tela de BI e gráficos. [CONCLUÍDO]
   - **Sub-tarefa 5.3.2:** Integração com SWR e API `/v1/relatorios`. [CONCLUÍDO]
 
+## Milestone 6: Frontend & UX (Refinamentos & Manual) [EM ANDAMENTO]
+
+- **Tarefa 6.1:** Correções Críticas de Fluxo. [PENDENTE]
+  - Buscar Global ("busca rápida") funcional.
+  - Implementar Edição (Update) e Exclusão (Delete) nos CRUDs.
+  - Integrar Dashboard Overview com a API (Remover mocks).
+  - Revisar Perfis (Permitir criação de Usuários Bancários, não apenas Admins).
+- **Tarefa 6.2:** Manual On-line (POC 13). [PLANEJADO]
+
 ---
 
 1- Preciso que entenda e eslareça os requisitos do arquivo requisitos.md.

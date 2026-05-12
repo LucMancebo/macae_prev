@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "../../design-system/components";
 import styles from "./dashboard.module.css";
 
@@ -14,6 +14,8 @@ export default function DashboardLayout({
 }) {
   const { user, logout } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const breadcrumbMap: Record<string, string> = {
     "/dashboard": "Painel Operacional",
@@ -75,6 +77,14 @@ export default function DashboardLayout({
     },
   ];
 
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchTerm.trim()) {
+      router.push(
+        `/dashboard/servidores?search=${encodeURIComponent(searchTerm.trim())}`,
+      );
+    }
+  };
+
   if (!user) return <div className={styles.loading}>Carregando...</div>;
 
   return (
@@ -132,6 +142,9 @@ export default function DashboardLayout({
               className={styles.searchInput}
               placeholder="Busca rápida por servidor, CPF ou matrícula"
               aria-label="Busca rápida"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleSearch}
             />
             <span className={styles.searchShortcut}>/</span>
           </div>

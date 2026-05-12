@@ -9,13 +9,15 @@ import AuditModal from "./AuditModal";
 import { Badge, Button } from "../../../design-system/components";
 import { resolveBadgeTone } from "../../../design-system/utils/status";
 import { useNotificationHelpers } from "../../../services/notification";
+import { useSearchParams } from "next/navigation";
 import styles from "./servidores.module.css";
 
 export default function ServidoresPage() {
   const [servidores, setServidores] = useState<Servidor[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("search") || "");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const notify = useNotificationHelpers();
@@ -43,6 +45,16 @@ export default function ServidoresPage() {
       setLoading(false);
     }
   }, [search, page]);
+
+  useEffect(() => {
+    const querySearch = searchParams.get("search");
+    if (querySearch !== null) {
+      setSearch((prev) => {
+        if (prev !== querySearch) setPage(1);
+        return querySearch;
+      });
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     void fetchServidores();

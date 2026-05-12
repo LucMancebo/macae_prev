@@ -21,7 +21,7 @@ export interface UsuarioFormData {
   email: string;
   senha_plana?: string;
   perfil_id: string;
-  consignataria_id?: string;
+  consignataria_id?: string | null;
   status: string;
 }
 
@@ -93,6 +93,8 @@ export default function UsuarioForm({
     };
     if (formData.consignataria_id) {
       payload.consignataria_id = formData.consignataria_id;
+    } else {
+      payload.consignataria_id = null; // Garante a desvinculação caso mude de "Banco" para "Administrador Geral"
     }
     if (formData.senha_plana) {
       payload.senha_plana = formData.senha_plana;

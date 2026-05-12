@@ -5,11 +5,11 @@
 
 ## 📊 Progresso Geral
 
-**Status: 25/30 Completas | 1 Parcial | 4 Pendentes (83% + Parciais)**
+**Status: 26/30 Completas | 0 Parciais | 4 Pendentes (86%)**
 
 | Completas | Parciais | Pendentes | Taxa Conclusão |
 | --------- | -------- | --------- | -------------- |
-| 25        | 1        | 4         | 83% ✅         |
+| 26        | 0        | 4         | 86% ✅         |
 
 > **Nota:** Categorias: ✓ Atende = Completo | (X) Atende parcial = Em Progresso | (X) Não atende = Não iniciado
 
@@ -20,7 +20,6 @@
 Com base no mapeamento da POC para as milestones e no estado atual do repositório, segue a classificação resumida das exigências da licitação:
 
 - **Concluídos (implementados):** POCs das Milestones 1–5 completas: 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 28, 29, 30. Essas entregas cobrem a fundação, segurança, core, folha e agora os **Relatórios Gerenciais e BI**.
-- **Parciais (em progresso / entregas parciais):** POCs de Milestone 4+ ainda incompletas: 2. Migração legado possui backend (parser, service, migration) mas faltam script formal de migração histórica e fluxo de UI completo.
 - **Pendentes (planejados / ainda não implementados):** POCs alocados às Milestones 6–7 (Manual, deploy/operação): 13, 25, 26, 27.
 
 Observação: a lista acima foi consolidada a partir do mapeamento POC→Milestones presente em `docs/projeto/plano.md` e do estado atual do código. Caso haja requisitos formais no anexo da licitação que não estejam representados pela lista de POC, indique-os para que eu os alinhe explicitamente.
@@ -40,8 +39,8 @@ Observação: a lista acima foi consolidada a partir do mapeamento POC→Milesto
 
 ### 2 – Migração da base de dados existente (4.1.2.)
 
-**(X) Atende parcial**
-**Status Real:** Backend da migração já foi iniciado na **Milestone 4**: parser CSV, validações, service, rotas e migration Prisma estão implementados. Ainda faltam o script formal de migração legado, a automação de importação histórica e o fluxo de UI.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 4/5**. O script formal e robusto de CLI (`migracao-legado.ts`) foi construído para ingestão direta no servidor, fazendo o parsing histórico de arquivos do formato tabular (.csv) e salvando com integridade referencial via _Prisma Upsert_. Além disso, os relatórios gerenciais e layouts de dados operacionais e de usuários estão na UI.
 
 ---
 

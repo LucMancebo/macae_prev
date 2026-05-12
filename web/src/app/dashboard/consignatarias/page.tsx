@@ -9,13 +9,15 @@ import ConsignatariaForm from "./ConsignatariaForm";
 import AuditModal from "../servidores/AuditModal";
 import { Badge, Button } from "../../../design-system/components";
 import { resolveBadgeTone } from "../../../design-system/utils/status";
+import { useSearchParams } from "next/navigation";
 import styles from "./consignatarias.module.css";
 
 export default function ConsignatariasPage() {
   const [items, setItems] = useState<Consignataria[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("search") || "");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const notify = useNotificationHelpers();
@@ -40,6 +42,16 @@ export default function ConsignatariasPage() {
       setLoading(false);
     }
   }, [search, page]);
+
+  useEffect(() => {
+    const querySearch = searchParams.get("search");
+    if (querySearch !== null) {
+      setSearch((prev) => {
+        if (prev !== querySearch) setPage(1);
+        return querySearch;
+      });
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     void fetchItems();
@@ -78,6 +90,26 @@ export default function ConsignatariasPage() {
   function handleNew() {
     setSelectedItem(null);
     setIsModalOpen(true);
+  }
+
+  async function handleDelete(item: Consignataria) {
+    if (
+      !window.confirm(
+        `Tem certeza que deseja inativar a instituição ${item.razao_social}?`,
+      )
+    )
+      return;
+    setLoading(true);
+    try {
+      await apiFetch(`/v1/consignatarias/${item.id}`, {
+        method: "DELETE", // A API deverá processar isso como Soft Delete (status = INATIVA)
+      });
+      notify.success("Instituição inativada com sucesso");
+      await fetchItems();
+    } catch (error: any) {
+      notify.error(error.message || "Erro ao inativar instituição");
+      setLoading(false);
+    }
   }
 
   function handleViewAudit(item: Consignataria) {
@@ -162,8 +194,14 @@ export default function ConsignatariasPage() {
                     >
                       🔍
                     </Button>
-                    <Button variant="ghost" size="sm" iconOnly>
-                      ⚙️
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      iconOnly
+                      title="Inativar Instituição"
+                      onClick={() => handleDelete(item)}
+                    >
+                      🗑️
                     </Button>
                   </td>
                 </tr>

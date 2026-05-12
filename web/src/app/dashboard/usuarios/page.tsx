@@ -83,6 +83,24 @@ export default function UsuariosPage() {
     setIsModalOpen(true);
   }
 
+  async function handleDelete(item: Usuario) {
+    if (
+      !window.confirm(`Tem certeza que deseja excluir o usuário ${item.nome}?`)
+    )
+      return;
+    setLoading(true);
+    try {
+      await apiFetch(`/v1/usuarios/${item.id}`, {
+        method: "DELETE",
+      });
+      notify.success("Usuário excluído com sucesso");
+      await fetchItems();
+    } catch (error) {
+      notify.error(getErrorMessage(error));
+      setLoading(false);
+    }
+  }
+
   function handleViewAudit(item: Usuario) {
     setSelectedItem(item);
     setIsAuditOpen(true);
@@ -183,6 +201,15 @@ export default function UsuariosPage() {
                       onClick={() => handleViewAudit(item)}
                     >
                       🔍
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      iconOnly
+                      onClick={() => handleDelete(item)}
+                      title="Excluir"
+                    >
+                      🗑️
                     </Button>
                   </td>
                 </tr>

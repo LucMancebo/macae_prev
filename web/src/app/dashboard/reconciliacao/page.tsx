@@ -17,6 +17,11 @@ export default function ReconciliacaoPage() {
   const [error, setError] = useState<string | null>(null);
   const [filtros, setFiltros] = useState<FiltrosRelatorio>({});
 
+  // Tratamento de compatibilidade segura: extrai diretamente caso a API não encapsule em 'data'
+  const dadosRelatorio = relatorio ? ((relatorio as any).data || relatorio) : null;
+  const byStatus = dadosRelatorio?.byStatus || {};
+  const byConsignataria = dadosRelatorio?.byConsignataria || {};
+
   const carregarRelatorio = async () => {
     try {
       setLoading(true);
@@ -111,6 +116,7 @@ export default function ReconciliacaoPage() {
       )}
 
       {!loading && relatorio && (
+      {!loading && relatorio && dadosRelatorio && (
         <div className={styles.resultsSection}>
           {/* Statistics Overview */}
           <div className={styles.statisticsGrid}>
@@ -118,19 +124,23 @@ export default function ReconciliacaoPage() {
               <span className={styles.statisticLabel}>Total Processado</span>
               <span className={styles.statisticValue}>
                 {relatorio.data.total}
+                {dadosRelatorio.total || 0}
               </span>
             </div>
 
             {relatorio.data.byStatus.CONCILIADA && (
+            {byStatus.CONCILIADA && (
               <div className={styles.statisticCard}>
                 <span className={styles.statisticLabel}>Conciliadas</span>
                 <span className={styles.statisticValue}>
                   {relatorio.data.byStatus.CONCILIADA}
+                  {byStatus.CONCILIADA}
                 </span>
               </div>
             )}
 
             {Object.entries(relatorio.data.byStatus).map(([status, count]) => {
+            {Object.entries(byStatus).map(([status, count]) => {
               if (status.includes("ERRO")) {
                 return (
                   <div key={status} className={styles.statisticCard}>
@@ -145,10 +155,12 @@ export default function ReconciliacaoPage() {
             })}
 
             {relatorio.data.byStatus.PENDENTE && (
+            {byStatus.PENDENTE && (
               <div className={styles.statisticCard}>
                 <span className={styles.statisticLabel}>Pendentes</span>
                 <span className={styles.statisticValue}>
                   {relatorio.data.byStatus.PENDENTE}
+                  {byStatus.PENDENTE}
                 </span>
               </div>
             )}
@@ -156,6 +168,7 @@ export default function ReconciliacaoPage() {
 
           {/* Consignatarias Breakdown */}
           {Object.keys(relatorio.data.byConsignataria).length > 0 && (
+          {Object.keys(byConsignataria).length > 0 && (
             <div>
               <h2 className={styles.heroTitle} style={{ marginBottom: "1rem" }}>
                 Detalhamento por Consignatária
@@ -168,6 +181,7 @@ export default function ReconciliacaoPage() {
                 }}
               >
                 {Object.entries(relatorio.data.byConsignataria).map(
+                {Object.entries(byConsignataria).map(
                   ([consignataria, dados]) => (
                     <div
                       key={consignataria}
@@ -212,6 +226,7 @@ export default function ReconciliacaoPage() {
           )}
 
           {relatorio.data.total === 0 && (
+          {dadosRelatorio.total === 0 && (
             <div className={styles.emptyState}>
               <div className={styles.emptyStateIcon}>📋</div>
               <p className={styles.emptyStateText}>

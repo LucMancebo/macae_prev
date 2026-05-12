@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { apiFetch } from "../../services/api";
 import { Badge, Card } from "../../design-system/components";
 import { formatarData } from "../../utils/formatters";
@@ -30,6 +30,10 @@ type DashboardStats = {
   usuariosPendentesLgpd: number;
   consignatariasAtivas: number;
   usuariosAtivos: number;
+  totalConsignacoes: number;
+  consignacoesByStatus: Record<string, number>;
+  totalMargens: number;
+  avgPercentualMaximo: number;
 };
 
 const initialStats: DashboardStats = {
@@ -43,6 +47,10 @@ const initialStats: DashboardStats = {
   usuariosPendentesLgpd: 0,
   consignatariasAtivas: 0,
   usuariosAtivos: 0,
+  totalConsignacoes: 0,
+  consignacoesByStatus: {},
+  totalMargens: 0,
+  avgPercentualMaximo: 0,
 };
 
 // Conteúdo removido: seções mock/“checklists” que não representam entregas funcionais do dashboard.
@@ -64,109 +72,89 @@ function formatarStatusInterface(value: "ok" | "parcial" | "pendente") {
   return "Pendente";
 }
 
-export default function DashboardOverview() {
-  const [stats, setStats] = useState<DashboardStats>(initialStats);
-  const [recentServidores, setRecentServidores] = useState<Servidor[]>([]);
-  const [loading, setLoading] = useState(true);
+const fetchOverviewData = async () => {
+  const [serv, cons, user, consign, marg] = await Promise.all([
+    apiFetch<PaginatedResponse<Servidor>>("/v1/servidores?limit=1000"),
+    apiFetch<PaginatedResponse<Consignataria>>("/v1/consignatarias?limit=1000"),
+    apiFetch<PaginatedResponse<UsuarioExt>>("/v1/usuarios?limit=1000"),
+    apiFetch<PaginatedResponse<Consignacao>>("/v1/consignacoes?limit=1000"),
+    apiFetch<PaginatedResponse<Margem>>("/v1/margens?limit=1000"),
+  ]);
+  return { serv, cons, user, consign, marg };
+};
 
-  useEffect(() => {
-    fetchStats();
+export default function DashboardOverview() {
+  const [data, setData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const loadData = useCallback(async () => {
+    try {
+      const result = await fetchOverviewData();
+      setData(result);
+    } catch (error) {
+      console.error("Erro ao carregar dados do dashboard:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  async function fetchStats() {
-    try {
-      const [serv, cons, user, consign, marg] = await Promise.all([
-        apiFetch<PaginatedResponse<Servidor>>("/v1/servidores?limit=1000"),
-        apiFetch<PaginatedResponse<Consignataria>>(
-          "/v1/consignatarias?limit=1000",
-        ),
-        apiFetch<PaginatedResponse<UsuarioExt>>("/v1/usuarios?limit=1000"),
-        apiFetch<PaginatedResponse<Consignacao>>("/v1/consignacoes?limit=1000"),
-        apiFetch<PaginatedResponse<Margem>>("/v1/margens?limit=1000"),
-      ]);
+  useEffect(() => {
+    void loadData();
 
-      const servidoresInativosOuBloqueados = serv.items.filter(
-        (item) => item.status !== "ATIVO",
-      ).length;
+    // Atualiza a cada 15s silenciosamente
+    const interval = setInterval(() => {
+      void loadData();
+    }, 15000);
 
-      const consignatariasAtivas = cons.items.filter(
-        (item) => item.status === "ATIVA",
-      ).length;
+    return () => clearInterval(interval);
+  }, [loadData]);
 
-      const consignatariasSuspensasOuInativas = cons.items.filter(
-        (item) => item.status === "SUSPENSA" || item.status === "INATIVA",
-      ).length;
+  const stats = useMemo<DashboardStats>(() => {
+    if (!data) return initialStats;
+    const { serv, cons, user, consign, marg } = data;
 
-      const usuariosAtivos = user.items.filter(
-        (item) => item.status === "ATIVO",
-      ).length;
-      const usuariosBloqueados = user.items.filter(
-        (item) => item.status === "BLOQUEADO",
-      ).length;
-      const usuariosComMfa = user.items.filter(
-        (item) => item.mfa_habilitado,
-      ).length;
-      const usuariosPendentesLgpd = user.items.filter(
-        (item) => item.aceitou_termos === false,
-      ).length;
+    const servidoresInativosOuBloqueados = serv.items.filter((item: { status: string; }) => item.status !== "ATIVO").length;
+    const consignatariasAtivas = cons.items.filter((item: { status: string; }) => item.status === "ATIVA").length;
+    const consignatariasSuspensasOuInativas = cons.items.filter((item: { status: string; }) => item.status === "SUSPENSA" || item.status === "INATIVA").length;
+    const usuariosAtivos = user.items.filter((item: { status: string; }) => item.status === "ATIVO").length;
+    const usuariosBloqueados = user.items.filter((item: { status: string; }) => item.status === "BLOQUEADO").length;
+    const usuariosComMfa = user.items.filter((item: { mfa_habilitado: any; }) => item.mfa_habilitado).length;
+    const usuariosPendentesLgpd = user.items.filter((item: { aceitou_termos: boolean; }) => item.aceitou_termos === false).length;
 
-      const recentes = [...serv.items]
-        .sort(
-          (a, b) =>
-            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
-        )
-        .slice(0, 6);
+    const consignacoesByStatus = (consign.items || []).reduce((acc: Record<string, number>, c: Consignacao) => {
+      const s = (c.status_fluxo || "").toUpperCase();
+      acc[s] = (acc[s] || 0) + 1;
+      return acc;
+    }, {});
 
-      setStats({
-        totalServidores: serv.meta.total,
-        totalConsignatarias: cons.meta.total,
-        totalUsuarios: user.meta.total,
-        servidoresInativosOuBloqueados,
-        consignatariasSuspensasOuInativas,
-        usuariosBloqueados,
-        usuariosComMfa,
-        usuariosPendentesLgpd,
-        consignatariasAtivas,
-        usuariosAtivos,
-      });
-      setRecentServidores(recentes);
+    const avgPercentualMaximo = marg.items && marg.items.length
+      ? Math.round(marg.items.reduce((s: number, m: Margem) => s + (m.percentual_maximo || 0), 0) / marg.items.length)
+      : 0;
 
-      const consignacoesByStatus = (consign.items || []).reduce(
-        (acc: Record<string, number>, c: Consignacao) => {
-          const s = (c.status_fluxo || "").toUpperCase();
-          acc[s] = (acc[s] || 0) + 1;
-          return acc;
-        },
-        {},
-      );
+    return {
+      totalServidores: serv.meta.total,
+      totalConsignatarias: cons.meta.total,
+      totalUsuarios: user.meta.total,
+      servidoresInativosOuBloqueados,
+      consignatariasSuspensasOuInativas,
+      usuariosBloqueados,
+      usuariosComMfa,
+      usuariosPendentesLgpd,
+      consignatariasAtivas,
+      usuariosAtivos,
+      totalConsignacoes: consign.meta.total,
+      consignacoesByStatus,
+      totalMargens: marg.meta.total,
+      avgPercentualMaximo,
+    };
+  }, [data]);
 
-      (window as any).__m3Stats = {
-        totalConsignacoes: consign.meta.total,
-        consignacoesByStatus,
-        totalMargens: marg.meta.total,
-        avgPercentualMaximo:
-          marg.items && marg.items.length
-            ? Math.round(
-                marg.items.reduce(
-                  (s: number, m: Margem) => s + (m.percentual_maximo || 0),
-                  0,
-                ) / marg.items.length,
-              )
-            : 0,
-      };
-    } catch (err) {
-      const anyErr = err as any;
-      const details =
-        anyErr?.error || anyErr?.message || anyErr?.status || anyErr;
-      // Inclui mais contexto para evitar console.error("{}") sem causa
-      console.error("Erro ao buscar estatísticas", {
-        details,
-        err: anyErr,
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
+  const recentServidores = useMemo(() => {
+    if (!data) return [];
+    return [...data.serv.items]
+      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+      .slice(0, 6);
+  }, [data]);
 
   const percentualMfa =
     stats.totalUsuarios > 0
@@ -190,10 +178,10 @@ export default function DashboardOverview() {
         <Card className={styles.kpiCard}>
           <span className={styles.kpiLabel}>Servidores cadastrados</span>
           <strong className={styles.kpiValue}>
-            {loading ? "..." : stats.totalServidores}
+            {isLoading ? "..." : stats.totalServidores}
           </strong>
           <span className={styles.kpiMeta}>
-            {loading
+            {isLoading
               ? ""
               : `${stats.servidoresInativosOuBloqueados} com restrição de status`}
           </span>
@@ -202,10 +190,10 @@ export default function DashboardOverview() {
         <Card className={styles.kpiCard}>
           <span className={styles.kpiLabel}>Consignatárias ativas</span>
           <strong className={styles.kpiValue}>
-            {loading ? "..." : stats.consignatariasAtivas}
+            {isLoading ? "..." : stats.consignatariasAtivas}
           </strong>
           <span className={styles.kpiMeta}>
-            {loading
+            {isLoading
               ? ""
               : `${stats.totalConsignatarias} total | ${stats.consignatariasSuspensasOuInativas} suspensas/inativas`}
           </span>
@@ -214,20 +202,20 @@ export default function DashboardOverview() {
         <Card className={styles.kpiCard}>
           <span className={styles.kpiLabel}>Usuários ativos</span>
           <strong className={styles.kpiValue}>
-            {loading ? "..." : stats.usuariosAtivos}
+            {isLoading ? "..." : stats.usuariosAtivos}
           </strong>
           <span className={styles.kpiMeta}>
-            {loading ? "" : `${stats.usuariosBloqueados} usuários bloqueados`}
+            {isLoading ? "" : `${stats.usuariosBloqueados} usuários bloqueados`}
           </span>
         </Card>
 
         <Card className={styles.kpiCard}>
           <span className={styles.kpiLabel}>Cobertura MFA</span>
           <strong className={styles.kpiValue}>
-            {loading ? "..." : `${percentualMfa}%`}
+            {isLoading ? "..." : `${percentualMfa}%`}
           </strong>
           <span className={styles.kpiMeta}>
-            {loading
+            {isLoading
               ? ""
               : `${stats.usuariosPendentesLgpd} pendentes de aceite LGPD`}
           </span>
@@ -236,26 +224,24 @@ export default function DashboardOverview() {
         <Card className={styles.kpiCard}>
           <span className={styles.kpiLabel}>Consignações (total)</span>
           <strong className={styles.kpiValue}>
-            {loading
-              ? "..."
-              : ((window as any).__m3Stats?.totalConsignacoes ?? 0)}
+            {isLoading ? "..." : stats.totalConsignacoes}
           </strong>
           <span className={styles.kpiMeta}>
-            {loading
+            {isLoading
               ? ""
-              : `S:${(window as any).__m3Stats?.consignacoesByStatus?.SOLICITADA || 0} • A:${(window as any).__m3Stats?.consignacoesByStatus?.APROVADA || 0} • T:${(window as any).__m3Stats?.consignacoesByStatus?.ATIVA || 0}`}
+              : `S:${stats.consignacoesByStatus?.SOLICITADA || 0} • A:${stats.consignacoesByStatus?.APROVADA || 0} • T:${stats.consignacoesByStatus?.ATIVA || 0}`}
           </span>
         </Card>
 
         <Card className={styles.kpiCard}>
           <span className={styles.kpiLabel}>Margens</span>
           <strong className={styles.kpiValue}>
-            {loading ? "..." : ((window as any).__m3Stats?.totalMargens ?? 0)}
+            {isLoading ? "..." : stats.totalMargens}
           </strong>
           <span className={styles.kpiMeta}>
-            {loading
+            {isLoading
               ? ""
-              : `Média % máx: ${(window as any).__m3Stats?.avgPercentualMaximo || 0}%`}
+              : `Média % máx: ${stats.avgPercentualMaximo || 0}%`}
           </span>
         </Card>
       </section>
@@ -274,7 +260,7 @@ export default function DashboardOverview() {
               <div className={styles.metricRow}>
                 <span>Usuários bloqueados</span>
                 <div className={styles.metricRight}>
-                  <strong>{loading ? "..." : stats.usuariosBloqueados}</strong>
+                  <strong>{isLoading ? "..." : stats.usuariosBloqueados}</strong>
                   <Badge
                     tone={resolveDomainTone(
                       stats.usuariosBloqueados > 0 ? "PENDENTE" : "OK",
@@ -288,9 +274,7 @@ export default function DashboardOverview() {
               <div className={styles.metricRow}>
                 <span>Pendências de aceite LGPD</span>
                 <div className={styles.metricRight}>
-                  <strong>
-                    {loading ? "..." : stats.usuariosPendentesLgpd}
-                  </strong>
+                  <strong>{isLoading ? "..." : stats.usuariosPendentesLgpd}</strong>
                   <Badge
                     tone={resolveDomainTone(
                       stats.usuariosPendentesLgpd > 0 ? "PENDENTE" : "OK",
@@ -304,9 +288,7 @@ export default function DashboardOverview() {
               <div className={styles.metricRow}>
                 <span>Consignatárias suspensas/inativas</span>
                 <div className={styles.metricRight}>
-                  <strong>
-                    {loading ? "..." : stats.consignatariasSuspensasOuInativas}
-                  </strong>
+                  <strong>{isLoading ? "..." : stats.consignatariasSuspensasOuInativas}</strong>
                   <Badge
                     tone={resolveDomainTone(
                       stats.consignatariasSuspensasOuInativas > 0
@@ -324,9 +306,7 @@ export default function DashboardOverview() {
               <div className={styles.metricRow}>
                 <span>Servidores inativos ou bloqueados</span>
                 <div className={styles.metricRight}>
-                  <strong>
-                    {loading ? "..." : stats.servidoresInativosOuBloqueados}
-                  </strong>
+                  <strong>{isLoading ? "..." : stats.servidoresInativosOuBloqueados}</strong>
                   <Badge
                     tone={resolveDomainTone(
                       stats.servidoresInativosOuBloqueados > 0
@@ -353,16 +333,13 @@ export default function DashboardOverview() {
 
             <ul className={styles.simpleList}>
               <li>
-                <strong>{loading ? "..." : stats.consignatariasAtivas}</strong>{" "}
-                consignatárias ativas
+                <strong>{isLoading ? "..." : stats.consignatariasAtivas}</strong> consignatárias ativas
               </li>
               <li>
-                <strong>{loading ? "..." : stats.usuariosAtivos}</strong>{" "}
-                usuários ativos
+                <strong>{isLoading ? "..." : stats.usuariosAtivos}</strong> usuários ativos
               </li>
               <li>
-                <strong>{loading ? "..." : `${percentualMfa}%`}</strong>{" "}
-                cobertura MFA
+                <strong>{isLoading ? "..." : `${percentualMfa}%`}</strong> cobertura MFA
               </li>
             </ul>
           </Card>
@@ -386,7 +363,7 @@ export default function DashboardOverview() {
               </tr>
             </thead>
             <tbody>
-              {loading ? (
+              {isLoading ? (
                 <tr>
                   <td className={styles.tableLoadingCell} colSpan={5}>
                     Carregando dados...
