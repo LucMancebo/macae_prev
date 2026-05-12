@@ -16,7 +16,8 @@ export default function UsuariosPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
-  const [meta, setMeta] = useState({ total: 0, page: 1, lastPage: 1 });
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuditOpen, setIsAuditOpen] = useState(false);
@@ -29,16 +30,18 @@ export default function UsuariosPage() {
     setLoading(true);
     try {
       const data = await apiFetch<PaginatedResponse<Usuario>>(
-        `/v1/usuarios?search=${search}&page=${meta.page}`,
+        `/v1/usuarios?search=${search}&page=${page}`,
       );
       setItems(data.items);
-      setMeta(data.meta);
+      if (data.meta) {
+        setTotal(data.meta.total);
+      }
     } catch (error) {
       console.error("Erro ao carregar usuários:", error);
     } finally {
       setLoading(false);
     }
-  }, [search, meta.page]);
+  }, [search, page]);
 
   useEffect(() => {
     void fetchItems();
@@ -103,7 +106,7 @@ export default function UsuariosPage() {
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
-              setMeta((m) => ({ ...m, page: 1 }));
+              setPage(1);
             }}
             className={styles.searchInput}
           />
@@ -115,23 +118,20 @@ export default function UsuariosPage() {
       <div className={styles.pagination}>
         <Button
           variant="ghost"
-          disabled={meta.page <= 1}
-          onClick={() =>
-            setMeta((m) => ({ ...m, page: Math.max(1, m.page - 1) }))
-          }
+          disabled={page === 1}
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
         >
           ← Anterior
         </Button>
 
         <span className={styles.pageInfo}>
-          Página {meta.page} de {Math.max(1, meta.lastPage)} ({meta.total}{" "}
-          total)
+          Página {page} de {Math.max(1, Math.ceil(total / 10))} ({total} total)
         </span>
 
         <Button
           variant="ghost"
-          disabled={meta.page >= meta.lastPage || meta.lastPage === 0}
-          onClick={() => setMeta((m) => ({ ...m, page: m.page + 1 }))}
+          disabled={page >= Math.ceil(total / 10) || total === 0}
+          onClick={() => setPage((p) => p + 1)}
         >
           Próxima →
         </Button>

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { apiFetch } from "../../../services/api";
-import { usePagination } from "../../../utils/pagination";
 import { useNotificationHelpers } from "../../../services/notification";
 import { Consignataria, PaginatedResponse } from "../../../types/entidades";
 import { formatarCNPJ } from "../../../utils/formatters";
@@ -17,7 +16,8 @@ export default function ConsignatariasPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
-  const pagination = usePagination();
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const notify = useNotificationHelpers();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,18 +28,18 @@ export default function ConsignatariasPage() {
     setLoading(true);
     try {
       const data = await apiFetch<any>(
-        `/v1/consignatarias?search=${search}&page=${pagination.page}`,
+        `/v1/consignatarias?search=${search}&page=${page}`,
       );
       setItems(data.items);
       if (data.meta) {
-        pagination.setTotal(data.meta.total);
+        setTotal(data.meta.total);
       }
     } catch (error) {
       console.error("Erro ao carregar consignatárias:", error);
     } finally {
       setLoading(false);
     }
-  }, [search, pagination.page]);
+  }, [search, page]);
 
   useEffect(() => {
     void fetchItems();
@@ -103,6 +103,7 @@ export default function ConsignatariasPage() {
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
+              setPage(1);
             }}
             className={styles.searchInput}
           />
@@ -183,20 +184,20 @@ export default function ConsignatariasPage() {
       <div className={styles.pagination}>
         <Button
           variant="ghost"
-          disabled={pagination.isFirstPage}
-          onClick={pagination.prevPage}
+          disabled={page === 1}
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
         >
           ← Anterior
         </Button>
 
         <span className={styles.pageInfo}>
-          Página {pagination.page} de {Math.max(1, pagination.totalPages)} ({pagination.total} total)
+          Página {page} de {Math.max(1, Math.ceil(total / 10))} ({total} total)
         </span>
 
         <Button
           variant="ghost"
-          disabled={pagination.isLastPage || pagination.totalPages === 0}
-          onClick={pagination.nextPage}
+          disabled={page >= Math.ceil(total / 10) || total === 0}
+          onClick={() => setPage((p) => p + 1)}
         >
           Próxima →
         </Button>

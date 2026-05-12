@@ -8,7 +8,6 @@ import ServidorForm from "./ServidorForm";
 import AuditModal from "./AuditModal";
 import { Badge, Button } from "../../../design-system/components";
 import { resolveBadgeTone } from "../../../design-system/utils/status";
-import { usePagination } from "../../../utils/pagination";
 import { useNotificationHelpers } from "../../../services/notification";
 import styles from "./servidores.module.css";
 
@@ -17,7 +16,8 @@ export default function ServidoresPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
-  const pagination = usePagination();
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const notify = useNotificationHelpers();
 
   // Estados do Modal
@@ -31,18 +31,18 @@ export default function ServidoresPage() {
     setLoading(true);
     try {
       const data = await apiFetch<any>(
-        `/v1/servidores?search=${search}&page=${pagination.page}`,
+        `/v1/servidores?search=${search}&page=${page}`,
       );
       setServidores(data.items);
       if (data.meta) {
-        pagination.setTotal(data.meta.total);
+        setTotal(data.meta.total);
       }
     } catch (error) {
       console.error("Erro ao carregar servidores:", error);
     } finally {
       setLoading(false);
     }
-  }, [search, pagination.page]);
+  }, [search, page]);
 
   useEffect(() => {
     void fetchServidores();
@@ -105,7 +105,10 @@ export default function ServidoresPage() {
             type="text"
             placeholder="Buscar por nome, CPF ou matrícula..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
             className={styles.searchInput}
           />
         </div>
@@ -178,20 +181,20 @@ export default function ServidoresPage() {
       <div className={styles.pagination}>
         <Button
           variant="ghost"
-          disabled={pagination.isFirstPage}
-          onClick={pagination.prevPage}
+          disabled={page === 1}
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
         >
           ← Anterior
         </Button>
 
         <span className={styles.pageInfo}>
-          Página {pagination.page} de {Math.max(1, pagination.totalPages)} ({pagination.total} total)
+          Página {page} de {Math.max(1, Math.ceil(total / 10))} ({total} total)
         </span>
 
         <Button
           variant="ghost"
-          disabled={pagination.isLastPage || pagination.totalPages === 0}
-          onClick={pagination.nextPage}
+          disabled={page >= Math.ceil(total / 10) || total === 0}
+          onClick={() => setPage((p) => p + 1)}
         >
           Próxima →
         </Button>
