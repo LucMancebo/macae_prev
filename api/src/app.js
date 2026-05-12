@@ -14,6 +14,11 @@ const auth_routes_1 = require("./modules/auth/auth.routes");
 const servidores_routes_1 = require("./modules/servidores/servidores.routes");
 const consignatarias_routes_1 = require("./modules/consignatarias/consignatarias.routes");
 const usuarios_routes_1 = require("./modules/usuarios/usuarios.routes");
+const produtos_routes_1 = require("./modules/produtos/produtos.routes");
+const margens_routes_1 = require("./modules/margens/margens.routes");
+const consignacoes_routes_1 = require("./modules/consignacoes/consignacoes.routes");
+const arquivo_routes_1 = require("./modules/arquivos/arquivo.routes");
+const reconciliacao_routes_1 = require("./modules/reconciliacao/reconciliacao.routes");
 const audit_routes_1 = require("./modules/audit/audit.routes");
 const error_handler_1 = require("./hooks/error-handler");
 const buildApp = () => {
@@ -96,6 +101,11 @@ const buildApp = () => {
     app.register(auth_routes_1.authRoutes, { prefix: '/v1/auth' });
     app.register(servidores_routes_1.servidoresRoutes, { prefix: '/v1/servidores' });
     app.register(consignatarias_routes_1.consignatariasRoutes, { prefix: '/v1/consignatarias' });
+    app.register(produtos_routes_1.produtosRoutes, { prefix: '/v1/produtos' });
+    app.register(margens_routes_1.margensRoutes, { prefix: '/v1/margens' });
+    app.register(consignacoes_routes_1.consignacoesRoutes, { prefix: '/v1/consignacoes' });
+    app.register(arquivo_routes_1.arquivosRoutes, { prefix: '/v1/arquivos' });
+    app.register(reconciliacao_routes_1.reconciliacaoRoutes, { prefix: '/v1/reconciliacao' });
     app.register(usuarios_routes_1.usuariosRoutes, { prefix: '/v1/usuarios' });
     app.register(audit_routes_1.auditRoutes, { prefix: '/v1/audit' });
     return app;
