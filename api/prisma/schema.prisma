@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -130,22 +130,23 @@ model Contrato {
 
 // 6. parcelas
 model Parcela {
-  id                    String    @id @default(uuid()) @db.Uuid
-  contrato_id           String    @db.Uuid
-  numero_parcela        Int
-  valor                 Decimal   @db.Decimal(12, 2)
-  competencia           String    @db.VarChar(7)
-  status                String // PREVISTA, DESCONTADA, NAO_DESCONTADA, CANCELADA
-  motivo_nao_desconto   String?   @db.VarChar(200)
-  data_processamento    DateTime?
+  id                       String    @id @default(uuid()) @db.Uuid
+  contrato_id              String    @db.Uuid
+  numero_parcela           Int
+  valor                    Decimal   @db.Decimal(12, 2)
+  competencia              String    @db.VarChar(7)
+  status                   String // PREVISTA, DESCONTADA, NAO_DESCONTADA, CANCELADA
+  motivo_nao_desconto      String?   @db.VarChar(200)
+  data_processamento       DateTime?
   data_processamento_folha DateTime?
-  status_reconciliacao  String?
-  arquivo_integracao_id String?   @db.Uuid
-  created_at            DateTime  @default(now())
-  updated_at            DateTime  @updatedAt
+  status_reconciliacao     String?
+  arquivo_integracao_id    String?   @db.Uuid
+  created_at               DateTime  @default(now())
+  updated_at               DateTime  @updatedAt
 
   contrato           Contrato           @relation(fields: [contrato_id], references: [id])
   arquivo_integracao ArquivoIntegracao? @relation(fields: [arquivo_integracao_id], references: [id])
+  repasses           Repasse[]
 
   @@map("parcelas")
 }
@@ -174,6 +175,7 @@ model Usuario {
   contratos_aprovados Contrato[]          @relation("Aprovador")
   logs_auditoria      LogAuditoria[]
   arquivos_integracao ArquivoIntegracao[]
+  arquivos            Arquivo[]
   aceites_termos      AceiteTermo[]
 
   @@map("usuarios")
@@ -193,12 +195,12 @@ model TermoUso {
 }
 
 model AceiteTermo {
-  id           String   @id @default(uuid()) @db.Uuid
-  usuario_id   String   @db.Uuid
-  termo_id     String   @db.Uuid
-  ip_origem    String   @db.VarChar(45)
-  user_agent   String?  @db.VarChar(500)
-  aceito_em    DateTime @default(now())
+  id         String   @id @default(uuid()) @db.Uuid
+  usuario_id String   @db.Uuid
+  termo_id   String   @db.Uuid
+  ip_origem  String   @db.VarChar(45)
+  user_agent String?  @db.VarChar(500)
+  aceito_em  DateTime @default(now())
 
   usuario Usuario  @relation(fields: [usuario_id], references: [id])
   termo   TermoUso @relation(fields: [termo_id], references: [id])
@@ -279,26 +281,26 @@ model ArquivoIntegracao {
 
 // 11b. arquivos
 model Arquivo {
-  id                 String   @id @default(uuid()) @db.Uuid
-  nome               String   @db.VarChar(200)
-  tipo               String // FOLHA, RETORNO, LEGADO
-  data_upload        DateTime @default(now())
-  data_processamento DateTime?
-  usuario_id         String   @db.Uuid
-  consignante_id     String?  @db.VarChar(50)
-  checksum_md5       String?  @db.VarChar(32)
-  checksum_sha256    String?  @db.VarChar(64)
-  tamanho_bytes      Int
-  status             String // PENDENTE_PROCESSAMENTO, PROCESSANDO, PROCESSADO, ERRO_PROCESSAMENTO, CANCELADO
-  linhas_total       Int
-  linhas_processadas Int
-  linhas_erro        Int
-  encoding_detectado String   @db.VarChar(20)
-  delimiter_detectado String  @db.VarChar(5)
-  created_at         DateTime @default(now())
-  updated_at         DateTime @updatedAt
+  id                  String    @id @default(uuid()) @db.Uuid
+  nome                String    @db.VarChar(200)
+  tipo                String // FOLHA, RETORNO, LEGADO
+  data_upload         DateTime  @default(now())
+  data_processamento  DateTime?
+  usuario_id          String    @db.Uuid
+  consignante_id      String?   @db.VarChar(50)
+  checksum_md5        String?   @db.VarChar(32)
+  checksum_sha256     String?   @db.VarChar(64)
+  tamanho_bytes       Int
+  status              String // PENDENTE_PROCESSAMENTO, PROCESSANDO, PROCESSADO, ERRO_PROCESSAMENTO, CANCELADO
+  linhas_total        Int
+  linhas_processadas  Int
+  linhas_erro         Int
+  encoding_detectado  String    @db.VarChar(20)
+  delimiter_detectado String    @db.VarChar(5)
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
 
-  usuario Usuario   @relation(fields: [usuario_id], references: [id])
+  usuario  Usuario   @relation(fields: [usuario_id], references: [id])
   repasses Repasse[]
 
   @@map("arquivos")
@@ -306,14 +308,14 @@ model Arquivo {
 
 // 11c. repasses
 model Repasse {
-  id           String   @id @default(uuid()) @db.Uuid
-  parcela_id   String   @db.Uuid
-  arquivo_id   String   @db.Uuid
-  tipo         String // DESCONTO, ACRESCIMO, JUROS, RETENCAO
-  valor        Decimal  @db.Decimal(12, 2)
-  percentual   Decimal? @db.Decimal(7, 4)
+  id             String   @id @default(uuid()) @db.Uuid
+  parcela_id     String   @db.Uuid
+  arquivo_id     String   @db.Uuid
+  tipo           String // DESCONTO, ACRESCIMO, JUROS, RETENCAO
+  valor          Decimal  @db.Decimal(12, 2)
+  percentual     Decimal? @db.Decimal(7, 4)
   data_movimento DateTime @default(now())
-  created_at   DateTime @default(now())
+  created_at     DateTime @default(now())
 
   parcela Parcela @relation(fields: [parcela_id], references: [id])
   arquivo Arquivo @relation(fields: [arquivo_id], references: [id])

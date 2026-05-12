@@ -4,6 +4,7 @@ import cookie from '@fastify/cookie';
 import jwt from '@fastify/jwt';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
+import './types/fastify';
 import { authRoutes } from './modules/auth/auth.routes';
 import { servidoresRoutes } from './modules/servidores/servidores.routes';
 import { consignatariasRoutes } from './modules/consignatarias/consignatarias.routes';
