@@ -200,6 +200,115 @@ test("calcularRepasse deve calcular juros com taxa", () => {
 
 ---
 
+### reconciliacao.test.ts (4 testes)
+
+#### UT-RECON-001: Reconciliação de parcela válida
+
+```typescript
+// Input: Linha folha com servidor.matricula + parcela.numero_parcela + consignataria_id match
+// Expected: Parcela atualizada para CONCILIADA, taxa_reconciliacao = 100%
+
+test("reconciliarParcelas deve conciliar parcela válida", async () => {
+  const linhas = [{
+    matricula: "MAT001",
+    valor: 100.00,
+    consignataria_id: "CONS-001"
+  }];
+
+  const result = await reconciliarParcelas(linhas, arquivoId);
+
+  expect(result.conciliadas).toBe(1);
+  expect(result.taxa_reconciliacao).toBe(100);
+  expect(result.detalhamento.CONCILIADA).toBe(1);
+  
+  // Verificar atualização no BD
+  const parcela = await prisma.parcela.findFirst({
+    where: { status_reconciliacao: "CONCILIADA" }
+  });
+  expect(parcela?.arquivo_integracao_id).toBe(arquivoId);
+});
+```
+
+#### UT-RECON-002: Erro de chave estrangeira (servidor ou consignatária não existe)
+
+```typescript
+// Input: Linha com matricula inexistente OU consignataria_id inexistente
+// Expected: Parcela marcada ERRO_FK, não atualiza status
+
+test("reconciliarParcelas deve detectar FK error", async () => {
+  const linhas = [{
+    matricula: "MAT_INVALIDO",
+    valor: 100.00,
+    consignataria_id: "CONS_INEXISTENTE"
+  }];
+
+  const result = await reconciliarParcelas(linhas, arquivoId);
+
+  expect(result.erros).toBe(1);
+  expect(result.detalhamento.ERRO_FK).toBe(1);
+  
+  // Não deve criar atualização
+  const updates = await prisma.parcela.findMany({
+    where: { arquivo_integracao_id: arquivoId }
+  });
+  expect(updates.length).toBe(0);
+});
+```
+
+#### UT-RECON-003: Divergência de valor (tolerance 5 centavos)
+
+```typescript
+// Input: Valor em folha diferente do BD além de 5 centavos
+// Expected: Parcela marcada ERRO_VALOR, registra diferença
+
+test("reconciliarParcelas deve detectar divergência de valor", async () => {
+  const linhas = [{
+    matricula: "MAT001",
+    valor: 100.50,  // BD tem 100.00, diferença = 0.50 > 0.05
+    consignataria_id: "CONS-001"
+  }];
+
+  const result = await reconciliarParcelas(linhas, arquivoId);
+
+  expect(result.erros).toBe(1);
+  expect(result.detalhamento.ERRO_VALOR).toBe(1);
+  
+  const parcela = await prisma.parcela.findFirst({
+    where: { status_reconciliacao: "ERRO_VALOR" }
+  });
+  expect(parcela?.divergencia).toBe(0.50);
+});
+```
+
+#### UT-RECON-004: Parcela pendente (não encontrada em folha)
+
+```typescript
+// Input: Parcela existe em BD mas não vem em folha
+// Expected: Parcela permanece com status PENDENTE
+
+test("reconciliarParcelas deve deixar PENDENTE quando não vem em folha", async () => {
+  // Criar parcela sem match em linhas
+  const linhas = [{
+    matricula: "MAT999",
+    valor: 999.99,
+    consignataria_id: "CONS-999"
+  }];
+
+  const result = await reconciliarParcelas(linhas, arquivoId);
+
+  expect(result.pendentes).toBe(1);
+  expect(result.detalhamento.PENDENTE).toBe(1);
+  
+  // Verificar que status não foi alterado
+  const parcela = await prisma.parcela.findFirst({
+    where: { status_reconciliacao: "PENDENTE" }
+  });
+  expect(parcela?.arquivo_integracao_id).toBeNull();
+});
+```
+
+---
+
 ## 🔗 Testes de Integração (15 testes)
 
 ### arquivo.service.test.ts (15 testes)
