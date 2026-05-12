@@ -209,21 +209,23 @@ test("calcularRepasse deve calcular juros com taxa", () => {
 // Expected: Parcela atualizada para CONCILIADA, taxa_reconciliacao = 100%
 
 test("reconciliarParcelas deve conciliar parcela válida", async () => {
-  const linhas = [{
-    matricula: "MAT001",
-    valor: 100.00,
-    consignataria_id: "CONS-001"
-  }];
+  const linhas = [
+    {
+      matricula: "MAT001",
+      valor: 100.0,
+      consignataria_id: "CONS-001",
+    },
+  ];
 
   const result = await reconciliarParcelas(linhas, arquivoId);
 
   expect(result.conciliadas).toBe(1);
   expect(result.taxa_reconciliacao).toBe(100);
   expect(result.detalhamento.CONCILIADA).toBe(1);
-  
+
   // Verificar atualização no BD
   const parcela = await prisma.parcela.findFirst({
-    where: { status_reconciliacao: "CONCILIADA" }
+    where: { status_reconciliacao: "CONCILIADA" },
   });
   expect(parcela?.arquivo_integracao_id).toBe(arquivoId);
 });
@@ -236,20 +238,22 @@ test("reconciliarParcelas deve conciliar parcela válida", async () => {
 // Expected: Parcela marcada ERRO_FK, não atualiza status
 
 test("reconciliarParcelas deve detectar FK error", async () => {
-  const linhas = [{
-    matricula: "MAT_INVALIDO",
-    valor: 100.00,
-    consignataria_id: "CONS_INEXISTENTE"
-  }];
+  const linhas = [
+    {
+      matricula: "MAT_INVALIDO",
+      valor: 100.0,
+      consignataria_id: "CONS_INEXISTENTE",
+    },
+  ];
 
   const result = await reconciliarParcelas(linhas, arquivoId);
 
   expect(result.erros).toBe(1);
   expect(result.detalhamento.ERRO_FK).toBe(1);
-  
+
   // Não deve criar atualização
   const updates = await prisma.parcela.findMany({
-    where: { arquivo_integracao_id: arquivoId }
+    where: { arquivo_integracao_id: arquivoId },
   });
   expect(updates.length).toBe(0);
 });
@@ -262,21 +266,23 @@ test("reconciliarParcelas deve detectar FK error", async () => {
 // Expected: Parcela marcada ERRO_VALOR, registra diferença
 
 test("reconciliarParcelas deve detectar divergência de valor", async () => {
-  const linhas = [{
-    matricula: "MAT001",
-    valor: 100.50,  // BD tem 100.00, diferença = 0.50 > 0.05
-    consignataria_id: "CONS-001"
-  }];
+  const linhas = [
+    {
+      matricula: "MAT001",
+      valor: 100.5, // BD tem 100.00, diferença = 0.50 > 0.05
+      consignataria_id: "CONS-001",
+    },
+  ];
 
   const result = await reconciliarParcelas(linhas, arquivoId);
 
   expect(result.erros).toBe(1);
   expect(result.detalhamento.ERRO_VALOR).toBe(1);
-  
+
   const parcela = await prisma.parcela.findFirst({
-    where: { status_reconciliacao: "ERRO_VALOR" }
+    where: { status_reconciliacao: "ERRO_VALOR" },
   });
-  expect(parcela?.divergencia).toBe(0.50);
+  expect(parcela?.divergencia).toBe(0.5);
 });
 ```
 
@@ -288,20 +294,22 @@ test("reconciliarParcelas deve detectar divergência de valor", async () => {
 
 test("reconciliarParcelas deve deixar PENDENTE quando não vem em folha", async () => {
   // Criar parcela sem match em linhas
-  const linhas = [{
-    matricula: "MAT999",
-    valor: 999.99,
-    consignataria_id: "CONS-999"
-  }];
+  const linhas = [
+    {
+      matricula: "MAT999",
+      valor: 999.99,
+      consignataria_id: "CONS-999",
+    },
+  ];
 
   const result = await reconciliarParcelas(linhas, arquivoId);
 
   expect(result.pendentes).toBe(1);
   expect(result.detalhamento.PENDENTE).toBe(1);
-  
+
   // Verificar que status não foi alterado
   const parcela = await prisma.parcela.findFirst({
-    where: { status_reconciliacao: "PENDENTE" }
+    where: { status_reconciliacao: "PENDENTE" },
   });
   expect(parcela?.arquivo_integracao_id).toBeNull();
 });
