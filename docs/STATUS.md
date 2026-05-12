@@ -1,8 +1,8 @@
 # Status Consolidado do Projeto — MACAEPREV
 
 **Data de Atualização:** 12 de maio de 2026  
-**Status Geral:** ✅ **Milestones 1–5 Completas (83%+)**  
-**Taxa de Conclusão:** 25/30 POCs (83%+) | 1 Parcial | 4 Pendentes
+**Status Geral:** ✅ **Milestones 1–5 Completas (83%+)** | ⏳ **M6–M7 Planejadas**  
+**Taxa de Conclusão:** 25/30 POCs (83%+) | 1 Parcial | 4 Pendentes (M6–M7)
 
 ---
 
@@ -160,20 +160,51 @@ Consulte [docs/README.md](README.md) para navegação completa.
 
 ## 🚀 Próximas Etapas
 
-### M6 — Frontend & UX (Planejado)
+### M6 — Frontend & UX (Planejado — 4 semanas)
 
-- Manual on-line interativo (POC 13)
-- Refinamentos de UX em todos os componentes
-- Testes E2E com database configurado
-- Validação de acessibilidade (WCAG 2.1 AA)
+**Foco:** Acessibilidade WCAG 2.1 AA, Performance, Manual On-line Interativo, i18n, Dark Mode, E2E Tests
 
-### M7 — Suporte & Operação (Planejado)
+**Fases de Execução:**
 
-- Configurar CI/CD final (GitHub Actions → ECR → ECS)
+1. **Auditoria (Sem 1):** axe-core scan + Lighthouse baseline
+2. **Acessibilidade (Sem 1-2):** Contraste, navegação keyboard, ARIA labels, focus indicators
+3. **i18n (Sem 2):** next-intl integrado + suporte PT-BR/EN
+4. **Dark Mode (Sem 2):** Tailwind dark mode + toggle em navbar
+5. **Manual On-line (Sem 3):** 15+ guias Markdown + HelpButton + FAQ interativa
+6. **E2E Tests (Sem 3-4):** 20+ testes Playwright + Core Web Vitals < 2.5s (LCP)
+
+**Documentação Completa:** [milestones/M6_frontend_ux/](milestones/M6_frontend_ux/)
+
+**POCs Cobertas:** POC 13 (Manual on-line)
+
+---
+
+### M7 — Suporte & Operação (Planejado — 2 semanas)
+
+**Foco:** CI/CD final, runbooks, go-live AWS
+
+**Atividades:**
+
+- Finalizar GitHub Actions (build → ECR → ECS deployment)
 - Criar runbooks de suporte e escalação
-- Implementar monitoramento (CloudWatch, logs)
-- Documentar manutenção preventiva/corretiva
-- Go-live em produção AWS
+- Documentar backup/disaster recovery (RDS snapshots)
+- Treinar equipe de operações
+- Go-live em produção (AWS)
+
+**POCs Cobertas:** POC 25 (Práticas ágeis), POC 26–27 (Suporte técnico)
+
+---
+
+## 📈 Progresso de Conclusão Global
+
+| Taxa            | Descrição                                         |
+| --------------- | ------------------------------------------------- |
+| **83%+**        | 25/30 POCs concluídas (M1–M5 completas)           |
+| **1 Parcial**   | POC 2 (Migração BD) — backend OK; UI em progresso |
+| **4 Pendentes** | POCs 13, 25, 26, 27 (M6–M7 planejadas)            |
+| **100%**        | Documentação M1–M6 estruturada                    |
+| **100%**        | Stack LTS (Node 24, TypeScript 6.x) harmonizado   |
+| **100%**        | CI/CD workflow criado + Dockerfiles + Terraform   |
 
 ---
 
