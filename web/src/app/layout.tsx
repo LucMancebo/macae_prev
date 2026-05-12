@@ -15,6 +15,8 @@ export const metadata: Metadata = {
 };
 
 import { AuthProvider } from "../context/AuthContext";
+import { NotificationProvider } from "../services/notification";
+import { ErrorBoundary, NotificationContainer } from "../components";
 
 export default function RootLayout({
   children,
@@ -24,7 +26,14 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={inter.variable}>
       <body suppressHydrationWarning>
-        <AuthProvider>{children}</AuthProvider>
+        <NotificationProvider>
+          <ErrorBoundary>
+            <AuthProvider>
+              {children}
+              <NotificationContainer />
+            </AuthProvider>
+          </ErrorBoundary>
+        </NotificationProvider>
       </body>
     </html>
   );
