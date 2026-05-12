@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReconciliacaoController = void 0;
 const database_1 = require("../../config/database");
+const error_utils_1 = require("../../utils/error-utils");
 class ReconciliacaoController {
     async relatorio(request, reply) {
         try {
@@ -44,7 +45,7 @@ class ReconciliacaoController {
             return reply.send({ ok: true, data: totals });
         }
         catch (err) {
-            return reply.status(500).send({ ok: false, error: 'Erro ao gerar relatório', details: err?.message });
+            return (0, error_utils_1.handleReplyError)(reply, err, 'Erro ao gerar relatório');
         }
     }
 }

@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { MargensService } from './margens.service';
 import { AuditService } from '../audit/audit.service';
+import { handleReplyError } from '../../utils/error-utils';
 
 export class MargensController {
     private service = new MargensService();
@@ -13,8 +14,8 @@ export class MargensController {
             const query = request.query as any;
             const result = await this.service.listar(query);
             return reply.send(result);
-        } catch (error: any) {
-            return reply.status(500).send({ error: error.message });
+        } catch (error: unknown) {
+            return handleReplyError(reply, error);
         }
     };
 
@@ -26,11 +27,8 @@ export class MargensController {
             const { id } = request.params as { id: string };
             const result = await this.service.buscarPorId(id);
             return reply.send(result);
-        } catch (error: any) {
-            if (error.message.includes('não encontrada')) {
-                return reply.status(404).send({ error: error.message });
-            }
-            return reply.status(500).send({ error: error.message });
+        } catch (error: unknown) {
+            return handleReplyError(reply, error);
         }
     };
 
@@ -42,11 +40,8 @@ export class MargensController {
             const { id } = request.params as { id: string };
             const result = await this.service.consultarDisponibilidade(id);
             return reply.send(result);
-        } catch (error: any) {
-            if (error.message.includes('não encontrada')) {
-                return reply.status(404).send({ error: error.message });
-            }
-            return reply.status(500).send({ error: error.message });
+        } catch (error: unknown) {
+            return handleReplyError(reply, error);
         }
     };
 
@@ -142,14 +137,8 @@ export class MargensController {
             });
 
             return reply.status(204).send();
-        } catch (error: any) {
-            if (error.message.includes('não encontrada')) {
-                return reply.status(404).send({ error: error.message });
-            }
-            if (error.message.includes('associadas')) {
-                return reply.status(409).send({ error: error.message });
-            }
-            return reply.status(500).send({ error: error.message });
+        } catch (error: unknown) {
+            return handleReplyError(reply, error);
         }
     };
 }

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MargensController = void 0;
 const margens_service_1 = require("./margens.service");
 const audit_service_1 = require("../audit/audit.service");
+const error_utils_1 = require("../../utils/error-utils");
 class MargensController {
     service = new margens_service_1.MargensService();
     /**
@@ -15,7 +16,7 @@ class MargensController {
             return reply.send(result);
         }
         catch (error) {
-            return reply.status(500).send({ error: error.message });
+            return (0, error_utils_1.handleReplyError)(reply, error);
         }
     };
     /**
@@ -28,10 +29,7 @@ class MargensController {
             return reply.send(result);
         }
         catch (error) {
-            if (error.message.includes('não encontrada')) {
-                return reply.status(404).send({ error: error.message });
-            }
-            return reply.status(500).send({ error: error.message });
+            return (0, error_utils_1.handleReplyError)(reply, error);
         }
     };
     /**
@@ -44,10 +42,7 @@ class MargensController {
             return reply.send(result);
         }
         catch (error) {
-            if (error.message.includes('não encontrada')) {
-                return reply.status(404).send({ error: error.message });
-            }
-            return reply.status(500).send({ error: error.message });
+            return (0, error_utils_1.handleReplyError)(reply, error);
         }
     };
     /**
@@ -136,13 +131,7 @@ class MargensController {
             return reply.status(204).send();
         }
         catch (error) {
-            if (error.message.includes('não encontrada')) {
-                return reply.status(404).send({ error: error.message });
-            }
-            if (error.message.includes('associadas')) {
-                return reply.status(409).send({ error: error.message });
-            }
-            return reply.status(500).send({ error: error.message });
+            return (0, error_utils_1.handleReplyError)(reply, error);
         }
     };
 }

@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { prisma } from '../../config/database';
+import { handleReplyError } from '../../utils/error-utils';
 
 export class ReconciliacaoController {
     async relatorio(request: FastifyRequest, reply: FastifyReply) {
@@ -47,8 +48,8 @@ export class ReconciliacaoController {
             }
 
             return reply.send({ ok: true, data: totals });
-        } catch (err: any) {
-            return reply.status(500).send({ ok: false, error: 'Erro ao gerar relatório', details: err?.message });
+        } catch (err: unknown) {
+            return handleReplyError(reply, err, 'Erro ao gerar relatório');
         }
     }
 }
