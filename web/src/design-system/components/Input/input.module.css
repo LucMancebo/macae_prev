@@ -18,8 +18,7 @@
     color: var(--text-muted);
   }
 
-  &:focus {
-    outline: none;
+  &:focus-visible {
     border-color: var(--brand-primary);
     box-shadow: var(--shadow-focus);
   }

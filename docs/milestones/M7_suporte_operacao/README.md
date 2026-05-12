@@ -9,12 +9,14 @@ M7 finaliza o ciclo de desenvolvimento com foco em operacionalização, suporte 
 ## Funcionalidades Planejadas
 
 ### CI/CD Final
+
 - ✅ GitHub Actions completo: lint → build → test → Docker → ECR → ECS deploy
 - ✅ Estratégia de deploy: blue-green, canary ou rolling updates
 - ✅ Configuração de secrets em GitHub (AWS credentials, database URLs)
 - ✅ Notifications pós-deploy (Slack, email)
 
 ### Infraestrutura em Produção
+
 - ✅ AWS ECS/Fargate com auto-scaling
 - ✅ AWS RDS PostgreSQL com backup automático
 - ✅ AWS CloudFront para CDN (Next.js static + API edge)
@@ -22,12 +24,14 @@ M7 finaliza o ciclo de desenvolvimento com foco em operacionalização, suporte 
 - ✅ SSL/TLS com AWS Certificate Manager
 
 ### Monitoramento & Logging
+
 - ✅ CloudWatch Logs centralizado (API + Web)
 - ✅ CloudWatch Alarms (CPU, Memory, Error Rate)
 - ✅ Application Performance Monitoring (APM)
 - ✅ Dashboards em CloudWatch
 
 ### Runbooks & Suporte
+
 - ✅ Runbook de troubleshooting (top 20 issues)
 - ✅ Runbook de escalação e SLA
 - ✅ Documentação de backup/restore (RDS snapshots)
@@ -35,6 +39,7 @@ M7 finaliza o ciclo de desenvolvimento com foco em operacionalização, suporte 
 - ✅ Guia de treinamento operacional
 
 ### Go-live Checklist
+
 - ✅ Migração de dados legados (se necessário)
 - ✅ Validação de performance em produção
 - ✅ Teste de carga (loadtest com k6 ou Apache JMeter)
@@ -42,6 +47,7 @@ M7 finaliza o ciclo de desenvolvimento com foco em operacionalização, suporte 
 - ✅ Comunicação com stakeholders
 
 ## POCs Cobertas
+
 - **POC 25:** Práticas ágeis e entrega contínua (CI/CD final)
 - **POC 26:** Suporte técnico + manutenção preventiva/corretiva
 - **POC 27:** Suporte contínuo + manutenções preventivas

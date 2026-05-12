@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest"
+    "test": "vitest",
+    "audit:a11y": "ts-node scripts/accessibility-audit/audit-a11y.ts",
+    "audit:lighthouse": "ts-node scripts/accessibility-audit/audit-lighthouse.ts",
+    "audit:all": "npm run audit:a11y && npm run audit:lighthouse"
   },
   "dependencies": {
     "next": "15.1.0",
@@ -15,14 +18,18 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@types/node": "^24",
+    "@axe-core/playwright": "^4.11.3",
+    "@types/node": "^24.12.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "chrome-launcher": "^1.2.1",
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
+    "jsdom": "^22.1.0",
+    "lighthouse": "^13.3.0",
+    "playwright": "^1.60.0",
     "typescript": "^6.0.3",
-    "vitest": "^1.1.5",
-    "jsdom": "^22.1.0"
+    "vitest": "^1.1.5"
   },
   "engines": {
     "node": ">=24.0.0"

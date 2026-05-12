@@ -97,6 +97,11 @@
     color 160ms ease,
     transform 160ms ease;
 
+  &:focus-visible {
+    outline: 3px solid rgba(67, 24, 255, 0.28);
+    outline-offset: 2px;
+  }
+
   &:hover {
     background: var(--bg-hover); /* Use CSS variable for hover background */
     color: var(--text-dark);
@@ -188,13 +193,12 @@
   color: var(--text-dark);
   font-family: var(--font-family-base);
   font-size: 0.875rem;
-  outline: none;
 
   &::placeholder {
     color: var(--text-muted);
   }
   /* Consider adding a focus ring for accessibility */
-  &:focus {
+  &:focus-visible {
     border-color: rgba(67, 24, 255, 0.28);
     box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.08);
   }
@@ -234,6 +238,11 @@
   ); /* Use CSS variable for transparent background */
   color: var(--text-muted);
   cursor: pointer;
+
+  &:focus-visible {
+    outline: 3px solid rgba(67, 24, 255, 0.28);
+    outline-offset: 2px;
+  }
 
   &:hover {
     background: rgba(67, 24, 255, 0.06);

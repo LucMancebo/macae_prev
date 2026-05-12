@@ -1,0 +1,32 @@
+[
+  {
+    "page": "Home",
+    "url": "http://localhost:3000/",
+    "scores": {
+      "performance": 97,
+      "accessibility": 93,
+      "best_practices": 96,
+      "seo": 100
+    },
+    "metrics": {
+      "lcp": 1912.40715,
+      "fid": 127,
+      "cls": 0
+    }
+  },
+  {
+    "page": "Login",
+    "url": "http://localhost:3000/login",
+    "scores": {
+      "performance": 99,
+      "accessibility": 93,
+      "best_practices": 96,
+      "seo": 100
+    },
+    "metrics": {
+      "lcp": 1823.1619999999998,
+      "fid": 111,
+      "cls": 0
+    }
+  }
+]

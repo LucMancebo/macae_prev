@@ -26,10 +26,13 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={inter.variable}>
       <body suppressHydrationWarning>
+        <a className="skip-link" href="#main-content">
+          Pular para o conteúdo principal
+        </a>
         <NotificationProvider>
           <ErrorBoundary>
             <AuthProvider>
-              {children}
+              <main id="main-content">{children}</main>
               <NotificationContainer />
             </AuthProvider>
           </ErrorBoundary>

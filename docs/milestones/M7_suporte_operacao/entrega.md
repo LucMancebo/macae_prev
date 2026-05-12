@@ -10,6 +10,7 @@ A Milestone 7 ainda não iniciou. Este documento será preenchido ao longo da ex
 ## Checklist de Entrega
 
 ### Infraestrutura AWS
+
 - [ ] VPC com subnets públicas/privadas (2 AZs)
 - [ ] ALB (Application Load Balancer) configurado
 - [ ] ECS cluster com 2 serviços (API, Web)
@@ -19,6 +20,7 @@ A Milestone 7 ainda não iniciou. Este documento será preenchido ao longo da ex
 - [ ] NAT Gateway para outbound internet
 
 ### CI/CD Pipeline
+
 - [ ] GitHub Actions workflow completo (.github/workflows/deploy.yml)
 - [ ] Trigger: push to main/develop
 - [ ] Steps: lint → build → test → Docker → ECR → ECS deploy
@@ -28,6 +30,7 @@ A Milestone 7 ainda não iniciou. Este documento será preenchido ao longo da ex
 - [ ] Rollback automático se falhar
 
 ### Monitoramento & Logging
+
 - [ ] CloudWatch Logs group para API, Web, RDS
 - [ ] CloudWatch Dashboards (visão consolidada)
 - [ ] CloudWatch Alarms (10+ métricas)
@@ -36,6 +39,7 @@ A Milestone 7 ainda não iniciou. Este documento será preenchido ao longo da ex
 - [ ] Log retention: 30 days
 
 ### Runbooks & Documentação
+
 - [ ] 10+ runbooks de troubleshooting
 - [ ] Escalation procedures documentadas
 - [ ] Backup/restore procedures (RDS snapshots)
@@ -44,6 +48,7 @@ A Milestone 7 ainda não iniciou. Este documento será preenchido ao longo da ex
 - [ ] SLA agreement (99.9% uptime)
 
 ### Load Testing & Security
+
 - [ ] Load test com k6 (1000 users, 10 req/sec)
 - [ ] Performance report gerado
 - [ ] Security scan com OWASP ZAP
@@ -51,6 +56,7 @@ A Milestone 7 ainda não iniciou. Este documento será preenchido ao longo da ex
 - [ ] Security findings remediados
 
 ### Go-live
+
 - [ ] Backup de dados legados realizado
 - [ ] Migração de dados (se necessário) validada
 - [ ] Blue-green deploy executado com sucesso
@@ -59,12 +65,14 @@ A Milestone 7 ainda não iniciou. Este documento será preenchido ao longo da ex
 - [ ] Comunicado de go-live enviado
 
 ### Treinamento
+
 - [ ] DevOps team treinado (4h)
 - [ ] Support team treinado (2h)
 - [ ] Managers informados sobre SLA (1h)
 - [ ] Documentação compartilhada
 
 ### Custos Finalizados
+
 - [ ] Estimativa mensal de AWS finalizada
 - [ ] Budget aprovado
 - [ ] Cost allocation tags configuradas
@@ -74,6 +82,7 @@ A Milestone 7 ainda não iniciou. Este documento será preenchido ao longo da ex
 ## Evidências de Cumprimento
 
 Após conclusão, as seguintes evidências serão documentadas:
+
 - Terraform apply output
 - CloudWatch dashboard screenshot
 - CI/CD pipeline execution log
@@ -86,12 +95,12 @@ Após conclusão, as seguintes evidências serão documentadas:
 
 ## Assinatura de Aceite
 
-| Papel | Nome | Data | Assinatura |
-|-------|------|------|-----------|
-| CIO / IT Director | — | TBD | — |
-| DevOps Lead | — | TBD | — |
-| Operations Manager | — | TBD | — |
-| Product Owner | — | TBD | — |
+| Papel              | Nome | Data | Assinatura |
+| ------------------ | ---- | ---- | ---------- |
+| CIO / IT Director  | —    | TBD  | —          |
+| DevOps Lead        | —    | TBD  | —          |
+| Operations Manager | —    | TBD  | —          |
+| Product Owner      | —    | TBD  | —          |
 
 ---
 

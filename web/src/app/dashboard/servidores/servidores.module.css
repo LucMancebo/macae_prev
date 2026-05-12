@@ -49,8 +49,8 @@
   color: var(--text-dark);
   transition: all 0.2s;
 }
-.searchInput:focus {
-  outline: none;
+
+.searchInput:focus-visible {
   background-color: white;
   border-color: var(--brand-primary);
   box-shadow: var(--shadow-focus);

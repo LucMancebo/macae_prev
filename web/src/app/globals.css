@@ -45,6 +45,29 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+body:has(.skip-link:focus-visible) {
+  overflow: hidden;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1000;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  background: var(--brand-primary);
+  color: var(--text-light);
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-180%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
 h1,
 h2,
 h3,
@@ -64,6 +87,15 @@ button {
   font-family: var(--font-family);
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(67, 24, 255, 0.28);
+  outline-offset: 2px;
 }
 
 /* === SnowUI Utility Classes === */
@@ -112,7 +144,6 @@ button {
 }
 
 .input-snow:focus {
-  outline: none;
   border-color: var(--brand-primary);
   box-shadow: var(--shadow-focus);
 }

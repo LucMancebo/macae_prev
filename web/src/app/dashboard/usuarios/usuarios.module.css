@@ -55,8 +55,7 @@
   transition: all 0.2s;
 }
 
-.searchInput:focus {
-  outline: none;
+.searchInput:focus-visible {
   background-color: white;
   border-color: var(--brand-primary);
   box-shadow: var(--shadow-focus);
@@ -228,10 +227,11 @@
   color: var(--text-dark);
 }
 
-.formGroup input:focus {
-  outline: none;
+.formGroup input:focus-visible,
+.formGroup select:focus-visible {
   background-color: white;
   border-color: var(--brand-primary);
+  box-shadow: var(--shadow-focus);
 }
 
 .btnSecondary {

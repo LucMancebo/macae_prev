@@ -1,0 +1,16 @@
+[
+  {
+    "page": "Home",
+    "url": "http://localhost:3000/",
+    "timestamp": "2026-05-12T18:21:58.350Z",
+    "violations": [],
+    "wcagLevel": "AA"
+  },
+  {
+    "page": "Login",
+    "url": "http://localhost:3000/login",
+    "timestamp": "2026-05-12T18:22:28.599Z",
+    "violations": [],
+    "wcagLevel": "AA"
+  }
+]

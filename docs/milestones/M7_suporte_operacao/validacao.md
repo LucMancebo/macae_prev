@@ -10,6 +10,7 @@
 **Descrição:** CI/CD pipeline automatizado (GitHub Actions → ECR → ECS)
 
 **Requisitos:**
+
 - [ ] GitHub Actions workflow (lint, build, test, Docker, push ECR, deploy ECS)
 - [ ] Trigger automático em push main/develop
 - [ ] Health checks pós-deploy
@@ -17,6 +18,7 @@
 - [ ] Notificações Slack
 
 **Critérios de Aceitação:**
+
 - Deploy automatizado em < 10 minutos
 - Zero manual steps necessários (totalmente automatizado)
 
@@ -28,6 +30,7 @@
 **Descrição:** Runbooks e procedimentos de suporte documentados
 
 **Requisitos:**
+
 - [ ] 10+ runbooks de troubleshooting
 - [ ] Escalation procedures
 - [ ] Backup/restore procedures
@@ -35,6 +38,7 @@
 - [ ] Alertas configurados
 
 **Critérios de Aceitação:**
+
 - Toda a equipe de operações treinada
 - 100% de runbooks testados manualmente
 
@@ -46,6 +50,7 @@
 **Descrição:** Sistema operacional 24/7 com monitoramento
 
 **Requisitos:**
+
 - [ ] 99.9% uptime SLA
 - [ ] RTO < 15 minutos (disaster recovery)
 - [ ] RPO < 1 hora (acceptable data loss)
@@ -53,6 +58,7 @@
 - [ ] Monitoramento de performance
 
 **Critérios de Aceitação:**
+
 - Sistema em produção com zero downtime não-planejado
 - Alertas funcionando corretamente
 
@@ -62,50 +68,50 @@
 
 ### Infraestrutura AWS
 
-| Componente | Status | Notas |
-|-----------|--------|-------|
-| VPC com Multi-AZ | ⏳ | 2 subnets públicas + privadas |
-| ECS Fargate | ⏳ | 2 serviços (API, Web) |
-| RDS Multi-AZ | ⏳ | Failover automático |
-| CloudFront | ⏳ | CDN com WAF |
-| CloudWatch | ⏳ | Logs + Metrics + Alarms |
+| Componente       | Status | Notas                         |
+| ---------------- | ------ | ----------------------------- |
+| VPC com Multi-AZ | ⏳     | 2 subnets públicas + privadas |
+| ECS Fargate      | ⏳     | 2 serviços (API, Web)         |
+| RDS Multi-AZ     | ⏳     | Failover automático           |
+| CloudFront       | ⏳     | CDN com WAF                   |
+| CloudWatch       | ⏳     | Logs + Metrics + Alarms       |
 
 ### Performance
 
-| Métrica | Alvo | Atual | Status |
-|---------|------|-------|--------|
-| API P95 Latency | < 1s | — | ⏳ |
-| Error Rate | < 0.1% | — | ⏳ |
-| System Uptime | 99.9% | — | ⏳ |
-| RDS CPU | < 75% | — | ⏳ |
+| Métrica         | Alvo   | Atual | Status |
+| --------------- | ------ | ----- | ------ |
+| API P95 Latency | < 1s   | —     | ⏳     |
+| Error Rate      | < 0.1% | —     | ⏳     |
+| System Uptime   | 99.9%  | —     | ⏳     |
+| RDS CPU         | < 75%  | —     | ⏳     |
 
 ### Security
 
-| Check | Status | Notas |
-|-------|--------|-------|
-| SSL/TLS | ⏳ | AWS Certificate Manager |
-| Security Groups | ⏳ | Least privilege access |
-| IAM Roles | ⏳ | Service-specific policies |
-| Secrets Manager | ⏳ | Encrypted credentials |
+| Check           | Status | Notas                     |
+| --------------- | ------ | ------------------------- |
+| SSL/TLS         | ⏳     | AWS Certificate Manager   |
+| Security Groups | ⏳     | Least privilege access    |
+| IAM Roles       | ⏳     | Service-specific policies |
+| Secrets Manager | ⏳     | Encrypted credentials     |
 
 ### Backups & Recovery
 
-| Aspecto | Target | Status |
-|--------|--------|--------|
-| RDS Backup Frequency | Daily | ⏳ |
-| Backup Retention | 30 days | ⏳ |
-| RTO | < 15 min | ⏳ |
-| RPO | < 1 hour | ⏳ |
+| Aspecto              | Target   | Status |
+| -------------------- | -------- | ------ |
+| RDS Backup Frequency | Daily    | ⏳     |
+| Backup Retention     | 30 days  | ⏳     |
+| RTO                  | < 15 min | ⏳     |
+| RPO                  | < 1 hour | ⏳     |
 
 ---
 
 ## Assinatura de Validação
 
-| Papel | Data | Status |
-|-------|------|--------|
-| CIO / Infrastructure Director | — | ⏳ Pendente |
-| DevOps Lead | — | ⏳ Pendente |
-| Security Officer | — | ⏳ Pendente |
+| Papel                         | Data | Status      |
+| ----------------------------- | ---- | ----------- |
+| CIO / Infrastructure Director | —    | ⏳ Pendente |
+| DevOps Lead                   | —    | ⏳ Pendente |
+| Security Officer              | —    | ⏳ Pendente |
 
 ---
 
