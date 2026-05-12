@@ -206,7 +206,7 @@ Cada questão da POC referencia diretamente um requisito. Abaixo o mapeamento co
 > **Objetivo**: Garantir a comunicação bidirecional com o sistema de folha.
 > **Duração estimada**: 4 semanas
 
-> **Estado atual:** backend da integração de folha e a tela `/dashboard/arquivos` já foram implementados. A engine de reconciliação, relatórios segmentados e documentação de API final seguem como próximas entregas.
+> **Estado atual:** Milestone concluída com sucesso. Motor de reconciliação, parsing avançado (CSV/UTF-8), relatórios segmentados e dashboards integrados.
 
 #### Issue 4.1 — Migração de Dados
 
@@ -236,6 +236,8 @@ Cada questão da POC referencia diretamente um requisito. Abaixo o mapeamento co
 
 > **Objetivo**: Módulos gerenciais e exportação de dados.
 > **Duração estimada**: 3 semanas
+
+> **Estado atual:** Backend da Milestone 5 (Módulo de Relatórios) concluído. Retornando volumes e CSV para download. Preparando frontend de gráficos (Recharts).
 
 #### Issue 5.1 — Dashboards Gerenciais
 

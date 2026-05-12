@@ -15,7 +15,7 @@ Milestones (visão geral):
 - M2_seguranca: concluído (autenticação JWT, MFA verificado, Auditoria de tela integrada, Fluxo LGPD real)
 - M3_core_consignacoes: concluído (CRUD completo de margens, produtos e controle de fluxo de consignações via API)
 - M4_integracao_folha: concluído (Parsing de CSV de repasse, Relatórios de Reconciliação, Exportação de Retorno)
-- M5_relatorios_bi: planejado (Próximo alvo)
+- M5_relatorios_bi: Em andamento (Módulo e endpoints backend de KPIs e Exportação CSV concluídos)
 
 Entregáveis concluídos:
 
@@ -23,18 +23,19 @@ Entregáveis concluídos:
 - Integração global de notificações contextuais (`NotificationContext`) e tratamento global de erros (`ErrorBoundary`).
 - Telas operacionais de CRUD completas (Usuários, Servidores, Consignatárias, Produtos, Margens, Consignações).
 - Painel de Dashboard (Visão Operacional) agregando KPI's com lógica de "domain status" real.
+- Estabilização global do Frontend (correção de crash handlers, injeção de hooks de notificação e paginação nas telas de CRUD).
+- Correção dos bugs de paginação (Fase 2 do ANALISE_FRONTEND_BUGS.md finalizada).
 
 Pendências / Itens que faltam:
 
 - Configurar CI para executar a suíte E2E com um banco de teste (Neon sandbox ou container gerenciado) — hoje os testes E2E devem apontar para um DB de teste.
 - Completar documentação de entrega de cada Milestone (checklists em `docs/milestones/*` estão parcialmente vazios).
 - Documentação de rollout / deploy no Vercel com variáveis sensíveis (criar playbook seguro sem expor secrets).
-- **Dívida Técnica Frontend (`usuarios/page.tsx`):** Os hooks `usePagination` e contexto de notificação não foram instanciados/desestruturados corretamente no componente, causando erro em tempo de compilação/renderização.
 - Implementar relatórios BI exportáveis e ranking (M5).
 
 Próximos passos recomendados:
 
-1. Corrigir o débito técnico em `/dashboard/usuarios/page.tsx` para não quebrar o build.
+1. Elaborar as Especificações Técnicas completas e Dicionário de Dados do projeto (Item 2 do roadmap).
 2. Elaborar a Milestone 5 (Relatórios Gerenciais e BI Analítico) para atender as métricas da diretoria MACAEPREV.
 3. Provisionar banco de teste dedicado no CI.
 4. Finalizar os artefatos documentais de M3 e M4 (Documentos de Validação e Evidência) exigidos pela licitação.

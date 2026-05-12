@@ -1,224 +1,133 @@
-# Dicionário de Dados — Sistema de Consignação MACAEPREV
+# Dicionário de Dados - Sistema MACAEPREV
+
+**Data:** 12 de maio de 2026  
+**Tecnologia-Alvo:** PostgreSQL  
+**ORM de Abstração:** Prisma ORM
+
+Este documento detalha o Dicionário de Dados e as Entidades implementadas para suportar as operações consignáveis em atendimento às requisições do sistema da folha MACAEPREV.
 
 ---
 
-## Tabela: servidores
+## 1. Módulo de Segurança e Acesso
 
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único do servidor |
-| cpf | VARCHAR(11) | N | UK | CPF criptografado (AES-256) |
-| nome | VARCHAR(200) | N | — | Nome completo |
-| matricula | VARCHAR(20) | N | UK | Matrícula funcional |
-| cargo | VARCHAR(100) | N | — | Cargo/função |
-| situacao_funcional | ENUM('ATIVO','APOSENTADO','PENSIONISTA') | N | — | Situação do servidor |
-| data_admissao | DATE | N | — | Data de ingresso no serviço público |
-| remuneracao_bruta | DECIMAL(12,2) | N | — | Remuneração bruta mensal |
-| status | ENUM('ATIVO','INATIVO','BLOQUEADO') | N | — | Status no sistema |
-| created_at | DATETIME | N | — | Data de criação |
-| updated_at | DATETIME | N | — | Data de atualização |
+### 1.1 Entidade: `Usuario`
 
----
+Responsável por autenticação e controle de escopo.
 
-## Tabela: consignatarias
+- `id` (UUID, PK): Identificador único da credencial.
+- `nome` (String): Nome completo do usuário.
+- `email` (String, Unique): E-mail validado para login.
+- `senha_hash` (String): Senha cifrada através de algoritmo Bcryptjs.
+- `perfil_id` (UUID, FK): Vínculo com a entidade `PerfilAcesso`.
+- `consignataria_id` (UUID, Nullable, FK): Se não for um funcionário MACAEPREV, relaciona-se a um Banco específico.
+- `status` (Enum): 'ATIVO', 'BLOQUEADO_TENTATIVAS', 'INATIVO'.
+- `mfa_secret` (String, Nullable): Chave semente para o gerador TOTP.
 
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único |
-| cnpj | VARCHAR(14) | N | UK | CNPJ da instituição |
-| razao_social | VARCHAR(200) | N | — | Razão social |
-| nome_fantasia | VARCHAR(200) | S | — | Nome fantasia |
-| tipo | ENUM('BANCO','SEGURADORA','PLANO_SAUDE','ASSOCIACAO','OUTROS') | N | — | Tipo da instituição |
-| cet_maximo | DECIMAL(5,4) | S | — | CET máximo global permitido |
-| status | ENUM('ATIVA','SUSPENSA','INATIVA') | N | — | Status |
-| contato_email | VARCHAR(200) | S | — | E-mail de contato |
-| contato_telefone | VARCHAR(20) | S | — | Telefone |
-| created_at | DATETIME | N | — | Data de criação |
-| updated_at | DATETIME | N | — | Data de atualização |
+### 1.2 Entidade: `PerfilAcesso`
 
----
+Mapeamento granular do escopo de visão.
 
-## Tabela: margens
+- `id` (UUID, PK): Identificador do perfil.
+- `nome` (String, Unique): Ex: 'ADMINISTRADOR', 'CONSIGNATARIA', 'SERVIDOR'.
+- `permissoes` (JSON): Vetor de claims autorizadas.
 
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único |
-| nome | VARCHAR(100) | N | — | Nome da margem |
-| tipo | ENUM('EXCLUSIVA','COMPARTILHADA') | N | — | Tipo de atribuição |
-| percentual_maximo | DECIMAL(5,2) | N | — | % máximo de comprometimento |
-| descricao | TEXT | S | — | Descrição da margem |
-| status | ENUM('ATIVA','INATIVA') | N | — | Status |
-| created_at | DATETIME | N | — | Data de criação |
-| updated_at | DATETIME | N | — | Data de atualização |
+### 1.3 Entidade: `LogAuditoria`
+
+Imutável (Append-only). Armazena pegadas da plataforma em respeito à LGPD.
+
+- `id` (UUID, PK): ID do evento.
+- `usuario_id` (UUID, FK): Quem executou a ação.
+- `acao` (String): Descrição canônica (Ex: 'CONSIGNACAO_CRIADA').
+- `entidade` (String): Tabela afetada (Ex: 'Consignacao').
+- `registro_id` (String): O ID do item alterado.
+- `detalhes` (JSON): Vetor contendo Snapshot _Before_ e _After_.
+- `ip_origem` (String): Capturado pelo Header proxy.
+- `created_at` (DateTime): Registro exato (em UTC) da infração ou uso.
 
 ---
 
-## Tabela: produtos
+## 2. Módulo Core: Servidores e Instituições
 
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único |
-| nome | VARCHAR(100) | N | — | Nome do produto |
-| tipo | ENUM('EMPRESTIMO','CARTAO','PLANO_SAUDE','SEGURO','MENSALIDADE','OUTROS') | N | — | Tipo |
-| tipo_desconto | ENUM('NOMINAL','PERCENTUAL') | N | — | Forma de desconto |
-| margem_id | UUID | N | FK → margens | Margem associada |
-| consignataria_id | UUID | N | FK → consignatarias | Consignatária dona do produto |
-| juros_minimo | DECIMAL(5,4) | S | — | Taxa de juros mínima (% a.m.) |
-| juros_maximo | DECIMAL(5,4) | S | — | Taxa de juros máxima (% a.m.) |
-| prazo_minimo | INT | S | — | Prazo mínimo (meses) |
-| prazo_maximo | INT | S | — | Prazo máximo (meses) |
-| parcelas_maximo | INT | S | — | Nº máximo de parcelas |
-| tempo_servico_minimo | INT | S | — | Tempo mínimo de serviço (meses) |
-| cargos_elegiveis | JSON | S | — | Lista de cargos elegíveis |
-| status | ENUM('ATIVO','INATIVO') | N | — | Status |
-| created_at | DATETIME | N | — | Data de criação |
-| updated_at | DATETIME | N | — | Data de atualização |
+### 2.1 Entidade: `Servidor`
 
----
+Dados do funcionalismo público da base MACAEPREV.
 
-## Tabela: contratos
+- `id` (UUID, PK): Chave relacional universal.
+- `matricula` (String, Unique): Número no sistema de folha da Prefeitura.
+- `cpf` (String, Unique): Validado e mascara-tratado.
+- `nome` (String): Nome civil.
+- `salario_base` (Decimal): Provê base para o teto de 30% da margem.
+- `cargo` (String): Informação opcional de segmentação.
+- `status` (Enum): 'ATIVO', 'AFASTADO', 'APOSENTADO'.
 
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único |
-| numero_contrato | VARCHAR(30) | N | UK | Número externo do contrato |
-| servidor_id | UUID | N | FK → servidores | Servidor beneficiário |
-| consignataria_id | UUID | N | FK → consignatarias | Consignatária contratante |
-| produto_id | UUID | N | FK → produtos | Produto contratado |
-| valor_total | DECIMAL(12,2) | N | — | Valor total do contrato |
-| valor_parcela | DECIMAL(12,2) | N | — | Valor mensal da parcela |
-| quantidade_parcelas | INT | N | — | Total de parcelas |
-| parcelas_pagas | INT | N | — | Parcelas já descontadas |
-| taxa_juros | DECIMAL(5,4) | N | — | Taxa de juros mensal |
-| cet | DECIMAL(5,4) | N | — | Custo Efetivo Total |
-| data_inicio | DATE | N | — | Início das deduções |
-| data_fim | DATE | N | — | Término previsto |
-| status | ENUM('PENDENTE','ATIVO','SUSPENSO','LIQUIDADO','CANCELADO') | N | — | Status |
-| tipo_operacao | ENUM('NOVO','PORTABILIDADE','RENEGOCIACAO') | N | — | Tipo da operação |
-| contrato_origem_id | UUID | S | FK → contratos | Contrato liquidado (portabilidade) |
-| fluxo_aprovacao_id | UUID | S | FK → fluxos_aprovacao | Fluxo de aprovação vigente |
-| aprovado_por | UUID | S | FK → usuarios | Quem aprovou |
-| data_aprovacao | DATETIME | S | — | Data de aprovação |
-| created_at | DATETIME | N | — | Data de criação |
-| updated_at | DATETIME | N | — | Data de atualização |
+### 2.2 Entidade: `Consignataria`
+
+Bancos, Associações e entidades habilitadas para empréstimos.
+
+- `id` (UUID, PK): ID interno.
+- `razao_social` (String): Nome empresarial.
+- `cnpj` (String, Unique): Cadastro no MF.
+- `tipo` (Enum): 'BANCO', 'SINDICATO', 'COOPERATIVA', 'PLANO_SAUDE'.
+- `cet_maximo` (Decimal): Limitador de teto de juros aprovado na licitação.
+- `status` (Enum): 'ATIVO', 'SUSPENSA'.
+
+### 2.3 Entidade: `Produto`
+
+Modalidade ofertada pelo Banco.
+
+- `id` (UUID, PK).
+- `consignataria_id` (UUID, FK).
+- `nome` (String): Ex: "Empréstimo Rápido 24x".
+- `tipo` (Enum): 'EMPRESTIMO', 'CARTAO', 'SEGURO'.
+- `taxa_minima` / `taxa_maxima` (Decimal): Threshold de validação mensal.
+- `averbacao` (Enum): 'NOMINAL' ou 'PERCENTUAL'.
+- `prazo_minimo` / `prazo_maximo` (Integer): Quantidade de meses.
 
 ---
 
-## Tabela: parcelas
+## 3. Módulo Core: Empréstimos (Consignações) e Margem
 
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único |
-| contrato_id | UUID | N | FK → contratos | Contrato vinculado |
-| numero_parcela | INT | N | — | Número sequencial |
-| valor | DECIMAL(12,2) | N | — | Valor da parcela |
-| competencia | VARCHAR(7) | N | — | Mês/Ano (YYYY-MM) |
-| status | ENUM('PREVISTA','DESCONTADA','NAO_DESCONTADA','CANCELADA') | N | — | Status |
-| motivo_nao_desconto | VARCHAR(200) | S | — | Motivo de não desconto |
-| data_processamento | DATETIME | S | — | Data do processamento |
-| arquivo_integracao_id | UUID | S | FK → arquivos_integracao | Arquivo de retorno |
-| created_at | DATETIME | N | — | Data de criação |
-| updated_at | DATETIME | N | — | Data de atualização |
+### 3.1 Entidade: `Margem` e `MargemServidor`
 
----
+Gestão da régua legal da Consignação.
 
-## Tabela: usuarios
+- **Margem:** Regras Globais. (`id`, `tipo`='EXCLUSIVA'/'COMPARTILHADA', `percentual_maximo`).
+- **MargemServidor:** Cota diária do funcionário. (`servidor_id`, `margem_id`, `valor_total`, `valor_utilizado`).
 
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único |
-| nome | VARCHAR(200) | N | — | Nome completo |
-| email | VARCHAR(200) | N | UK | E-mail (login) |
-| senha_hash | VARCHAR(256) | N | — | Senha (bcrypt) |
-| perfil_id | UUID | N | FK → perfis_acesso | Perfil de acesso |
-| consignataria_id | UUID | S | FK → consignatarias | Consignatária vinculada (se aplicável) |
-| status | ENUM('ATIVO','BLOQUEADO','INATIVO') | N | — | Status |
-| ultimo_acesso | DATETIME | S | — | Data/hora do último login |
-| mfa_habilitado | BOOLEAN | N | — | MFA ativo (default: false) |
-| tentativas_login | INT | N | — | Tentativas falhas (reset ao logar) |
-| created_at | DATETIME | N | — | Data de criação |
-| updated_at | DATETIME | N | — | Data de atualização |
+### 3.2 Entidade: `Consignacao` (O Contrato Mestre)
 
----
+Obrigação de dívida assumida.
 
-## Tabela: perfis_acesso
+- `id` (UUID, PK).
+- `servidor_id` (UUID, FK).
+- `consignataria_id` (UUID, FK).
+- `produto_id` (UUID, FK).
+- `valor_total` (Decimal): Quanto foi financiado.
+- `taxa_juros` / `cet_percentual` (Decimal): Retenção de limites.
+- `quantidade_parcelas` (Integer).
+- `valor_parcela` (Decimal).
+- `status_fluxo` (Enum): 'SOLICITADA', 'APROVADA', 'ATIVA', 'CANCELADA', 'QUITADA', 'PORTADA'.
 
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único |
-| nome | VARCHAR(100) | N | UK | Nome do perfil |
-| descricao | TEXT | S | — | Descrição |
-| permissoes | JSON | N | — | Lista de permissões granulares |
-| created_at | DATETIME | N | — | Data de criação |
-| updated_at | DATETIME | N | — | Data de atualização |
+### 3.3 Entidade: `Parcela`
+
+Fatias do contrato destinadas à quitação na folha daquele mês.
+
+- `id` (UUID, PK).
+- `consignacao_id` (UUID, FK).
+- `numero_parcela` (Integer).
+- `valor` (Decimal).
+- `competencia` (String): Mês base de desconto (Ex: '2026-05').
+- `status_pagamento` (Enum): 'PREVISTA', 'PAGA', 'NAO_PAGA', 'ATRASO'.
+- `arquivo_integracao_id` (UUID, Nullable, FK): Arquivo de repasse que deu baixa nela.
+- `status_reconciliacao` (Enum): 'CONCILIADA', 'PENDENTE', 'ERRO_VALOR', 'ERRO_FK'.
 
 ---
 
-## Tabela: logs_auditoria
+## 4. Módulo Integração e Folha (Arquivo e Repasse)
 
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único |
-| usuario_id | UUID | N | FK → usuarios | Usuário executor |
-| entidade | VARCHAR(100) | N | — | Tabela/entidade afetada |
-| entidade_id | UUID | N | — | ID do registro afetado |
-| acao | ENUM('INCLUSAO','ALTERACAO','EXCLUSAO','CONSULTA','LOGIN','LOGOUT') | N | — | Tipo de ação |
-| dados_anteriores | JSON | S | — | Snapshot antes da alteração |
-| dados_novos | JSON | S | — | Snapshot depois da alteração |
-| ip_origem | VARCHAR(45) | N | — | Endereço IP do usuário |
-| user_agent | VARCHAR(500) | S | — | Navegador/dispositivo |
-| data_hora | DATETIME | N | — | Timestamp da operação |
+### 4.1 Entidade: `ArquivoIntegracao` e `Repasse`
 
----
+Dados de Input e Output da Prefeitura.
 
-## Tabela: fluxos_aprovacao
-
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único |
-| nome | VARCHAR(100) | N | — | Nome do fluxo |
-| tipo_operacao | ENUM('NOVO','PORTABILIDADE','RENEGOCIACAO','CANCELAMENTO') | N | — | Tipo de operação |
-| etapas | JSON | N | — | Config de etapas: [{responsavel, ordem, prazo_dias}] |
-| acao_expiracao | ENUM('APROVAR','REJEITAR','ESCALONAR') | N | — | Ação ao expirar prazo |
-| status | ENUM('ATIVO','INATIVO') | N | — | Status |
-| created_at | DATETIME | N | — | Data de criação |
-| updated_at | DATETIME | N | — | Data de atualização |
-
----
-
-## Tabela: arquivos_integracao
-
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único |
-| tipo | ENUM('ENVIO','RETORNO') | N | — | Tipo do arquivo |
-| competencia | VARCHAR(7) | N | — | Mês/Ano (YYYY-MM) |
-| nome_arquivo | VARCHAR(200) | N | — | Nome do arquivo |
-| caminho_arquivo | VARCHAR(500) | N | — | Caminho de armazenamento |
-| data_geracao | DATETIME | N | — | Data de geração |
-| data_processamento | DATETIME | S | — | Data de processamento |
-| total_registros | INT | N | — | Total de linhas |
-| registros_sucesso | INT | S | — | Processados OK |
-| registros_erro | INT | S | — | Com erro |
-| status | ENUM('GERADO','ENVIADO','PROCESSADO','ERRO') | N | — | Status |
-| usuario_id | UUID | N | FK → usuarios | Quem gerou/processou |
-| created_at | DATETIME | N | — | Data de criação |
-| updated_at | DATETIME | N | — | Data de atualização |
-
----
-
-## Tabela: margem_servidor
-
-| Campo | Tipo | Nulo | PK/FK | Descrição |
-|-------|------|------|-------|-----------|
-| id | UUID | N | PK | Identificador único |
-| servidor_id | UUID | N | FK → servidores | Servidor |
-| margem_id | UUID | N | FK → margens | Margem |
-| valor_total | DECIMAL(12,2) | N | — | Margem total calculada |
-| valor_utilizado | DECIMAL(12,2) | N | — | Margem comprometida |
-| valor_reservado | DECIMAL(12,2) | N | — | Margem reservada (portabilidade) |
-| valor_disponivel | DECIMAL(12,2) | N | — | Margem livre |
-| competencia_base | VARCHAR(7) | N | — | Folha base do cálculo |
-| updated_at | DATETIME | N | — | Última atualização |
-
-**Índice composto único:** (servidor_id, margem_id)
+- **ArquivoIntegracao:** (`id`, `nome_arquivo`, `tipo`='FOLHA'|'RETORNO', `checksum` para evitar clone, `status`).
+- **Repasse:** Fração que a folha deduz como taxa de admin MACAEPREV (`id`, `arquivo_id`, `parcela_id`, `tipo_movimento`='DESCONTO', `valor_receita`).

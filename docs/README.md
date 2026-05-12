@@ -23,15 +23,15 @@ Como contribuir com a documentação
 
 ## 🎯 Status Geral do Projeto
 
-| Milestone | Escopo                    | Backend      | Frontend     | Testes  | POCs  |
-| --------- | ------------------------- | ------------ | ------------ | ------- | ----- |
-| **M1**    | Fundação & Infraestrutura | ✅ Completo  | ✅ Completo  | Ok      | 4/4   |
-| **M2**    | Segurança & Autenticação  | ✅ Completo  | ✅ Completo  | 16/16   | 4/4   |
-| **M3**    | Núcleo de Consignações    | ✅ Completo  | ✅ Completo  | 118/118 | 10/10 |
-| **M4**    | Integração com Folha      | ✅ Completo  | ✅ Completo  | —       | 4/4   |
-| **M5**    | BI & Dashboards           | ⏳ Planejado | ⏳ Planejado | —       | —     |
-| **M6**    | Frontend & UX             | ⏳ Planejado | ⏳ Planejado | —       | —     |
-| **M7**    | Suporte & Operação        | ⏳ Planejado | ⏳ Planejado | —       | —     |
+| Milestone | Escopo                    | Backend      | Frontend     | Testes  | POCs           |
+| --------- | ------------------------- | ------------ | ------------ | ------- | -------------- |
+| **M1**    | Fundação & Infraestrutura | ✅ Completo  | ✅ Completo  | Ok      | 4/4            |
+| **M2**    | Segurança & Autenticação  | ✅ Completo  | ✅ Completo  | 16/16   | 4/4            |
+| **M3**    | Núcleo de Consignações    | ✅ Completo  | ✅ Completo  | 118/118 | 10/10          |
+| **M4**    | Integração com Folha      | ✅ Completo  | ✅ Completo  | —       | 4/4            |
+| **M5**    | BI & Dashboards           | 🚧 Em Andam. | ⏳ Planejado | —       | 10, 14, 22, 30 |
+| **M6**    | Frontend & UX             | ⏳ Planejado | ⏳ Planejado | —       | —              |
+| **M7**    | Suporte & Operação        | ⏳ Planejado | ⏳ Planejado | —       | —              |
 
 **Status Consolidado (M1 a M4)**: ✅ Monolito integrado e interfaces consumindo endpoints de negócio, englobando controle de margem, reconciliação de CSV e workflow de portabilidade.
 
@@ -56,6 +56,13 @@ docs/
 ├── banco_de_dados/               # Modelagem de dados
 │   ├── dicionario_dados.md       # 12 tabelas detalhadas (campos, tipos, PKs, FKs)
 │   └── modelo_er.md              # Diagrama ER + cardinalidades + índices
+│
+├── manuais/                      # Manuais de Operação e Uso
+│   ├── manual_usuario.md         # Guia para Correspondentes e Servidores
+│   ├── manual_administrador.md   # Guia para Gestores MACAEPREV
+│   ├── manual_desenvolvedor.md   # Guia de Setup e Testes (Engenharia)
+│   ├── manual_configuracao.md    # Guia de Variáveis de Ambiente e Fallback
+│   └── manual_deploy.md          # Guia de Publicação no Vercel e Neon
 │
 ├── projeto/                      # Planejamento do projeto
 │   ├── plano.md                  # Milestones, issues, sub-issues, dependências
