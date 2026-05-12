@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { apiFetch } from "../../../services/api";
+import { useNotificationHelpers } from "../../../services/notification";
 import { Usuario, PaginatedResponse } from "../../../types/entidades";
 import UsuarioForm, { UsuarioFormData } from "./UsuarioForm";
 import AuditModal from "../servidores/AuditModal";
@@ -20,6 +21,9 @@ export default function UsuariosPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuditOpen, setIsAuditOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Usuario | null>(null);
+
+  // Instanciando o hook para o disparo de toasts
+  const notify = useNotificationHelpers();
 
   const fetchItems = useCallback(async () => {
     setLoading(true);
@@ -57,9 +61,10 @@ export default function UsuariosPage() {
       setIsModalOpen(false);
       setSelectedItem(null);
       await fetchItems();
+      notify.success("Usuário salvo com sucesso");
     } catch (error) {
       const message = getErrorMessage(error);
-      alert(message);
+      notify.error(message);
     } finally {
       setSaving(false);
     }
@@ -110,7 +115,7 @@ export default function UsuariosPage() {
       <div className={styles.pagination}>
         <Button
           variant="ghost"
-          disabled={meta.page === 1}
+          disabled={meta.page <= 1}
           onClick={() =>
             setMeta((m) => ({ ...m, page: Math.max(1, m.page - 1) }))
           }
@@ -119,12 +124,13 @@ export default function UsuariosPage() {
         </Button>
 
         <span className={styles.pageInfo}>
-          Página {meta.page} de {meta.lastPage} ({meta.total} total)
+          Página {meta.page} de {Math.max(1, meta.lastPage)} ({meta.total}{" "}
+          total)
         </span>
 
         <Button
           variant="ghost"
-          disabled={meta.page >= meta.lastPage}
+          disabled={meta.page >= meta.lastPage || meta.lastPage === 0}
           onClick={() => setMeta((m) => ({ ...m, page: m.page + 1 }))}
         >
           Próxima →

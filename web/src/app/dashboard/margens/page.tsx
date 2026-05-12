@@ -25,6 +25,7 @@ import {
   FormField,
   Select,
 } from "../../../design-system/components";
+import { useNotificationHelpers } from "../../../services/notification";
 import styles from "./margens.module.css";
 
 const tiposOptions = [
@@ -44,6 +45,7 @@ export default function MargensPage() {
   const [selectedItem, setSelectedItem] = useState<Margem | null>(null);
   const [disponibilidade, setDisponibilidade] =
     useState<DisponibilidadeMaragem | null>(null);
+  const notify = useNotificationHelpers();
 
   const [formData, setFormData] = useState({
     consignataria_id: "",
@@ -142,8 +144,9 @@ export default function MargensPage() {
       }
       setIsModalOpen(false);
       await fetchItems();
+      notify.success("Margem salva com sucesso");
     } catch (error: any) {
-      alert(error.message || "Erro ao salvar margem");
+      notify.error(error.message || "Erro ao salvar margem");
     } finally {
       setSaving(false);
     }
@@ -157,8 +160,9 @@ export default function MargensPage() {
         await bloquearMargem(item.id);
       }
       await fetchItems();
+      notify.success("Status alterado com sucesso");
     } catch (error: any) {
-      alert(error.message || "Erro ao alterar status");
+      notify.error(error.message || "Erro ao alterar status");
     }
   }
 
@@ -167,8 +171,9 @@ export default function MargensPage() {
     try {
       await deletarMargem(item.id);
       await fetchItems();
+      notify.success("Margem deletada com sucesso");
     } catch (error: any) {
-      alert(error.message || "Erro ao deletar margem");
+      notify.error(error.message || "Erro ao deletar margem");
     }
   }
 

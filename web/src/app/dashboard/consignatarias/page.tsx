@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { apiFetch } from "../../../services/api";
+import { usePagination } from "../../../utils/pagination";
+import { useNotificationHelpers } from "../../../services/notification";
 import { Consignataria, PaginatedResponse } from "../../../types/entidades";
 import { formatarCNPJ } from "../../../utils/formatters";
 import ConsignatariaForm from "./ConsignatariaForm";
@@ -15,7 +17,8 @@ export default function ConsignatariasPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
-  const [meta, setMeta] = useState({ total: 0, page: 1, lastPage: 1 });
+  const pagination = usePagination();
+  const notify = useNotificationHelpers();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuditOpen, setIsAuditOpen] = useState(false);
@@ -24,17 +27,19 @@ export default function ConsignatariasPage() {
   const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await apiFetch<PaginatedResponse<Consignataria>>(
-        `/v1/consignatarias?search=${search}&page=${meta.page}`,
+      const data = await apiFetch<any>(
+        `/v1/consignatarias?search=${search}&page=${pagination.page}`,
       );
       setItems(data.items);
-      setMeta(data.meta);
+      if (data.meta) {
+        pagination.setTotal(data.meta.total);
+      }
     } catch (error) {
       console.error("Erro ao carregar consignatárias:", error);
     } finally {
       setLoading(false);
     }
-  }, [search, meta.page]);
+  }, [search, pagination.page]);
 
   useEffect(() => {
     void fetchItems();
@@ -56,9 +61,10 @@ export default function ConsignatariasPage() {
       }
       setIsModalOpen(false);
       setSelectedItem(null);
+      notify.success("Instituição salva com sucesso");
       await fetchItems();
     } catch (error: any) {
-      alert(error.message || "Erro ao salvar instituição");
+      notify.error(error.message || "Erro ao salvar instituição");
     } finally {
       setSaving(false);
     }
@@ -178,22 +184,20 @@ export default function ConsignatariasPage() {
       <div className={styles.pagination}>
         <Button
           variant="ghost"
-          disabled={meta.page === 1}
-          onClick={() =>
-            setMeta((m) => ({ ...m, page: Math.max(1, m.page - 1) }))
-          }
+          disabled={pagination.isFirstPage}
+          onClick={pagination.prevPage}
         >
           ← Anterior
         </Button>
 
         <span className={styles.pageInfo}>
-          Página {meta.page} de {meta.lastPage} ({meta.total} total)
+          Página {pagination.page} de {Math.max(1, pagination.totalPages)} ({pagination.total} total)
         </span>
 
         <Button
           variant="ghost"
-          disabled={meta.page >= meta.lastPage}
-          onClick={() => setMeta((m) => ({ ...m, page: m.page + 1 }))}
+          disabled={pagination.isLastPage || pagination.totalPages === 0}
+          onClick={pagination.nextPage}
         >
           Próxima →
         </Button>
@@ -215,6 +219,10 @@ export default function ConsignatariasPage() {
           onCancel={() => setIsAuditOpen(false)}
         />
       )}
+    </div>
+  );
+}
+  )}
     </div>
   );
 }

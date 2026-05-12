@@ -16,6 +16,7 @@ import {
   listarParcelas,
 } from "../../../services/consignacoes";
 import { Badge, Button } from "../../../design-system/components";
+import { useNotificationHelpers } from "../../../services/notification";
 import styles from "./consignacoes.module.css";
 
 const statusColors: Record<
@@ -31,6 +32,7 @@ const statusColors: Record<
 };
 
 export default function ConsignacoesPage() {
+  const notify = useNotificationHelpers();
   const [items, setItems] = useState<Consignacao[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -93,8 +95,9 @@ export default function ConsignacoesPage() {
       }
       setSelectedItem(result);
       await fetchItems();
+      notify.success("Ação executada com sucesso");
     } catch (error: any) {
-      alert(error.message || "Erro ao executar ação");
+      notify.error(error.message || "Erro ao executar ação");
     }
   }
 

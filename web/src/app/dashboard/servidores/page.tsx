@@ -8,6 +8,8 @@ import ServidorForm from "./ServidorForm";
 import AuditModal from "./AuditModal";
 import { Badge, Button } from "../../../design-system/components";
 import { resolveBadgeTone } from "../../../design-system/utils/status";
+import { usePagination } from "../../../utils/pagination";
+import { useNotificationHelpers } from "../../../services/notification";
 import styles from "./servidores.module.css";
 
 export default function ServidoresPage() {
@@ -15,7 +17,8 @@ export default function ServidoresPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
-  const [meta, setMeta] = useState({ total: 0, page: 1, lastPage: 1 });
+  const pagination = usePagination();
+  const notify = useNotificationHelpers();
 
   // Estados do Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,17 +30,19 @@ export default function ServidoresPage() {
   const fetchServidores = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await apiFetch<PaginatedResponse<Servidor>>(
-        `/v1/servidores?search=${search}&page=${meta.page}`,
+      const data = await apiFetch<any>(
+        `/v1/servidores?search=${search}&page=${pagination.page}`,
       );
       setServidores(data.items);
-      setMeta(data.meta);
+      if (data.meta) {
+        pagination.setTotal(data.meta.total);
+      }
     } catch (error) {
       console.error("Erro ao carregar servidores:", error);
     } finally {
       setLoading(false);
     }
-  }, [search, meta.page]);
+  }, [search, pagination.page]);
 
   useEffect(() => {
     void fetchServidores();
@@ -61,8 +66,9 @@ export default function ServidoresPage() {
       setIsModalOpen(false);
       setSelectedServidor(null);
       await fetchServidores();
+      notify.success("Servidor salvo com sucesso");
     } catch (error: any) {
-      alert(error.message || "Erro ao salvar servidor");
+      notify.error(error.message || "Erro ao salvar servidor");
     } finally {
       setSaving(false);
     }
@@ -170,23 +176,25 @@ export default function ServidoresPage() {
 
       {/* Paginação */}
       <div className={styles.pagination}>
-        <button
-          disabled={meta.page === 1}
-          onClick={() => setMeta({ ...meta, page: meta.page - 1 })}
-          className={styles.pageBtn}
+        <Button
+          variant="ghost"
+          disabled={pagination.isFirstPage}
+          onClick={pagination.prevPage}
         >
-          Anterior
-        </button>
+          ← Anterior
+        </Button>
+
         <span className={styles.pageInfo}>
-          Página {meta.page} de {meta.lastPage}
+          Página {pagination.page} de {Math.max(1, pagination.totalPages)} ({pagination.total} total)
         </span>
-        <button
-          disabled={meta.page === meta.lastPage}
-          onClick={() => setMeta({ ...meta, page: meta.page + 1 })}
-          className={styles.pageBtn}
+
+        <Button
+          variant="ghost"
+          disabled={pagination.isLastPage || pagination.totalPages === 0}
+          onClick={pagination.nextPage}
         >
-          Próxima
-        </button>
+          Próxima →
+        </Button>
       </div>
 
       {/* Modal de Cadastro/Edição */}

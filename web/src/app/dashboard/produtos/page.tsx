@@ -21,6 +21,7 @@ import {
   FormField,
   Select,
 } from "../../../design-system/components";
+import { useNotificationHelpers } from "../../../services/notification";
 import styles from "./produtos.module.css";
 
 const tiposOptions = [
@@ -46,6 +47,7 @@ export default function ProdutosPage() {
   const [total, setTotal] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Produto | null>(null);
+  const notify = useNotificationHelpers();
 
   const [formData, setFormData] = useState({
     consignataria_id: "",
@@ -151,8 +153,9 @@ export default function ProdutosPage() {
       }
       setIsModalOpen(false);
       await fetchItems();
+      notify.success("Produto salvo com sucesso");
     } catch (error: any) {
-      alert(error.message || "Erro ao salvar produto");
+      notify.error(error.message || "Erro ao salvar produto");
     } finally {
       setSaving(false);
     }
@@ -163,8 +166,9 @@ export default function ProdutosPage() {
     try {
       await deletarProduto(item.id);
       await fetchItems();
+      notify.success("Produto deletado com sucesso");
     } catch (error: any) {
-      alert(error.message || "Erro ao deletar produto");
+      notify.error(error.message || "Erro ao deletar produto");
     }
   }
 
