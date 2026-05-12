@@ -1,0 +1,21 @@
+aws_region    = "us-east-1"
+environment   = "prod"
+vpc_cidr      = "10.0.0.0/16"
+public_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnets = ["10.0.10.0/24", "10.0.11.0/24"]
+azs           = ["us-east-1a", "us-east-1b"]
+
+# RDS
+db_instance_class = "db.t4g.small"
+allocated_storage = 30
+db_name           = "macaeprev"
+db_username       = "postgres"
+db_password       = "CHANGE_ME_IN_SECRETS_MANAGER"  # Use AWS Secrets Manager
+backup_retention_days = 30
+multi_az_enabled  = true
+
+# ECS
+task_cpu     = 1024
+task_memory  = 2048
+api_desired_count = 3
+web_desired_count = 3

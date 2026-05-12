@@ -53,7 +53,7 @@ Esta entrega cobre os seguintes itens da Prova de Conceito:
 
 ### 5.1 Documentação API
 
-- **OpenAPI JSON**: `docs/openapi.json` (atualizado automaticamente via `npm run --prefix api generate:openapi`)
+- **OpenAPI JSON**: `docs/integracao/openapi.json` (atualizado automaticamente via `npm run --prefix api generate:openapi`)
 - **Swagger UI**: Disponível em `/docs` quando servidor rodando (dev ou prod)
 - **Exemplos CURL**: Veja `docs/CURL_EXAMPLES.md`
 

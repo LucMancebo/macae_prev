@@ -1,133 +1,125 @@
-# Dicionário de Dados - Sistema MACAEPREV
+# Dicionário de Dados - MACAEPREV
 
-**Data:** 12 de maio de 2026  
-**Tecnologia-Alvo:** PostgreSQL  
-**ORM de Abstração:** Prisma ORM
+**Data:** 12 de maio de 2026
+**Banco de Dados:** PostgreSQL 15+ (via Prisma ORM)
 
-Este documento detalha o Dicionário de Dados e as Entidades implementadas para suportar as operações consignáveis em atendimento às requisições do sistema da folha MACAEPREV.
+Este documento detalha as 12 entidades principais estruturadas para o funcionamento do sistema de consignação, definindo seus domínios, tipos e restrições.
 
----
+## 1. Usuario
 
-## 1. Módulo de Segurança e Acesso
+Gerencia as credenciais e acessos ao sistema.
+| Campo | Tipo | Descrição | Restrições |
+|---|---|---|---|
+| `id` | UUID | Identificador único do usuário | PK |
+| `nome` | VARCHAR | Nome completo | NOT NULL |
+| `email` | VARCHAR | E-mail corporativo / login | UNIQUE, NOT NULL |
+| `senha` | VARCHAR | Hash Bcrypt da senha | NOT NULL |
+| `mfa_enabled` | BOOLEAN | Indica se MFA está ativo | DEFAULT false |
+| `tentativas_login` | INT | Contador de bloqueio | DEFAULT 0 |
+| `perfil_id` | UUID | FK para PerfilAcesso | NOT NULL |
+| `consignataria_id`| UUID | FK para Consignataria | NULLABLE |
 
-### 1.1 Entidade: `Usuario`
+## 2. PerfilAcesso
 
-Responsável por autenticação e controle de escopo.
+Define níveis e permissões (RBAC).
+| Campo | Tipo | Descrição | Restrições |
+|---|---|---|---|
+| `id` | UUID | Identificador único | PK |
+| `nome` | VARCHAR | Nome do perfil (ADMIN, BANCO) | UNIQUE, NOT NULL |
+| `permissoes` | JSONB | Objeto de claims de acesso | NOT NULL |
 
-- `id` (UUID, PK): Identificador único da credencial.
-- `nome` (String): Nome completo do usuário.
-- `email` (String, Unique): E-mail validado para login.
-- `senha_hash` (String): Senha cifrada através de algoritmo Bcryptjs.
-- `perfil_id` (UUID, FK): Vínculo com a entidade `PerfilAcesso`.
-- `consignataria_id` (UUID, Nullable, FK): Se não for um funcionário MACAEPREV, relaciona-se a um Banco específico.
-- `status` (Enum): 'ATIVO', 'BLOQUEADO_TENTATIVAS', 'INATIVO'.
-- `mfa_secret` (String, Nullable): Chave semente para o gerador TOTP.
+## 3. Servidor
 
-### 1.2 Entidade: `PerfilAcesso`
+Dados funcionais da folha de pagamento.
+| Campo | Tipo | Descrição | Restrições |
+|---|---|---|---|
+| `id` | UUID | Identificador único | PK |
+| `matricula` | VARCHAR | Matrícula no MACAEPREV | UNIQUE, NOT NULL |
+| `cpf` | VARCHAR | CPF do servidor | UNIQUE, NOT NULL |
+| `nome` | VARCHAR | Nome completo | NOT NULL |
+| `salario_base` | DECIMAL | Valor base para cálculo | NOT NULL |
+| `status` | ENUM | ATIVO, INATIVO, BLOQUEADO | DEFAULT ATIVO |
 
-Mapeamento granular do escopo de visão.
+## 4. Consignataria
 
-- `id` (UUID, PK): Identificador do perfil.
-- `nome` (String, Unique): Ex: 'ADMINISTRADOR', 'CONSIGNATARIA', 'SERVIDOR'.
-- `permissoes` (JSON): Vetor de claims autorizadas.
+Instituições bancárias e financeiras credenciadas.
+| Campo | Tipo | Descrição | Restrições |
+|---|---|---|---|
+| `id` | UUID | Identificador único | PK |
+| `cnpj` | VARCHAR | CNPJ da instituição | UNIQUE, NOT NULL |
+| `nome_fantasia` | VARCHAR | Nome de exibição | NOT NULL |
+| `taxa_admin` | DECIMAL | % repassada ao MACAEPREV | DEFAULT 0.00 |
 
-### 1.3 Entidade: `LogAuditoria`
+## 5. Produto
 
-Imutável (Append-only). Armazena pegadas da plataforma em respeito à LGPD.
+Modalidades de crédito liberadas no sistema.
+| Campo | Tipo | Descrição | Restrições |
+|---|---|---|---|
+| `id` | UUID | Identificador único | PK |
+| `consignataria_id`| UUID | Dono do produto | FK, NOT NULL |
+| `tipo` | ENUM | EMPRESTIMO, CARTAO, SEGURO | NOT NULL |
+| `taxa_efetiva_max`| DECIMAL | Limite do CET | NOT NULL |
+| `prazo_max_meses` | INT | Teto máximo de meses | NOT NULL |
 
-- `id` (UUID, PK): ID do evento.
-- `usuario_id` (UUID, FK): Quem executou a ação.
-- `acao` (String): Descrição canônica (Ex: 'CONSIGNACAO_CRIADA').
-- `entidade` (String): Tabela afetada (Ex: 'Consignacao').
-- `registro_id` (String): O ID do item alterado.
-- `detalhes` (JSON): Vetor contendo Snapshot _Before_ e _After_.
-- `ip_origem` (String): Capturado pelo Header proxy.
-- `created_at` (DateTime): Registro exato (em UTC) da infração ou uso.
+## 6. Margem
 
----
+Regras institucionais estáticas sobre os descontos.
+| Campo | Tipo | Descrição | Restrições |
+|---|---|---|---|
+| `id` | UUID | Identificador único | PK |
+| `nome` | VARCHAR | Nome (ex: Margem Livre 30%) | NOT NULL |
+| `percentual_limite`| DECIMAL| Percentual max da folha | NOT NULL |
+| `exclusiva` | BOOLEAN | Se não permite share | DEFAULT false |
 
-## 2. Módulo Core: Servidores e Instituições
+## 7. MargemServidor
 
-### 2.1 Entidade: `Servidor`
+Espelho em tempo real da carteira do servidor.
+| Campo | Tipo | Descrição | Restrições |
+|---|---|---|---|
+| `id` | UUID | Identificador único | PK |
+| `servidor_id` | UUID | Vínculo com servidor | FK, NOT NULL |
+| `margem_id` | UUID | Vínculo com a regra | FK, NOT NULL |
+| `valor_utilizado` | DECIMAL | Total já averbado | DEFAULT 0.00 |
 
-Dados do funcionalismo público da base MACAEPREV.
+## 8. Contrato (Consignacao)
 
-- `id` (UUID, PK): Chave relacional universal.
-- `matricula` (String, Unique): Número no sistema de folha da Prefeitura.
-- `cpf` (String, Unique): Validado e mascara-tratado.
-- `nome` (String): Nome civil.
-- `salario_base` (Decimal): Provê base para o teto de 30% da margem.
-- `cargo` (String): Informação opcional de segmentação.
-- `status` (Enum): 'ATIVO', 'AFASTADO', 'APOSENTADO'.
+Averbação financeira confirmada.
+| Campo | Tipo | Descrição | Restrições |
+|---|---|---|---|
+| `id` | UUID | Identificador único | PK |
+| `servidor_id` | UUID | Tomador do empréstimo | FK, NOT NULL |
+| `produto_id` | UUID | Produto atrelado | FK, NOT NULL |
+| `valor_total` | DECIMAL | Valor da operação | NOT NULL |
+| `valor_parcela` | DECIMAL | Desconto mensal | NOT NULL |
+| `cet_percentual` | DECIMAL | Custo Efetivo Total | NOT NULL |
+| `status_fluxo` | ENUM | SOLICITADA, ATIVA, QUITADA| DEFAULT SOLICITADA|
 
-### 2.2 Entidade: `Consignataria`
+## 9. Parcela
 
-Bancos, Associações e entidades habilitadas para empréstimos.
+Títulos mensais gerados pela Consignação.
+| Campo | Tipo | Descrição | Restrições |
+|---|---|---|---|
+| `id` | UUID | Identificador único | PK |
+| `contrato_id` | UUID | FK para o Contrato | FK, NOT NULL |
+| `competencia` | VARCHAR | Mês de desconto (YYYY-MM) | NOT NULL |
+| `valor` | DECIMAL | Valor a descontar | NOT NULL |
+| `status` | ENUM | PREVISTA, DESCONTADA, ERRO| DEFAULT PREVISTA |
 
-- `id` (UUID, PK): ID interno.
-- `razao_social` (String): Nome empresarial.
-- `cnpj` (String, Unique): Cadastro no MF.
-- `tipo` (Enum): 'BANCO', 'SINDICATO', 'COOPERATIVA', 'PLANO_SAUDE'.
-- `cet_maximo` (Decimal): Limitador de teto de juros aprovado na licitação.
-- `status` (Enum): 'ATIVO', 'SUSPENSA'.
+## 10. ArquivoIntegracao
 
-### 2.3 Entidade: `Produto`
+Arquivos de retorno CSV/TXT processados.
+| Campo | Tipo | Descrição | Restrições |
+|---|---|---|---|
+| `id` | UUID | Identificador único | PK |
+| `nome_arquivo` | VARCHAR | Arquivo original importado| NOT NULL |
+| `hash_md5` | VARCHAR | Prevenção de duplicidade | UNIQUE, NOT NULL |
 
-Modalidade ofertada pelo Banco.
+## 11. LogAuditoria
 
-- `id` (UUID, PK).
-- `consignataria_id` (UUID, FK).
-- `nome` (String): Ex: "Empréstimo Rápido 24x".
-- `tipo` (Enum): 'EMPRESTIMO', 'CARTAO', 'SEGURO'.
-- `taxa_minima` / `taxa_maxima` (Decimal): Threshold de validação mensal.
-- `averbacao` (Enum): 'NOMINAL' ou 'PERCENTUAL'.
-- `prazo_minimo` / `prazo_maximo` (Integer): Quantidade de meses.
-
----
-
-## 3. Módulo Core: Empréstimos (Consignações) e Margem
-
-### 3.1 Entidade: `Margem` e `MargemServidor`
-
-Gestão da régua legal da Consignação.
-
-- **Margem:** Regras Globais. (`id`, `tipo`='EXCLUSIVA'/'COMPARTILHADA', `percentual_maximo`).
-- **MargemServidor:** Cota diária do funcionário. (`servidor_id`, `margem_id`, `valor_total`, `valor_utilizado`).
-
-### 3.2 Entidade: `Consignacao` (O Contrato Mestre)
-
-Obrigação de dívida assumida.
-
-- `id` (UUID, PK).
-- `servidor_id` (UUID, FK).
-- `consignataria_id` (UUID, FK).
-- `produto_id` (UUID, FK).
-- `valor_total` (Decimal): Quanto foi financiado.
-- `taxa_juros` / `cet_percentual` (Decimal): Retenção de limites.
-- `quantidade_parcelas` (Integer).
-- `valor_parcela` (Decimal).
-- `status_fluxo` (Enum): 'SOLICITADA', 'APROVADA', 'ATIVA', 'CANCELADA', 'QUITADA', 'PORTADA'.
-
-### 3.3 Entidade: `Parcela`
-
-Fatias do contrato destinadas à quitação na folha daquele mês.
-
-- `id` (UUID, PK).
-- `consignacao_id` (UUID, FK).
-- `numero_parcela` (Integer).
-- `valor` (Decimal).
-- `competencia` (String): Mês base de desconto (Ex: '2026-05').
-- `status_pagamento` (Enum): 'PREVISTA', 'PAGA', 'NAO_PAGA', 'ATRASO'.
-- `arquivo_integracao_id` (UUID, Nullable, FK): Arquivo de repasse que deu baixa nela.
-- `status_reconciliacao` (Enum): 'CONCILIADA', 'PENDENTE', 'ERRO_VALOR', 'ERRO_FK'.
-
----
-
-## 4. Módulo Integração e Folha (Arquivo e Repasse)
-
-### 4.1 Entidade: `ArquivoIntegracao` e `Repasse`
-
-Dados de Input e Output da Prefeitura.
-
-- **ArquivoIntegracao:** (`id`, `nome_arquivo`, `tipo`='FOLHA'|'RETORNO', `checksum` para evitar clone, `status`).
-- **Repasse:** Fração que a folha deduz como taxa de admin MACAEPREV (`id`, `arquivo_id`, `parcela_id`, `tipo_movimento`='DESCONTO', `valor_receita`).
+Trilha de auditoria LGPD (Imutável).
+| Campo | Tipo | Descrição | Restrições |
+|---|---|---|---|
+| `id` | UUID | Identificador único | PK |
+| `usuario_id` | UUID | Quem executou a ação | FK, NOT NULL |
+| `acao` | VARCHAR | Ex: CREATE_CONTRATO | NOT NULL |
+| `ip_origem` | VARCHAR | Endereço IP detectado | NOT NULL |

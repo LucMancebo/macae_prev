@@ -62,7 +62,7 @@
 
 ### Documentação
 
-- [docs/openapi.json](../../../docs/openapi.json) - Endpoint `/v1/reconciliacao/relatorio` documentado
+- [docs/integracao/openapi.json](../../../integracao/openapi.json) - Endpoint `/v1/reconciliacao/relatorio` documentado
 
 ## Resumo de Testes Executados
 

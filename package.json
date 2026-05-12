@@ -5,11 +5,14 @@
     "clean:all": "rm -rf ./**/dist ./**/.next **/tsconfig.tsbuildinfo && npm run clean:ts"
   },
   "devDependencies": {
-    "@types/node": "^25.6.0",
+    "@types/node": "^24.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "@google/genai": "^2.0.1"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

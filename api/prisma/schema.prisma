@@ -146,6 +146,7 @@ model Parcela {
 
   contrato           Contrato           @relation(fields: [contrato_id], references: [id])
   arquivo_integracao ArquivoIntegracao? @relation(fields: [arquivo_integracao_id], references: [id])
+  repasses          Repasse[]
 
   @@map("parcelas")
 }
@@ -174,6 +175,7 @@ model Usuario {
   contratos_aprovados Contrato[]          @relation("Aprovador")
   logs_auditoria      LogAuditoria[]
   arquivos_integracao ArquivoIntegracao[]
+  arquivos            Arquivo[]
   aceites_termos      AceiteTermo[]
 
   @@map("usuarios")

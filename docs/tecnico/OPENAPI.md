@@ -2,7 +2,7 @@
 
 O projeto gera a especificação OpenAPI automaticamente a partir das rotas registradas no Fastify.
 
-Para gerar o arquivo localmente (arquivo gerado: `docs/openapi.json`):
+Para gerar o arquivo localmente (arquivo gerado: `docs/integracao/openapi.json`):
 
 ```bash
 # na raiz do repositório

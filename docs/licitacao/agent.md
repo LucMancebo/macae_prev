@@ -37,11 +37,13 @@
 - **Tarefa 4.2:** Reconciliação e Conciliação automática. [CONCLUÍDO]
 - **Tarefa 4.3:** Dashboards de Erros (FK, Valor) e segmentação por Consignatária. [CONCLUÍDO]
 
-## Milestone 5: Relatórios Analíticos & BI [EM ANDAMENTO]
+## Milestone 5: Relatórios Analíticos & BI [CONCLUÍDO]
 
 - **Tarefa 5.1:** Módulo de agregação no Backend (Volume, Ranking e Repasse). [CONCLUÍDO]
 - **Tarefa 5.2:** Exportadores CSV (Contratos). [CONCLUÍDO]
-- **Tarefa 5.3:** Dashboards Analíticos Frontend (Recharts). [PRÓXIMO PASSO]
+- **Tarefa 5.3:** Dashboards Analíticos Frontend (Recharts). [CONCLUÍDO]
+  - **Sub-tarefa 5.3.1:** Criação da estrutura base da tela de BI e gráficos. [CONCLUÍDO]
+  - **Sub-tarefa 5.3.2:** Integração com SWR e API `/v1/relatorios`. [CONCLUÍDO]
 
 ---
 
@@ -80,32 +82,4 @@
 
 3- Elabore o banco de dados do projeto.
 4- Elabore o dicionário de dados do projeto.
-5- Elabore o modelo entidade-relacionamento do projeto.
-6- Elabore o modelo entidade-relacionamento do projeto.
-7- Elabore o modelo entidade-relacionamento do projeto.
-
-8- Elabore o código do projeto.
-
-9- Elabore os testes do projeto.
-
-10- Elabore a documentação do projeto.
-
-11- Elabore o manual do usuário do projeto. [CONCLUÍDO]
-
-12- Elabore o manual do administrador do projeto. [CONCLUÍDO]
-
-13- Elabore o manual do desenvolvedor do projeto. [CONCLUÍDO]
-
-14- Elabore o manual de configuração do projeto. [CONCLUÍDO]
-
-15- Elabore o manual de deploy do projeto. [CONCLUÍDO]
-
-16- Elabore o manual de rollback do projeto. [CONCLUÍDO]
-
-17- Elabore o manual de desinstalação do projeto. [CONCLUÍDO]
-
-18- Elabore o manual de desconfiguração do projeto. [CONCLUÍDO]
-
-19- Elabore o manual de undeploy do projeto. [CONCLUÍDO]
-
-20- Elabore o manual de recuperação do projeto. [CONCLUÍDO]
+5- Elabore o modelo entidade-relacionamento do pr

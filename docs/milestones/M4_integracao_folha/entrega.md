@@ -31,7 +31,7 @@
 - Routes: `api/src/modules/reconciliacao/reconciliacao.routes.ts`
 - Autenticação: JWT verificado (ADMIN)
 - Resposta: estatísticas por status e detalhamento por consignatária
-- Documentação OpenAPI spec completa em `docs/openapi.json`
+- Documentação OpenAPI spec completa em `docs/integracao/openapi.json`
 
 ### Frontend - Dashboards
 

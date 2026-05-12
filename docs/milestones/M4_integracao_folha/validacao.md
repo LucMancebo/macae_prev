@@ -54,7 +54,7 @@
 | Reconciliation API       | api/src/modules/reconciliacao       | ✅     |
 | Files Dashboard          | web/src/app/dashboard/arquivos      | ✅     |
 | Reconciliation Dashboard | web/src/app/dashboard/reconciliacao | ✅     |
-| OpenAPI Docs             | docs/openapi.json                   | ✅     |
+| OpenAPI Docs             | docs/integracao/openapi.json        | ✅     |
 
 ## ✅ Validações Executadas
 

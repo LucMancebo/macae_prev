@@ -67,7 +67,7 @@ Tabela `LogAuditoria` registra corretamente:
 
 ## 7. Documentação de API (OpenAPI/Swagger)
 
-- ✅ Arquivo: `docs/openapi.json` (gerado automaticamente)
+- ✅ Arquivo: `docs/integracao/openapi.json` (gerado automaticamente)
 - ✅ Gerador: `api/scripts/generate_openapi.js`
 - ✅ Endpoint Swagger: `/docs` (dev e prod)
 - ✅ Inclui todos os schemas e respostas de erro

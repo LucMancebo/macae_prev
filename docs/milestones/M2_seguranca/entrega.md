@@ -24,7 +24,7 @@
 3. **Criptografia**: BCrypt (salt 10) para senhas; Conformidade LGPD
 4. **Auditoria Centralizada**: LogAuditoria com IP, User-Agent, timestamps
 5. **Proteção de Força Bruta**: 5 tentativas → 30min bloqueio
-6. **Swagger/OpenAPI**: Documentação interativa em `/docs` + JSON em `docs/openapi.json`
+6. **Swagger/OpenAPI**: Documentação interativa em `/docs` + JSON em `docs/integracao/openapi.json`
 7. **Suite de Testes**: 16 casos E2E com 100% sucesso
 8. **Scripts de Teste**: Local (Docker) e Vercel DB
 
@@ -38,7 +38,7 @@ docs/milestones/M2_seguranca/
   ├── validacao.md          (Checklist técnico)
   └── entrega.md            (Resumo executivo)
 
-docs/openapi.json           (API swagger — 60+ endpoints/schemas)
+docs/integracao/openapi.json           (API swagger — 60+ endpoints/schemas)
 docs/CURL_EXAMPLES.md       (Exemplos práticos de integração)
 
 api/scripts/

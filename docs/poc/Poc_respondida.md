@@ -1,26 +1,27 @@
 # POC — Prova de Conceito — Respostas (Status Real do Projeto)
 
 > _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1–4 Concluídas** (fundação, segurança, core consignações e integração folha completa). Última atualização: 11/05/2026.
+> _Nota de Progresso:_ Este documento foi atualizado para refletir **apenas o que está efetivamente executado** na base de código atual. Status: **Milestones 1–5 Concluídas** (M5 - Relatórios & BI integrados). Última atualização: 12/05/2026.
 
 ## 📊 Progresso Geral
 
-**Status: 21/30 Completas | 1 Parcial | 8 Pendentes (70% + Parciais)**
+**Status: 25/30 Completas | 1 Parcial | 4 Pendentes (83% + Parciais)**
 
 | Completas | Parciais | Pendentes | Taxa Conclusão |
 | --------- | -------- | --------- | -------------- |
-| 21        | 1        | 8         | 70% ✅         |
+| 25        | 1        | 4         | 83% ✅         |
 
 > **Nota:** Categorias: ✓ Atende = Completo | (X) Atende parcial = Em Progresso | (X) Não atende = Não iniciado
 
 ---
 
-**Análise da Licitação — Status Consolidado (12/05/2026)**
+**Análise da Licitação — Status Consolidado M5 (12/05/2026)**
 
 Com base no mapeamento da POC para as milestones e no estado atual do repositório, segue a classificação resumida das exigências da licitação:
 
-- **Concluídos (implementados):** POCs das Milestones 1–4 completas: 1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 16, 17, 18, 19, 20, 21, 23, 24, 28, 29. Essas entregas cobrem a fundação, segurança, core de consignações e integração folha completa (importação, reconciliação, relatórios segmentados).
+- **Concluídos (implementados):** POCs das Milestones 1–5 completas: 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 28, 29, 30. Essas entregas cobrem a fundação, segurança, core, folha e agora os **Relatórios Gerenciais e BI**.
 - **Parciais (em progresso / entregas parciais):** POCs de Milestone 4+ ainda incompletas: 2. Migração legado possui backend (parser, service, migration) mas faltam script formal de migração histórica e fluxo de UI completo.
-- **Pendentes (planejados / ainda não implementados):** POCs alocados às Milestones 5–7 (BI avançado, manual, relatórios gerenciais, deploy/operação): 10, 13, 14, 22, 25, 26, 27, 30. Essas cobrem BI/analytics, manual online, relatórios gerenciais, deploy, operação e suporte continuado.
+- **Pendentes (planejados / ainda não implementados):** POCs alocados às Milestones 6–7 (Manual, deploy/operação): 13, 25, 26, 27.
 
 Observação: a lista acima foi consolidada a partir do mapeamento POC→Milestones presente em `docs/projeto/plano.md` e do estado atual do código. Caso haja requisitos formais no anexo da licitação que não estejam representados pela lista de POC, indique-os para que eu os alinhe explicitamente.
 
@@ -68,7 +69,7 @@ Observação: a lista acima foi consolidada a partir do mapeamento POC→Milesto
 ### 6 - Logs de CRUD nas telas + auditoria completa (4.1.6.)
 
 **(✓) Atende**
-**Status Real:** ✅ **Concluído em Milestone 2**. Tabela `LogAuditoria` implementada com campos: IP, User-Agent, ação, timestamp, usuario_id. Middleware de auditoria registra todas as ações de login/LGPD. Documentado em `docs/milestones/M2_seguranca/documentacao.md`.
+**Status Real:** ✅ **Concluído em Milestone 2**. Tabela `LogAuditoria` implementada com campos: IP, User-Agent, ação, timestamp, usuario_id. Middleware de auditoria registra todas as ações de login/LGPD. Documentado em [milestones/M2_seguranca/documentacao.md](../milestones/M2_seguranca/documentacao.md).
 
 ---
 
@@ -95,8 +96,8 @@ Observação: a lista acima foi consolidada a partir do mapeamento POC→Milesto
 
 ### 10 - Informações gerenciais: ranking, volume, produtividade (4.1.7.3.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 5**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 5**. Implementado na página `/dashboard/bi` contendo a tabela `RankingTable` e `VolumeChart` puxando dados gerenciais pelo serviço de API.
 
 ---
 
@@ -123,8 +124,8 @@ Observação: a lista acima foi consolidada a partir do mapeamento POC→Milesto
 
 ### 14 - Exportação CSV + relatórios e gráficos gerenciais (4.1.11.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 5**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 5**. Componente genérico `<ExportCSV />` criado garantindo tabulação em CSV. Relatórios gerenciais visualizáveis em gráficos via biblioteca Recharts.
 
 ---
 
@@ -179,8 +180,8 @@ Observação: a lista acima foi consolidada a partir do mapeamento POC→Milesto
 
 ### 22 - Módulo BI: conciliação, relatórios, gráficos (4.1.16.3.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 5**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 5**. Modulo integrado (`/dashboard/bi`) consolidando repasses, volume negociado e eficiência das consignatárias. Gráficos dinâmicos com SWR no React.
 
 ---
 
@@ -194,7 +195,7 @@ Observação: a lista acima foi consolidada a partir do mapeamento POC→Milesto
 ### 24 - Segurança: criptografia + controle de acesso (4.1.17.4.)
 
 **(✓) Atende**
-**Status Real:** ✅ **Concluído em Milestone 2**. Criptografia BCrypt (salt 10) implementada para senhas. JWT tokens com expiração 8h. Rate-limiting: 5 tentativas → 30min bloqueio. HttpOnly cookies em prod. Documentado completo em `docs/openapi.json` e Swagger `/docs`.
+**Status Real:** ✅ **Concluído em Milestone 2**. Criptografia BCrypt (salt 10) implementada para senhas. JWT tokens com expiração 8h. Rate-limiting: 5 tentativas → 30min bloqueio. HttpOnly cookies em prod. Documentado completo em [integracao/openapi.json](../integracao/openapi.json) e Swagger `/docs`.
 
 ---
 
@@ -235,5 +236,5 @@ Observação: a lista acima foi consolidada a partir do mapeamento POC→Milesto
 
 ### 30 - Relatório mensal de receita/repasse ao MACAEPREV (4.2.1.)
 
-**(X) Não atende**
-**Status Real:** Planejado para **Milestone 5**.
+**(✓) Atende**
+**Status Real:** ✅ **Concluído em Milestone 5**. Acompanhamento contínuo da receita do Instituto materializada no componente `RepasseChart`, atualizado via folha de pagamentos processada.
