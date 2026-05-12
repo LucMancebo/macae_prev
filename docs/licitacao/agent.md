@@ -16,7 +16,8 @@
 ### Issue 2.2: Motor de Segurança & Auditoria
 
 - **Tarefa 2.2.1:** Middleware JWT e Auditoria de CRUD. [CONCLUÍDO]
-- **Tarefa 2.2.2:** Bloqueio de IP por Brute Force. [PENDENTE]
+- **Tarefa 2.2.2:** Componente UI de Histórico (AuditModal). [CONCLUÍDO]
+- **Tarefa 2.2.3:** Fluxo LGPD e MFA Integrado. [CONCLUÍDO]
 
 ### Issue 2.3: Homologação (Vercel) [NOVA]
 
@@ -24,12 +25,19 @@
 - **Tarefa 2.3.2:** Deploy e vinculação de variáveis de ambiente. [CONCLUÍDO]
 - **Tarefa 2.3.2:** Vincular banco Neon e realizar Deploy. [EM ANDAMENTO]
 
-## Milestone 3: Core - Gestão de Consignações [PRÓXIMO PASSO]
+## Milestone 3: Core - Gestão de Consignações [CONCLUÍDO]
 
-### Issue 3.1: Motor de Cálculo de Margem
+- **Tarefa 3.1:** API e UI para Criação e Gestão de Produtos/Margens. [CONCLUÍDO]
+- **Tarefa 3.2:** Motor de Cálculo de Margem e Portabilidade. [CONCLUÍDO]
+- **Tarefa 3.3:** Workflows de aprovação de Consignação (Tabela/Detalhes). [CONCLUÍDO]
 
-- **Sub-tarefa 3.1.1:** Criar `MarginService` (Regra 30% empréstimo / 5% cartão).
-- **Sub-tarefa 3.1.2:** Criar API de consulta de margem real para o servidor.
+## Milestone 4: Integração com a Folha de Pagamento [CONCLUÍDO]
+
+- **Tarefa 4.1:** Importação/Exportação e Parsing de CSV da Folha. [CONCLUÍDO]
+- **Tarefa 4.2:** Reconciliação e Conciliação automática. [CONCLUÍDO]
+- **Tarefa 4.3:** Dashboards de Erros (FK, Valor) e segmentação por Consignatária. [CONCLUÍDO]
+
+## Milestone 5: Relatórios Analíticos & BI [PRÓXIMO PASSO]
 
 ---
 

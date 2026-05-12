@@ -23,17 +23,17 @@ Como contribuir com a documentação
 
 ## 🎯 Status Geral do Projeto
 
-| Milestone | Escopo                    | Backend      | Frontend     | Testes  | POCs |
-| --------- | ------------------------- | ------------ | ------------ | ------- | ---- |
-| **M1**    | Fundação & Infraestrutura | ✅ Completo  | ✅ Completo  | —       | 4/4  |
-| **M2**    | Segurança & Autenticação  | ✅ Completo  | ✅ Completo  | 16/16   | 4/4  |
-| **M3**    | Núcleo de Consignações    | ✅ Completo  | ✅ Completo  | 118/118 | 8/8  |
-| **M4**    | Relatórios & Integrações  | ⏳ Planejado | ⏳ Planejado | —       | 8/12 |
-| **M5**    | BI & Dashboards           | ⏳ Planejado | ⏳ Planejado | —       | —    |
-| **M6**    | Frontend & UX             | ⏳ Planejado | ⏳ Planejado | —       | —    |
-| **M7**    | Suporte & Operação        | ⏳ Planejado | ⏳ Planejado | —       | —    |
+| Milestone | Escopo                    | Backend      | Frontend     | Testes  | POCs  |
+| --------- | ------------------------- | ------------ | ------------ | ------- | ----- |
+| **M1**    | Fundação & Infraestrutura | ✅ Completo  | ✅ Completo  | Ok      | 4/4   |
+| **M2**    | Segurança & Autenticação  | ✅ Completo  | ✅ Completo  | 16/16   | 4/4   |
+| **M3**    | Núcleo de Consignações    | ✅ Completo  | ✅ Completo  | 118/118 | 10/10 |
+| **M4**    | Integração com Folha      | ✅ Completo  | ✅ Completo  | —       | 4/4   |
+| **M5**    | BI & Dashboards           | ⏳ Planejado | ⏳ Planejado | —       | —     |
+| **M6**    | Frontend & UX             | ⏳ Planejado | ⏳ Planejado | —       | —     |
+| **M7**    | Suporte & Operação        | ⏳ Planejado | ⏳ Planejado | —       | —     |
 
-**Total M3**: ✅ Backend (118 tests) + ✅ Frontend (3 CRUD pages + dashboard KPIs) + ✅ Build (Next.js green)
+**Status Consolidado (M1 a M4)**: ✅ Monolito integrado e interfaces consumindo endpoints de negócio, englobando controle de margem, reconciliação de CSV e workflow de portabilidade.
 
 ---
 
@@ -101,7 +101,7 @@ docs/
 | M1  | ✅ Fundação & Infraestrutura    | 4 sem   | 1, 15, 23, 29                    |
 | M2  | ✅ Segurança & Autenticação     | 3 sem   | 6, 12, 24, 28                    |
 | M3  | ✅ Core: Gestão de Consignações | 6 sem   | 3, 4, 5, 7, 8, 9, 11, 16, 20, 21 |
-| M4  | ⏳ Integração com Folha         | 4 sem   | 2, 17, 18, 19                    |
+| M4  | ✅ Integração com Folha         | 4 sem   | 2, 17, 18, 19                    |
 | M5  | ⏳ Relatórios & BI              | 3 sem   | 10, 14, 22, 30                   |
 | M6  | ⏳ Frontend & UX                | 4 sem   | 1, 13, 15                        |
 | M7  | ⏳ Suporte & Operação           | 2 sem   | 25, 26, 27                       |
