@@ -1,9 +1,10 @@
 import { prisma } from '../config/database';
 import { LinhaFolhaEntrada, ResultadoReconciliacao } from '../types/arquivo';
 
-function numeroParaFloat(value: any): number {
+function numeroParaFloat(value: unknown): number {
     if (typeof value === 'number') return value;
     if (typeof value === 'string') return parseFloat(value.replace(',', '.')) || 0;
+    if (value === null || value === undefined) return 0;
     return 0;
 }
 

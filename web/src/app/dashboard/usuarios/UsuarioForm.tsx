@@ -16,9 +16,18 @@ import {
 } from "../../../design-system/components";
 import styles from "./usuarios.module.css";
 
+export interface UsuarioFormData {
+  nome: string;
+  email: string;
+  senha_plana?: string;
+  perfil_id: string;
+  consignataria_id?: string;
+  status: string;
+}
+
 interface UsuarioFormProps {
   item?: Usuario | null;
-  onSave: (data: any) => Promise<void>;
+  onSave: (data: UsuarioFormData) => Promise<void>;
   onCancel: () => void;
   loading: boolean;
 }
@@ -76,9 +85,18 @@ export default function UsuarioForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = { ...formData };
-    if (!payload.consignataria_id) delete (payload as any).consignataria_id;
-    if (!payload.senha_plana) delete (payload as any).senha_plana;
+    const payload: UsuarioFormData = {
+      nome: formData.nome,
+      email: formData.email,
+      perfil_id: formData.perfil_id,
+      status: formData.status,
+    };
+    if (formData.consignataria_id) {
+      payload.consignataria_id = formData.consignataria_id;
+    }
+    if (formData.senha_plana) {
+      payload.senha_plana = formData.senha_plana;
+    }
     onSave(payload);
   };
 

@@ -3,10 +3,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { apiFetch } from "../../../services/api";
 import { Usuario, PaginatedResponse } from "../../../types/entidades";
-import UsuarioForm from "./UsuarioForm";
+import UsuarioForm, { UsuarioFormData } from "./UsuarioForm";
 import AuditModal from "../servidores/AuditModal";
 import { Badge, Button } from "../../../design-system/components";
 import { resolveBadgeTone } from "../../../design-system/utils/status";
+import { getErrorMessage } from "../../../types/errors";
 import styles from "./usuarios.module.css";
 
 export default function UsuariosPage() {
@@ -39,7 +40,7 @@ export default function UsuariosPage() {
     void fetchItems();
   }, [fetchItems]);
 
-  async function handleSave(formData: any) {
+  async function handleSave(formData: UsuarioFormData) {
     setSaving(true);
     try {
       if (selectedItem) {
@@ -56,8 +57,9 @@ export default function UsuariosPage() {
       setIsModalOpen(false);
       setSelectedItem(null);
       await fetchItems();
-    } catch (error: any) {
-      alert(error.message || "Erro ao salvar usuário");
+    } catch (error) {
+      const message = getErrorMessage(error);
+      alert(message);
     } finally {
       setSaving(false);
     }

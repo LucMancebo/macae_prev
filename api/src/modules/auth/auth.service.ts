@@ -1,8 +1,9 @@
 import { prisma } from '../../config/database';
 import bcrypt from 'bcryptjs';
-import { FastifyInstance } from 'fastify';
+import { FastifyInstance, FastifyRequest } from 'fastify';
 import { authenticator } from 'otplib';
 import qrcode from 'qrcode';
+import { Usuario } from '@prisma/client';
 
 const MAX_TENTATIVAS = Number(process.env.AUTH_MAX_TENTATIVAS) || 5;
 const BLOQUEIO_MINUTOS = Number(process.env.AUTH_BLOQUEIO_MINUTOS) || 30;
@@ -153,7 +154,7 @@ export class AuthService {
         });
     }
 
-    public async aceitarTermos(usuarioId: string, termoId: string, req: any): Promise<void> {
+    public async aceitarTermos(usuarioId: string, termoId: string, req: FastifyRequest): Promise<void> {
         const ip_origem = req.ip || req.socket.remoteAddress || '0.0.0.0';
         const user_agent = req.headers['user-agent'] || 'Desconhecido';
 
@@ -187,7 +188,7 @@ export class AuthService {
         });
     }
 
-    private gerarToken(usuario: any, app: FastifyInstance): string {
+    private gerarToken(usuario: Usuario & { perfil: any }, app: FastifyInstance): string {
         return app.jwt.sign(
             {
                 id: usuario.id,
