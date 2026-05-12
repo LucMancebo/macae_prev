@@ -235,19 +235,19 @@ export function validarLinhaFolha(
         return { valida: false, erros };
     }
 
-    // Mapear campos para objeto respeitando a ordem real do layout CSV
-    const colunasOrdenadas = schema.colunas_ordenadas || [
-        ...schema.colunas_obrigatorias,
-        ...schema.colunas_opcionais
-    ];
-
-    const mapa = colunasOrdenadas.reduce(
+    // Mapear campos para objeto
+    const mapa = schema.colunas_obrigatorias.reduce(
         (acc, col, idx) => {
             acc[col] = campos[idx] || '';
             return acc;
         },
         {} as Record<string, string>
     );
+
+    // Adicionar opcionais
+    schema.colunas_opcionais.forEach((col, idx) => {
+        mapa[col] = campos[schema.colunas_obrigatorias.length + idx] || '';
+    });
 
     // Validar campos obrigatórios
     for (const coluna of schema.colunas_obrigatorias) {

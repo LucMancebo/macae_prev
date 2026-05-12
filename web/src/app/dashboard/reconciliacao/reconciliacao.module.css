@@ -1,0 +1,211 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.heroTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+}
+
+.heroDescription {
+    font-size: 1rem;
+    color: #718096;
+}
+
+.filtersSection {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 200px;
+}
+
+.filterLabel {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.filterInput {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.filterButton {
+    padding: 0.5rem 1rem;
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.filterButton:hover {
+    background-color: #3182ce;
+}
+
+.resultsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.statisticsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.statisticCard {
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.statisticLabel {
+    font-size: 0.875rem;
+    color: #718096;
+    font-weight: 500;
+}
+
+.statisticValue {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+}
+
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.statusConciliada {
+    background-color: #c6f6d5;
+    color: #22543d;
+}
+
+.statusErro {
+    background-color: #fed7d7;
+    color: #742a2a;
+}
+
+.statusPendente {
+    background-color: #feebc8;
+    color: #7c2d12;
+}
+
+.consignatariaSection {
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.consignatariaTitle {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 1rem;
+}
+
+.consignatariaStats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.consignatariaStat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.consignatariaStatLabel {
+    font-size: 0.75rem;
+    color: #718096;
+    font-weight: 500;
+}
+
+.consignatariaStatValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a202c;
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+}
+
+.loadingSpinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #4299e1;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.errorContainer {
+    padding: 1rem;
+    background-color: #fed7d7;
+    border: 1px solid #fc8181;
+    border-radius: 4px;
+    color: #742a2a;
+}
+
+.emptyState {
+    padding: 2rem;
+    text-align: center;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.emptyStateIcon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.emptyStateText {
+    color: #718096;
+    font-size: 1rem;
+}
